@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<Stage>
+	<rows>
+		 <row id='0'>wsaarrsw</row>
+		 <row id='1'>pgaarrgw</row>
+		 <row id='2'>paaarrpw</row>
+	</rows>
+ 	<units>
+  		<unit row='0' col='3' color="blue" direction="N">Bullet</unit><!-- minden attribútumot adjadtok meg, kivéve a játékosnál turndirt és colort (ezeket csak akkor, ha lő vagy fordul), ha nem így tesztek, hiba lesz -->
+		<unit row='1' col='5' >Box</unit><!-- ZPM-ek és Boxok hamarabb legyenek, mint a játékosok, ez nagyban megkönnyíti a dolgokat -->
+		<unit row='1' col='4' >ZPM</unit>
+		<unit row='2' col='1' direction="W" action="SHOOT" box='true' color='blue'>O'neill</unit>
+		<unit row='0' col='5' direction="E" action="TURN" box='false' turndir='S'>Jaffa</unit>
+	</units>
+	<field_properties>
+		<connections>
+			<connection fRow='0' fCol='1' toRow='1' toCol='6'/> <!-- 0,1-es Scale csatlakozik az 1,6-os Gate-hez (from -> to analógia) -->
+			<connection fRow='0' fCol='6' toRow='1' toCol='1'/>
+		</connections>
+		<portalwall_colors>
+			<portalwall_color row='2' col='0' color="blue"/>  <!-- a szín már jelenti egyben azt is hogy az adott portál "aktív" (tehát van rajta valami) -->
+			<portalwall_color row='2' col='6' color="yellow"/> <!-- ha a másik szín, "színpár", akkor az már átjárót is jelent egyben(Portal osztály gondoskodik erről)-->
+		</portalwall_colors>
+	</field_properties>
+</Stage>
+<!-- mindezeken felül szerintem a teszteseteknél ki tudtok alakítani egy-egy rövid lépéssorozatot, ami már nem szükséges az inicializációhoz. -->
