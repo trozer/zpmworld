@@ -25,7 +25,7 @@ public class Game {
 		//game.newGame(argFile);
 		System.out.println("janika");
 		System.out.println("lacika");
-		System.out.println("janikácskaka");
+		System.out.println("pistike");
 		game.console();
 	}
 
