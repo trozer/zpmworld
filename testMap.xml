@@ -10,12 +10,12 @@
 		 <row id='6'>wwwwwww</row>
 	</rows>
  	<units>
-  		<unit row='0' col='3' color="blue" direction="N">Bullet</unit><!-- minden attribútumot adjadtok meg, kivéve a játékosnál turndirt és colort (ezeket csak akkor, ha lő vagy fordul), ha nem így tesztek, hiba lesz -->
+  	<!--	<unit row='1' col='3' color="blue" direction="E">Bullet</unit> --><!-- minden attribútumot adjadtok meg, kivéve a játékosnál turndirt és colort (ezeket csak akkor, ha lő vagy fordul), ha nem így tesztek, hiba lesz -->
 		<unit row='1' col='4' >Box</unit><!-- ZPM-ek és Boxok hamarabb legyenek, mint a játékosok, ez nagyban megkönnyíti a dolgokat -->
 		<unit row='4' col='4' >ZPM</unit>
 		<unit row='2' col='3' direction="E" action="NONE" box='false'>O'neill</unit>
-		<unit row='5' col='5' direction="W" action="NONE" box='true'>Jaffa</unit>
-		<unit row='5' col='1' direction="W" action="NONE" box='true'>Replicator</unit>
+		<unit row='5' col='5' direction="N" action="NONE" box='true'>Jaffa</unit>
+	<!--	<unit row='5' col='1' direction="W" action="NONE" box='true'>Replicator</unit> -->
 	</units>
 	<field_properties>
 		<connections>

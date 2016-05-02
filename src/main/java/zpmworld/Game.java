@@ -18,12 +18,16 @@ public class Game {
 	private boolean pause;
 
 	public static void main(String[] args){
-		Game game = new Game();
-		System.out.println("Üdvözöllek a ZPM világ nevû játékban!");
-		//later check args and run appropiate command
-		//File argFile = new File("testMap.xml");
-		//game.newGame(argFile);
-		game.console();
+		try {
+			Game game = new Game();
+			System.out.println("Üdvözöllek a ZPM világ nevû játékban!");
+			//later check args and run appropiate command
+			File argFile = new File("testMap.xml");
+			game.newGame(argFile);
+			game.console();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	Game(){
@@ -301,7 +305,7 @@ public class Game {
 				}
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
-				//e.printStackTrace();
+				e.printStackTrace();
 				break;
 			}
 		}
