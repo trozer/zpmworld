@@ -24,6 +24,7 @@ public class Game {
 		//File argFile = new File("testMap.xml");
 		//game.newGame(argFile);
 		System.out.println("janika");
+		System.out.println("lacika");
 		game.console();
 	}
 
