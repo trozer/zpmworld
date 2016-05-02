@@ -21,7 +21,6 @@ public abstract class Field {
 		neighbours.put(Direction.WEST, null);
 		neighbours.put(Direction.EAST, null);
 		containedUnits = new ArrayList<Unit>();
-		System.out.println("jani");
 	}
 	
 	void setPosition(Point position){

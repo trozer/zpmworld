@@ -23,9 +23,6 @@ public class Game {
 		//later check args and run appropiate command
 		//File argFile = new File("testMap.xml");
 		//game.newGame(argFile);
-		System.out.println("janika");
-		System.out.println("lacika");
-		System.out.println("lacikácskaka");
 		game.console();
 	}
 
