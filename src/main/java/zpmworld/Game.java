@@ -22,6 +22,7 @@ public class Game {
 			Game game = new Game();
 			System.out.println("Üdvözöllek a ZPM világ nevû játékban!");
 			//later check args and run appropiate command
+			System.out.println("janika");
 			File argFile = new File("testMap.xml");
 			game.newGame(argFile);
 			game.console();
