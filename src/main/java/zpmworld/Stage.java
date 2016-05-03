@@ -66,8 +66,10 @@ public class Stage implements Serializable
 	    			Field field;
 	                switch (row.charAt(j)) {
 		                case 'r':
-		                    field = new Road();
+		                    Road rtemp = new Road();
+							field = rtemp;
 		                    roads.add(field);
+							game.registerDrawableField(new DrawableRoad(rtemp));
 		                    break;
 		                case 'a':
 		                    field = new Abyss();

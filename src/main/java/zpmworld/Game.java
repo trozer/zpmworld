@@ -16,8 +16,9 @@ public class Game {
 	private ActionUnit Oneill;
 	private ActionUnit Replicator;
 	private boolean pause;
+	private Graphic graphic;
 
-	public static void main(String[] args){
+/*	public static void main(String[] args){
 		try {
 			Game game = new Game();
 			System.out.println("Üdvözöllek a ZPM világ nevû játékban!");
@@ -28,11 +29,28 @@ public class Game {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
-	Game(){
+	Game(Graphic graphic) throws Exception {
 		state = State.MENU;
 		pause = false;
+		this.graphic = graphic;
+	}
+
+	public void registerDrawableField(Drawable fieldDrawable){
+		graphic.registerDrawableField(fieldDrawable);
+	}
+
+	public void registerDrawableUnit(Drawable unitDrawable){
+		graphic.registerDrawableUnit(unitDrawable);
+	}
+
+	public void deleteDrawableField(Field field){
+		graphic.deleteDrawableField(field);
+	}
+
+	public void deleteDrawableUnit(Unit unit){
+		graphic.deleteDrawableUnit(unit);
 	}
 
 	public void setReplicator(Replicator replicator){
@@ -41,6 +59,7 @@ public class Game {
 
 	public void update(){
 		if(!pause){
+			graphic.update();
 			stage.update();
 			stage.collectUnits();
 		}

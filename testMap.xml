@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <Stage>
 	<rows>
-		 <row id='0'>wwwwwww</row>
-		 <row id='1'>wsrrrpw</row>
-		 <row id='2'>wrgrrpw</row>
-		 <row id='3'>wsargpw</row>
-		 <row id='4'>wrprrpw</row>
-		 <row id='5'>wrrrrrw</row>
-		 <row id='6'>wwwwwww</row>
+		 <row id='0'>wwwwwwwwwwwwww</row>
+		 <row id='1'>wsrrrpwwsrrwrw</row>
+		 <row id='2'>wsrrrpwwsgrrpw</row>
+		 <row id='3'>wsargpwwsargpw</row>
+		 <row id='4'>wrprrpwwwprrpw</row>
+		 <row id='5'>wrrrrrrrrrsrww</row>
+		 <row id='6'>wwwwwwwwwwwwww</row>
 	</rows>
  	<units>
   	<!--	<unit row='1' col='3' color="blue" direction="E">Bullet</unit> --><!-- minden attribútumot adjadtok meg, kivéve a játékosnál turndirt és colort (ezeket csak akkor, ha lő vagy fordul), ha nem így tesztek, hiba lesz -->
