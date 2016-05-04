@@ -2,6 +2,8 @@ package zpmworld;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
 
@@ -11,35 +13,65 @@ public class Graphic extends JPanel{
     private List<Drawable> drawableFields;
     private List<Drawable> drawableUnits;
     private Game game;
+    private boolean updateSort;
 
     public Graphic(int WIDTH, int HEIGHT){
         super();
+        updateSort = true;
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         drawableFields = new ArrayList<Drawable>();
         drawableUnits = new ArrayList<Drawable>();
+        setBorder(BorderFactory.createRaisedBevelBorder());
+        setFocusable(true);
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                requestFocus();
+            }
+        });
     }
 
     public void update(){
-        for(Drawable drawable : drawableFields)
-            drawable.draw(this.getGraphics());
+        if(updateSort) {
+            drawableUnits.sort(new Comparator<Drawable>() {
+                public int compare(Drawable o1, Drawable o2) {
+                    return o1.compareTo(o2);
+                }
+            });
+            updateSort = false;
+        }
+        //paintComponent(this.getGraphics());
+    }
+
+    @Override
+    protected void paintComponent(Graphics g){
+        super.paintComponent(g);
+        for(Drawable drawable : drawableFields) {
+            drawable.draw(g);
+        }
         for(Drawable drawable : drawableUnits){
-            drawable.draw(this.getGraphics());
+            drawable.draw(g);
         }
     }
+
 
     public void setGame(Game game){
         this.game = game;
     }
 
     public void registerDrawableField(Drawable fieldDrawable){
-        fieldDrawable.setSizeReference(new Point((int)(WIDTH*0.071),(int)(HEIGHT*0.1)));
-        fieldDrawable.setScale(HEIGHT/480);
+        fieldDrawable.setSizeReference(new Point((int)(WIDTH*0.065),(int)(HEIGHT*0.093)));
+        fieldDrawable.setScale(HEIGHT/(double)540);
         drawableFields.add(fieldDrawable);
+        updateSort = true;
     }
 
     public void registerDrawableUnit(Drawable unitDrawable){
+        unitDrawable.setSizeReference(new Point((int)(WIDTH*0.065),(int)(HEIGHT*0.093)));
+        unitDrawable.setScale((HEIGHT/(double)540));
         drawableUnits.add(unitDrawable);
+        updateSort = true;
     }
 
     public void deleteDrawableField(Field field){
@@ -47,6 +79,7 @@ public class Graphic extends JPanel{
             if(drawableFields.get(i).getField() == field)
                 drawableFields.remove(drawableFields.get(i));
         }
+        updateSort = true;
     }
 
     public void deleteDrawableUnit(Unit unit){
@@ -54,5 +87,6 @@ public class Graphic extends JPanel{
             if(drawableUnits.get(i).getUnit() == unit)
                 drawableUnits.remove(drawableUnits.get(i));
         }
+        updateSort = true;
     }
 }

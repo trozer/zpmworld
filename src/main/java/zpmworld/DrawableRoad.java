@@ -22,10 +22,18 @@ public class DrawableRoad extends Drawable{
     public void draw(Graphics graphic){
         Point pos = field.getPosition();
         graphic.drawImage(img.get(0),(int)pos.getX()*(int)sizeReference.getX(),(int)pos.getY()*(int)sizeReference.getY(),
-                        Scale*img.get(0).getWidth(),Scale*img.get(0).getHeight(),null);
+                (int)(Scale*img.get(0).getWidth()),(int)(Scale*img.get(0).getHeight()),null);
     }
 
+    @Override
     public Field getField(){ return  field; }
+
+    @Override
+    public boolean compare(Field field){
+        if(this.field == field)
+            return true;
+        return false;
+    }
 
     public void setImgs() throws IOException {
         img.add(ImageIO.read(new File("ut.PNG")));

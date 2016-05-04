@@ -13,7 +13,7 @@ public abstract class Drawable implements Comparable{
     protected int Zindex;
     protected List<BufferedImage> img;
     protected Point sizeReference;
-    protected int Scale;
+    protected double Scale;
 
     Drawable(int index){
         Zindex = index;
@@ -24,7 +24,7 @@ public abstract class Drawable implements Comparable{
         sizeReference = ref;
     }
 
-    public void setScale(int scale){
+    public void setScale(double scale){
         Scale = scale;
     }
 

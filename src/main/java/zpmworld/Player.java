@@ -27,6 +27,10 @@ public class Player extends ActionUnit{
 	public int getCollectedZPM(){
 		return zpm.size();
 	}
+
+	public String getName(){
+		return name;
+	}
 	
 	//ZPM felvetele. Ha elfogyott a palyarol az osszes, akkor nyertunk
 	public void addZPM(ZPM zpm){

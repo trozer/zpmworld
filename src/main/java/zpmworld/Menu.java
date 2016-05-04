@@ -35,6 +35,8 @@ public class Menu extends JPanel{
         pause = new JButton("Pause");
         add(pause);
 
+        setBorder(BorderFactory.createRaisedBevelBorder());
+
     }
 
     private void newGame(){

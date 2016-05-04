@@ -1,6 +1,8 @@
 package zpmworld;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.channels.Pipe;
@@ -9,7 +11,7 @@ import java.util.List;
 import java.io.File;
 import java.util.Random;
 
-public class Game {
+public class Game implements KeyListener{
 	private State state;
 	private Stage stage;
 	private ActionUnit Jaffa;
@@ -57,11 +59,19 @@ public class Game {
 		this.Replicator = replicator;
 	}
 
+	public State getState(){
+		return state;
+	}
+
+	public void setState(State state){
+		this.state = state;
+	}
+
 	public void update(){
 		if(!pause){
-			graphic.update();
 			stage.update();
 			stage.collectUnits();
+			graphic.update();
 		}
 	}
 
@@ -548,4 +558,48 @@ public class Game {
 		this.stage = stage;
 	}
 
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_W){
+			Oneill.toString();
+			if(Oneill.getCurrentDirection() == Direction.NORTH)
+				Oneill.move();
+			else
+				Oneill.turn(Direction.NORTH);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_A){
+			if(Oneill.getCurrentDirection() == Direction.WEST)
+				Oneill.move();
+			else
+				Oneill.turn(Direction.WEST);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_D){
+			if(Oneill.getCurrentDirection() == Direction.EAST)
+				Oneill.move();
+			else
+				Oneill.turn(Direction.EAST);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_S){
+			if(Oneill.getCurrentDirection() == Direction.SOUTH)
+				Oneill.move();
+			else
+				Oneill.turn(Direction.SOUTH);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_K){
+			Graphics2D g = (Graphics2D) graphic.getGraphics();
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
+			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+					RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			update();
+		}
+	}
+
+	public void keyReleased(KeyEvent e) {
+
+	}
 }

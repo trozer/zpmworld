@@ -198,11 +198,12 @@ public class Stage implements Serializable
 	    							color = colorByString(unitElement.getAttribute("color"));
 	    						if(unitElement.getAttribute("box").equals("true"))
 	    							box = new Box(field);
-	    						ActionUnit player;
+								Player player;
 
 	    						if(unitType.equals("O'neill")){
 	    							player = new Player(allZPM, dir,new Action(actionType, turnDir, color), field, game,box, "O'neill");
-	    							game.setOneill(player);
+									game.registerDrawableUnit(new DrawablePlayer(player));
+									game.setOneill(player);
 	    						}else{
 	    							player = new Player(allZPM, dir,new Action(actionType, turnDir, color), field, game,box ,"Jaffa");
 	    							game.setJaffa(player);

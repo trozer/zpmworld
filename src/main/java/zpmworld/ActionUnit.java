@@ -28,6 +28,8 @@ public abstract class ActionUnit extends Unit{
 	public Action getAction(){
 		return nextAction;
 	}
+
+	public Direction getCurrentDirection(){ return currentDirection; }
 	
 	
 }
