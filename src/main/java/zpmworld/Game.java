@@ -20,9 +20,10 @@ public class Game implements KeyListener{
 	private boolean pause;
 	private Graphic graphic;
 
-/*	public static void main(String[] args){
+	public static void main(String[] args){
 		try {
-			Game game = new Game();
+			Graphic graphic = new Graphic(800,600);
+			Game game = new Game(graphic);
 			System.out.println("Üdvözöllek a ZPM világ nevû játékban!");
 			//later check args and run appropiate command
 			File argFile = new File("testMap.xml");
@@ -31,10 +32,10 @@ public class Game implements KeyListener{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}*/
+	}
 
 	Game(Graphic graphic) throws Exception {
-		state = State.MENU;
+		state = State.GAME;
 		pause = false;
 		this.graphic = graphic;
 	}

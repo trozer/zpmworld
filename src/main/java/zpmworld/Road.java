@@ -1,122 +1,96 @@
 package zpmworld;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Map;
-
-import javax.swing.text.Position;
 
 public class Road extends Field {
 
-	// --------Attribútumok--------
-
-
-	
-
-
-	// -------Metódusok---------
-
-	public Road() {	//konstruktor
+	// Konstruktorok
+	public Road() {
 		super();
 	}
 
+	public Road(Point position){
+		super(position);
+	}
+	// Mûködés
 	@Override
-	public void doo(Player player){	//a játékos cselekedetére "reagál"
-		player.getAction();
-		switch (player.getAction().getType()) {
-        case MOVE:	//ha a játékos lépni akar
-        		if (containedUnits.isEmpty()){
-        			player.step(this);
-        			containedUnits.add(player);
-        		}
-        		else{
-        			for(int i = 0; i < containedUnits.size(); i++) 
-        				containedUnits.get(i).accept(this, player);
-        		}
+	public void doo(Player player){
+
+		ActionType actionType = player.getAction().getType();
+		if(!checkAcceptance(player,actionType)){
+			return;
+		}
+
+		switch (actionType) {
+        	case MOVE:
+
+				// Ha mindenki ellenõrizte a MOVE-t, akkor a Field elvégzi annak alapértelmezett részét
+				player.step(this);
+				containedUnits.add(player);
+
+				// Speciális cselekvések
+				if (!containedUnits.isEmpty()){
+					for(Unit unit : containedUnits){
+						unit.accept(player,this);
+					}
+				}
         		break;
         
-        case GRAB:	//ha a játékos fel akar venni valamit
+			case GRAB:	//ha a játékos fel akar venni valamit
         		if (!containedUnits.isEmpty()){
-        			for(int i = 0; i < containedUnits.size(); i++) 
-        				containedUnits.get(i).accept(this, player);
+					for(Unit unit : containedUnits){
+						unit.accept(player,this);
+					}
     			}
         		break;
-        		
-        default:	//minden más eset
-        	//TODO
-        	
+
+			case DROP:
+				// ha mindenki engedélyezte a DROP-ot, akkor accept nélkül átveszi a Road,
+				// hiszen nincs speciális cselekvés
+				Box box = player.dropBox();
+				box.setCurrentField(this);
+				containedUnits.add(box);
+				break;
+
+        default:
         	break;
 		}
-		//drop -adunit intézi
 	}
 
 	@Override
-	public void doo(Bullet bullet) {	//a lövedék cselekedetétre reagál
-		switch (bullet.getAction().getType()) {
-        case MOVE:	//ha megérkezik/lépni akar
-        	if (containedUnits.isEmpty()){
-        	bullet.step(this);
-        	
-        	}
-        	else{
-        		for(int i = 0; i < containedUnits.size(); i++) 
-    				containedUnits.get(i).accept(bullet, this);
-        		bullet.step(this);
+	public void doo(Bullet bullet) {
+
+		if(!checkAcceptance(bullet, ActionType.MOVE)){
+			return;
+		}
+
+		// Alapértelmezett cselekvés: ha mindenki engedélyezte, akkor semmi akadálya
+		bullet.step(this);
+		containedUnits.add(bullet);
+
+		// Speciális cselekvés
+		if(!containedUnits.isEmpty()) {
+			for (Unit unit : containedUnits) {
+				unit.accept(bullet, this);
 			}
-        	break;
-        default:	//minden más eset
-        	break;
 		}
 	}
 
 	@Override
 	 public void doo(Replicator replicator){
-		switch (replicator.getAction().getType()) {
-        case MOVE:
-        	replicator.step(this);
-        	containedUnits.add(replicator);
-        	break;
-    	default:
-			break;
-		}
-	}
-	
-	@Override
-	public void forceAddUnit(Unit unit){
-		containedUnits.add(unit);
-	}
 
-	@Override
-	public void removeUnit(){
-		containedUnits = new ArrayList<Unit>();
-	}
-	
-	@Override
-	void removeUnit(Unit unit){
-		if (!containedUnits.isEmpty()){
-			containedUnits.remove(unit);
+		if(!checkAcceptance(replicator, ActionType.MOVE)){		//TODO nem feltétlen kell egyszerüsíteni... szebb a MOVEos megoldás
+			return;
 		}
-	}
-	
-	@Override
-	public boolean addUnit(Unit unit){
-		if(containedUnits.isEmpty()){
-			containedUnits.add(unit);
-			return true;
-		}
-		return false;
-	}
-	
-	@Override
-	public Field getNeighbourInDirection(Direction dir) {
-		// TODO Auto-generated method stub
-		return super.getNeighbourInDirection(dir);
-	}
 
-	@Override
-	public void addNeighbour(Direction direction, Field neighbour) {
-		// TODO Auto-generated method stub
-		super.addNeighbour(direction, neighbour);
+		replicator.step(this);
+		containedUnits.add(replicator);
+
+		if(!containedUnits.isEmpty()){
+			for(Unit unit : containedUnits){
+				unit.accept(replicator, this);
+			}
+		}
 	}
 	
 	@Override

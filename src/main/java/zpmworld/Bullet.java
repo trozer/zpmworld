@@ -1,12 +1,15 @@
 package zpmworld;
 
 import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Bullet extends ActionUnit{
 
     private Color color;
 
     public Bullet(Action action, Field currentField){
+        super();
         this.nextAction = action;
         this.currentField = currentField;
         this.currentDirection = action.getDirection();
@@ -14,25 +17,56 @@ public class Bullet extends ActionUnit{
         this.weight = 0;
     }
 
-    public Color getColor(){ return color; }
+    public Bullet(Field currentField, int weight, Direction direction, Action nextAction, Color color){
+        super(currentField, weight, direction, nextAction);
+        this.color = color;
+    }
+
+    public Bullet(Field currentField, int weight, Direction direction, Color color){
+        super(currentField, weight, direction, new Action(ActionType.MOVE, direction, color));
+        this.color = color;
+    }
 
     @Override
-    public void step(Field target){
-    	currentField.removeUnit(this);
-        target.forceAddUnit(this);
-        this.setCurrentField(target);
+    protected Map<Class, Map<ActionType, Boolean>> initAcceptance() {
+        Map<Class,Map<ActionType,Boolean>> returnMap = new HashMap<Class, Map<ActionType, Boolean>>();
+        Map<ActionType, Boolean> playerAccept = new HashMap<ActionType, Boolean>();
+        playerAccept.put(ActionType.MOVE,true);
+        playerAccept.put(ActionType.GRAB,true);
+        playerAccept.put(ActionType.DROP,true);    //olvashatÃ³sÃ¡g miatt van kÃ¼lÃ¶n kiemelve, de ha nem lenne itt, akkor is false lenne
+        playerAccept.put(ActionType.NONE,true);
+        returnMap.put(Player.class,playerAccept);
+        Map<ActionType, Boolean> bulletAccept = new HashMap<ActionType, Boolean>();
+        bulletAccept.put(ActionType.MOVE,true);
+        bulletAccept.put(ActionType.NONE,true);
+        returnMap.put(Bullet.class,bulletAccept);
+        Map<ActionType, Boolean> replicatorAccept = new HashMap<ActionType, Boolean>();
+        replicatorAccept.put(ActionType.MOVE,true);
+        replicatorAccept.put(ActionType.NONE,true);
+        returnMap.put(Replicator.class,replicatorAccept);
+
+        return returnMap;
     }
+
+    public Color getColor(){ return color; }
 
     public void action(){
         if (nextAction.getType() == ActionType.MOVE){
         	currentField.getNeighbourInDirection(currentDirection).doo(this);
+        } else { //ez csak biztosÃ­tÃ©k, elmÃ©letileg soha nem fut le
+            this.nextAction = new Action(ActionType.MOVE, currentDirection, color);
+            currentField.getNeighbourInDirection(currentDirection).doo(this);
         }
     }
 
-    public void setCurrentField(Field field){
-        this.currentField = field;
+    @Override
+    public void accept(Replicator replicator, Field field) {
+        field.removeUnit(replicator);
+        replicator.kill();
+        field.removeUnit(this);
+        this.kill();
     }
-    
+
     public String toString(){
     	String szin;
     	String irany;
@@ -43,15 +77,15 @@ public class Bullet extends ActionUnit{
     	else if (color == Color.GREEN) szin = "green";
     	else szin = "red";
     	
-    	if (currentDirection == Direction.NORTH) irany = "észak";
+    	if (currentDirection == Direction.NORTH) irany = "ï¿½szak";
 		else if (currentDirection == Direction.EAST) irany = "kelet";
-		else if (currentDirection == Direction.SOUTH) irany = "dél";
+		else if (currentDirection == Direction.SOUTH) irany = "dï¿½l";
 		else irany = "nyugat";
     	
-    	if (dead == false) elet = "él";
+    	if (dead == false) elet = "ï¿½l";
 		else elet = "halott";
     	
-    	return "lövedék: mozgás cselekvést akar végrehajtani, " + irany + " irányba néz, " + szin + ", " + elet;
+    	return "lï¿½vedï¿½k: mozgï¿½s cselekvï¿½st akar vï¿½grehajtani, " + irany + " irï¿½nyba nï¿½z, " + szin + ", " + elet;
     }
 
 }

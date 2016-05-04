@@ -46,7 +46,7 @@ public class Portal {
 	}
 
 	public boolean amIPortal(Field field) {
-		return (blue == field || yellow == field || red == field || green == field);
+		return (blue.equals(field) || yellow.equals(field) || red.equals(field) || green.equals(field));
 	}
 
 	public void createPortal(Field field, Color color) {
@@ -62,28 +62,28 @@ public class Portal {
 	}
 
 	public Field getPair(Field field) {
-		if (blue == field) {
+		if (blue.equals(field)) {
 			return yellow;
-		} else if (yellow == field) {
+		} else if (yellow.equals(field)) {
 			return blue;
-		} else if (red == field) {
+		} else if (red.equals(field)) {
 			return green;
-		} else if (green == field) {
+		} else if (green.equals(field)) {
 			return red;
 		}
 		return null;
 	}
 	
-	public String getColor(Field field){
-		if (blue == field) {
-			return "kék";
-		} else if (yellow == field) {
-			return "sárga";
-		} else if (red == field) {
-			return "piros";
-		} else if (green == field) {
-			return "zöld";
+	public Color getColor(Field field){
+		if (blue.equals(field)) {
+			return Color.BLUE;
+		} else if (yellow.equals(field)) {
+			return Color.YELLOW;
+		} else if (red.equals(field)) {
+			return Color.RED;
+		} else if (green.equals(field)) {
+			return Color.GREEN;
 		}
-		return "";
+		return null;
 	}
 }

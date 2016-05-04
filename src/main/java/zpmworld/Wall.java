@@ -1,51 +1,28 @@
 package zpmworld;
 
+import java.awt.Point;
+
 public class Wall extends Field {
 
 	public Wall() {
 		super();
 	}
 
-	@Override
-	public void doo(Player player) {
+	public Wall(Point position){
+		super(position);
 	}
 
 	@Override
-	public void doo(Replicator replicator) {
-	}
-
-	@Override
-	public void doo(Bullet bullet) {
+	public void doo(Bullet bullet) { //TODO hibakezelés.. de az kb mindenhova kéne
 		bullet.step(this);
 		bullet.kill();
 	}
 
 	@Override
-	public Field getNeighbourInDirection(Direction dir) {
-		return super.getNeighbourInDirection(dir);
+	public void addUnit(Unit unit) {
+		return;
 	}
 
-	@Override
-	public boolean addUnit(Unit unit) {
-		return false;
-	}
-
-	@Override
-	public void forceAddUnit(Unit unit){
-		containedUnits.add(unit);
-		unit.kill();
-	}
-
-	@Override
-	public void removeUnit() {
-		super.removeUnit();
-	}
-
-	@Override
-	public void addNeighbour(Direction direction, Field neighbour) {
-		super.addNeighbour(direction, neighbour);
-	}
-	
 	@Override
 	public String toString(){
 		return "fal: " + super.toString();

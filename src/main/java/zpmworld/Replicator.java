@@ -1,5 +1,7 @@
 package zpmworld;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Replicator extends ActionUnit{
@@ -7,6 +9,7 @@ public class Replicator extends ActionUnit{
 	private Game game;
 	
 	public Replicator(Game game, Direction direction, Field field){
+		super();
 		this.game = game;
 		this.currentDirection = direction;
 		this.currentField = field;
@@ -14,53 +17,82 @@ public class Replicator extends ActionUnit{
 		this.nextAction = new Action(ActionType.MOVE, direction, null);
 	}
 
-	//A replicator uj action-jet allitja elo.
-	private Action makeNextAction() {
-		Direction dir;
-		Random r = new Random();
-		int i = r.nextInt(7); //0-6
-		
-		if (i < 3) dir = currentDirection;
-		else if (i == 3) dir = Direction.NORTH;
-		else if (i == 4) dir = Direction.EAST;
-		else if (i == 5) dir = Direction.WEST;
-		else dir = Direction.SOUTH;
-		
-		Action nextA = new Action(ActionType.MOVE, dir, null);
-		return nextA;
+	public Replicator(Game game, Direction direction, Field currentField, int weight){
+		super(currentField, weight, direction, new Action(ActionType.MOVE, direction, null));
+		this.game = game;
 	}
-	
+
+	@Override
+	protected Map<Class, Map<ActionType, Boolean>> initAcceptance() {
+		Map<Class,Map<ActionType,Boolean>> returnMap = new HashMap<Class, Map<ActionType, Boolean>>();
+		Map<ActionType, Boolean> playerAccept = new HashMap<ActionType, Boolean>();
+		playerAccept.put(ActionType.MOVE,true);
+		playerAccept.put(ActionType.GRAB,true);
+		playerAccept.put(ActionType.DROP,true);    //olvashatóság miatt van külön kiemelve, de ha nem lenne itt, akkor is false lenne
+		playerAccept.put(ActionType.NONE,true);
+		returnMap.put(Player.class,playerAccept);
+		Map<ActionType, Boolean> bulletAccept = new HashMap<ActionType, Boolean>();
+		bulletAccept.put(ActionType.MOVE,true);
+		bulletAccept.put(ActionType.NONE,true);
+		returnMap.put(Bullet.class,bulletAccept);
+		Map<ActionType, Boolean> replicatorAccept = new HashMap<ActionType, Boolean>();
+		replicatorAccept.put(ActionType.MOVE,true);
+		replicatorAccept.put(ActionType.NONE,true);
+		returnMap.put(Replicator.class,replicatorAccept);
+
+		return returnMap;
+	}
+
+	//A nextAction alapjan csinal valamit.
+	public void action() {
+		if(nextAction == null || nextAction.getType() == ActionType.NONE) {
+			return;
+		}
+		//Ha move, akkor a megfelelo iranyban levo szomszedos mezo doo-jat hivja meg.
+		if (nextAction.getType() == ActionType.MOVE){
+			currentField.getNeighbourInDirection(currentDirection).doo(this);
+			nextAction = makeNextAction();
+		} else if (nextAction.getType() == ActionType.TURN){
+			nextAction = makeNextAction();
+		} else {
+			nextAction = makeNextAction();
+		}
+	}
+
+	// Speciális cselekvés bullet esetén
+	@Override
+	public void accept(Bullet bullet, Field field){
+		field.removeUnit(bullet);
+		bullet.kill();
+		field.removeUnit(this);
+		this.kill();
+	}
+
 	//Kezdemenyezi a mezo cserejet (utra), majd megoli magat
 	public void replaceField(){
 		game.replaceField(currentField);
 		currentField.removeUnit(this);
 		kill();
 	}
-	
-	//Eltavolitja magat a jelenlegi mezorol,
-	//es beallitja a currentFieldet az uj mezore. Illetve beallit maganak egy uj mozgast.
-	public void step(Field target){
-		currentField.removeUnit();
-		currentField = target;
-		
-		nextAction = makeNextAction();
-	}
-	
-	//A nextAction alapjan csinal valamit.
-	public void action() {
-		//Ha move, akkor a megfelelo iranyban levo szomszedos mezo doo-jat hivja meg.
-		if (nextAction.getType() == ActionType.MOVE){
-			currentField.getNeighbourInDirection(currentDirection).doo(this);
-			nextAction = null;
+
+	//A replicator uj action-jet allitja elo.
+	//TODO okosítani: zsákutca = megfordul, elágazás: nagyobb eséllyel nem fordul vissza...pl previousPosition attrib segíthet
+	private Action makeNextAction() {
+		int randomAction = new Random().nextInt(10); 	//0-9
+		if(randomAction < 7){	//70% eséllyel MOVE
+			return new Action(ActionType.MOVE,currentDirection,null);
 		}
-	}
-	
-	@Override
-	public void accept(Bullet unit, Field field){
-		field.removeUnit(unit);
-		field.removeUnit();
-		unit.kill();
-		this.kill();
+
+		Direction dir;
+		Random r = new Random();
+		int i = r.nextInt(4); //0-3
+
+		if (i == 0) dir = Direction.NORTH;
+		else if (i == 1) dir = Direction.EAST;
+		else if (i == 2) dir = Direction.WEST;
+		else dir = Direction.SOUTH;
+
+		return new Action(ActionType.TURN, dir, null);
 	}
 	
 	public String toString(){

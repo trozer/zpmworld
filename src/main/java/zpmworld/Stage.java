@@ -1,10 +1,7 @@
 package zpmworld;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
@@ -381,10 +378,6 @@ public class Stage implements Serializable
     		roads.set(roads.indexOf(field), road);
     }
     
-    public List<Unit> getUnit(Field field){
-    	return fields.get(fields.indexOf(field)).getUnits();
-    }
-    
     //helper query, check boxes
     public List<Unit> listBoxes(){
     	List<Unit> boxes = new ArrayList<Unit>();
@@ -500,7 +493,7 @@ public class Stage implements Serializable
     }
     
     public void setUnitPos(Field fieldFrom, Field fieldTo){
-    	List<Unit> fromUnits = fieldFrom.getUnits();
+    	Set<Unit> fromUnits = fieldFrom.getUnits();
     	for(Unit unit : fromUnits){
     		fieldFrom.removeUnit(unit);
     		fieldTo.addUnit(unit);

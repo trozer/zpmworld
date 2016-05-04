@@ -1,8 +1,8 @@
 package zpmworld;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Scale extends Field {
 
@@ -10,181 +10,224 @@ public class Scale extends Field {
 	
 	
 	private Gate myGate;
-	int openLimit;
-	boolean blockAddUnit;
+	private int openLimit;
+	private Set<Box> containedBoxes;
 	
 	//-------Metódusok---------
-	
-	
-	
+
 	public Scale(){	//konstruktor
 		super();	
 		this.myGate = null;
 		this.openLimit = 15;
-		this.blockAddUnit = false;
-		//ez így csudálatos, szóljatok, ha visszaírhatom :-)
+		containedBoxes = new TreeSet<Box>();
 	}
+
+	public Scale(int openLimit){	//konstruktor
+		super();
+		this.myGate = null;
+		this.openLimit = openLimit;
+		containedBoxes = new TreeSet<Box>();
+	}
+
+	public Scale(Point position){
+		super(position);
+		this.myGate = null;
+		this.openLimit = 15;
+		containedBoxes = new TreeSet<Box>();
+	}
+
+	public Scale(Point position, int openLimit){
+		super(position);
+		this.myGate = null;
+		this.openLimit = openLimit;
+		containedBoxes = new TreeSet<Box>();
+	}
+
+	// Getter-setter
 	
 	public void setGate(Gate gate){	//beállítja a saját kapuját, azaz a hozzá tartozó kaput, ha még nincs neki
 		if(myGate == null) 
 			myGate = gate;
-		else 
-			System.out.println("setGate: már van beállítva gate!");
 	}
-	
+
+	public void addUnit(Box box){
+		containedBoxes.add(box);
+	}
+
+	public void removeUnit(Box box){
+		if (!containedBoxes.isEmpty()){
+			containedBoxes.remove(box);
+		}
+	}
+
+	public Set<Box> getBoxes(){
+		return containedBoxes;
+	}
+
+	public int getOpenLimit(){
+		return openLimit;
+	}
+
+	// Mûködés
+
 	@Override
 	public void doo(Player player){	//a játékos cselekedetére "reagál"
-		int hatar = 0;
-		switch (player.getAction().getType()) {
-        case MOVE:	//ha a játékos rálép magára húzza és kinyitja a hozzá tartozó kaput
-		
-        	if (!containedUnits.isEmpty()){
-        		for(int i = 0; i < containedUnits.size(); i++) 
-    				containedUnits.get(i).accept(this, player);
-        	}
-        	if (containedUnits.isEmpty()){
+
+		ActionType actionType = player.getAction().getType();
+		if(!checkAcceptance(player,actionType)){
+			return;
+		}
+
+		switch (actionType) {
+			/**
+			 * A Scale-en egyszerre lehet több Box és más Unit is
+			 */
+			case MOVE:
+
+				// Ha mindenki ellenõrizte a MOVE-t, akkor a Field elvégzi annak alapértelmezett részét
 				player.step(this);
 				containedUnits.add(player);
-				if (myGate != null)
-					myGate.open();
-			}
-        	break;
-		
-        case GRAB:	//ha a játékos leszed róla egy tárgyat, a hozzá tartozó kapu bezárul
-        	if (!containedUnits.isEmpty()){
-        		for(int i = 0; i < containedUnits.size(); i++) 
-    				containedUnits.get(i).accept(this, player);
-    		}
-        	for(int i = 0; i < containedUnits.size(); i++) 
-				hatar += containedUnits.get(i).getWeight();
-			if (hatar < openLimit && myGate != null){
-    			myGate.close();
-        	}
-    		break;
+
+				// Speciális cselekvések
+				if (!containedUnits.isEmpty()){
+					for(Unit unit : containedUnits){
+						unit.accept(player,this);
+					}
+				}
+
+				gateMechanism();
+				break;
+
+			case GRAB:	//ha a játékos leszed róla egy tárgyat, a hozzá tartozó kapu bezárul
+				if (!containedBoxes.isEmpty()){
+					for(Box box : containedBoxes){
+						box.accept(player,this);
+					}
+				}
+
+				if (!containedUnits.isEmpty()){
+					for(Unit unit : containedUnits){
+						unit.accept(player,this);
+					}
+				}
+
+				gateMechanism();
+				break;
+
+			/**
+			 * A játékos csak doboz tud lerakni, ami a Scale esetén mindig sikerül, hiszen lehet stackelni a
+			 * dobozokat és állhat másik Unit is a mérlegen.
+			 */
+			case DROP:
+				Box box = player.dropBox();
+				box.setCurrentField(this);
+				containedBoxes.add(box);
+
+				gateMechanism();
+				break;
     		
         default:	//minden más eset
-        	//TODO
         	break;
 		}
 	}
-	
+
+	/**
+	 * A dobozok nem jelentenek akadályt, így csak a rajta lévõ másik elem(ek)-tõl függ, valamint, mivel epusztíthatja
+	 * a mérlegen álló replikátort, ellenõrizzük az összsúlyt.
+	 * @param bullet
+     */
 	@Override
 	public void doo(Bullet bullet){		//lövedékre reagál
-		
-		switch (bullet.getAction().getType()) {
-        case MOVE:	//magára húzza a lövedéket, a lövedék nem nyitja ki a kaput
-        	if (containedUnits.isEmpty()){
-        		bullet.step(this);
-        		containedUnits.add(bullet);
-        		break;
-        	}
-        	else{
-        		for(int i = 0; i < containedUnits.size(); i++) 
-    				containedUnits.get(i).accept(bullet, this);
-        	}
-        default:	//minden más eset
-        	break;
+
+		if(!checkAcceptance(bullet, ActionType.MOVE)){
+			return;
 		}
+
+		bullet.step(this);
+		containedUnits.add(bullet);
+
+		if(!containedUnits.isEmpty()) {
+			for (Unit unit : containedUnits) {
+				unit.accept(bullet, this);
+			}
+		}
+
+		gateMechanism();
 	}
-	
+
+	/**
+	 * A replikátor viselkedése ennek a függvénynek a meghívásakor csak MOVE lehet, így ezt nem ellenõrizzük külön,
+	 * valamint a dobozok nem befolyásolják a viselkedését, csak a többi egység, viszont mivel meg is állhat, ezért
+	 * számít a súlya.
+	 * @param replicator
+     */
 	@Override
 	 public void doo(Replicator replicator){
-		switch (replicator.getAction().getType()) {
-        case MOVE:
-        	replicator.step(this);
-        	containedUnits.add(replicator);
-        	break;
-    	default:
-			break;
+
+		if(!checkAcceptance(replicator, ActionType.MOVE)){
+			return;
 		}
+
+		replicator.step(this);
+		containedUnits.add(replicator);
+
+		if(!containedUnits.isEmpty()){
+			for(Unit unit : containedUnits){
+				unit.accept(replicator, this);
+			}
+		}
+
+		gateMechanism();
 	}
-	
-	@Override
-	public void forceAddUnit(Unit unit){
-		containedUnits.add(unit);
-	}
-	
-	@Override
-	public boolean addUnit(Unit unit){
-		int hatar = 0;
-		if (!blockAddUnit){
-		containedUnits.add(unit);
+
+	private void gateMechanism(){
+		int gross = 0;		//összsúly
+
+		for(Unit unit : containedUnits){
+			gross += unit.getWeight();
 		}
-		blockAddUnit = true;
-			for(int i = 0; i < containedUnits.size(); i++) 
-				containedUnits.get(i).accept(unit, this);
-		blockAddUnit = false;
-		
-		for(Unit u : containedUnits) hatar += u.getWeight();
-		if (hatar >= openLimit){
-			if(myGate != null)
-				myGate.open();
+
+		for(Box box : containedBoxes){
+			gross += box.getWeight();
 		}
-		return true;
-		/*if (containedUnits.size() < 3 ){
-			containedUnits.add(unit);
+
+		if(gross >= openLimit && myGate != null){
 			myGate.open();
-			return true;
-		}
-		else
-			return false;*/
-	}
-
-	@Override
-	public void removeUnit(){	//eltávolítja a unitot ami a mérlegen van, ilyenkor a kapu bezárul 
-		containedUnits = new ArrayList<Unit>();
-		if(myGate != null)
+		} else if (myGate != null) {
 			myGate.close();
-	}
-	
-	@Override
-	public void removeUnit(Unit unit){
-		int hatar = 0;
-		if (!containedUnits.isEmpty()){
-			containedUnits.remove(unit);
-			for(Unit u : containedUnits) hatar += u.getWeight();
-		}
-		if (hatar < openLimit){
-			if(myGate != null)
-				myGate.close();
 		}
 	}
 	
-	@Override
-	public Field getNeighbourInDirection(Direction dir) {
-		// TODO Auto-generated method stub
-		return super.getNeighbourInDirection(dir);
-	}
+	//Teszt
 
-	@Override
-	public void addNeighbour(Direction direction, Field neighbour) {
-		// TODO Auto-generated method stub
-		super.addNeighbour(direction, neighbour);
-	}
-	
-	//TODO,testing phase, correct this
 	@Override
 	public String toString(){
-		int sulyok = 0;
-		for (int i = 0; i < containedUnits.size(); i++){
-			sulyok += containedUnits.get(i).getWeight();
+		int gross = 0;		//összsúly
+
+		for(Unit unit : containedUnits){
+			gross += unit.getWeight();
 		}
+
+		for(Box box : containedBoxes){
+			gross += box.getWeight();
+		}
+
 		if(myGate != null)
-			if(sulyok >= openLimit)
-				return "mérleg: (" + toInt(position.getX()) + "," + toInt(position.getY()) + ") pozíció, "
+			if(gross >= openLimit)
+				return "mérleg: (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") pozíció, "
 					+ openLimit + " súlyhatár, lenyomva , van hozzákapcsolt kapu, " 
 					+ containedUnits.size() + " darab tárolt egység";
 			else
-				return "mérleg: (" + toInt(position.getX()) + "," + toInt(position.getY()) + ") pozíció, "
+				return "mérleg: (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") pozíció, "
 				+ openLimit + " súlyhatár, nincs lenyomva , van hozzákapcsolt kapu, " 
 				+ containedUnits.size() + " darab tárolt egység";
 		else
-			if(sulyok >= openLimit)
-					return "mérleg: (" + toInt(position.getX()) + "," + toInt(position.getY()) + ") pozíció, "
+			if(gross >= openLimit)
+					return "mérleg: (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") pozíció, "
 						+ openLimit + " súlyhatár, lenyomva , nincs hozzákapcsolt kapu, " 
 						+ containedUnits.size() + " darab tárolt egység";
 				else
-					return "mérleg: (" + toInt(position.getX()) + "," + toInt(position.getY()) + ") pozíció, "
+					return "mérleg: (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") pozíció, "
 					+ openLimit + " súlyhatár, nincs lenyomva , nincs hozzákapcsolt kapu, " 
 					+ containedUnits.size() + " darab tárolt egység";
 	}

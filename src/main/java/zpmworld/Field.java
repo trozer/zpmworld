@@ -5,24 +5,40 @@ import java.awt.Point;
 
 public abstract class Field {
 	
-	//--------Attribútumok--------
+	//--------AttribÃºtumok--------
 	
-	protected Map<Direction, Field> neighbours = new TreeMap<Direction, Field>();
-	protected List<Unit> containedUnits;
-	//protected Unit containedUnit; // DELETE THIS LATER, this helped me to avoid to change many functions in other classes
-	//egyenlõre a fenti sort nem töröltem, mert nem akarom, hogy azok az osztályok miatt amiket nem én írtam hiba legyen benne
+	protected Map<Direction, Field> neighbours;
+	/**
+	 *  EgyedisÃ©g fontos: az accepteknÃ©l elÅ‘ fog fordulni, h egy egysÃ©get tÃ¶bbszÃ¶r is hozzÃ¡ akarunk adni, de ezt Ã­gy kivÃ©djÃ¼k.
+	 */
+	protected Set<Unit> containedUnits;
 	protected Point position;
 	
-	//-------Metódusok---------
-	
-	Field(){
+	//-------MetÃ³dusok---------
+
+	// Konstruktorok:
+
+	public Field(){
+		neighbours = new TreeMap<Direction, Field>();
 		neighbours.put(Direction.NORTH, null);
 		neighbours.put(Direction.SOUTH, null);
 		neighbours.put(Direction.WEST, null);
 		neighbours.put(Direction.EAST, null);
-		containedUnits = new ArrayList<Unit>();
+		containedUnits = new TreeSet<Unit>();		//TreeSet: kevÃ©s elem, Ã­gy fontosabb a sorrend, mint a keresÃ©si gyorsasÃ¡g (ellenben HashSettel)
 	}
-	
+
+	public Field(Point position){
+		neighbours = new TreeMap<Direction, Field>();
+		neighbours.put(Direction.NORTH, null);
+		neighbours.put(Direction.SOUTH, null);
+		neighbours.put(Direction.WEST, null);
+		neighbours.put(Direction.EAST, null);
+		containedUnits = new TreeSet<Unit>();
+		this.position = position;
+	}
+
+	// Getter-setter fÃ¼ggvÃ©nyek:
+
 	void setPosition(Point position){
 		this.position = position;
 	}
@@ -30,75 +46,92 @@ public abstract class Field {
 	Point getPosition(){
 		return this.position;
 	}
-	
-	public void doo(Player player){}
-	public void doo(Bullet bullet){}
-	public void doo(Replicator replicator){}
-	
-	public List<Unit> getUnits(){
+
+	public Set<Unit> getUnits(){
 		return containedUnits;
 	}
-	
-	//Visszaadja a praméter kapott irány felõli szomszédját
+
+	//Visszaadja a pramï¿½ter kapott irï¿½ny felï¿½li szomszï¿½djï¿½t
 	public Field getNeighbourInDirection(Direction dir){
-		for (Map.Entry<Direction, Field> entry : neighbours.entrySet()) {	//így lépkedük végig egy Map objektumon
+		for (Map.Entry<Direction, Field> entry : neighbours.entrySet()) {	//ï¿½gy lï¿½pkedï¿½k vï¿½gig egy Map objektumon
 			if (entry.getKey() == dir){
-				
 				return entry.getValue();
 			}
 		}
-		return null;	//ha nincs szomszédja a megadott irányban
+		return null;	//ha nincs szomszï¿½dja a megadott irï¿½nyban
 	}
-	
-	public boolean addUnit(Unit unit){	//új unitot adunk a mezõhöz; csak akkor tehetjük meg, ha az üres
-		//TODO -> this is (3) not definitive 
-		if (containedUnits.isEmpty()){
-			containedUnits.add(unit);
-			return true;
-		}
-		else
-			return false;
-	}
-	
-	//TODO, this is for testing, delete or change this later
-	public void showUnits(){
-		for(int i = 0; i < containedUnits.size(); i++) 
-			System.out.println(containedUnits.get(i).toString());
-		
-	}
-	
-	public void removeUnit(){	
-		containedUnits = new ArrayList<Unit>();
-	}
-	
-	void removeUnit(Unit unit){
-		if (!containedUnits.isEmpty()){
-			containedUnits.remove(unit);
-		}
-	}
-	
-	public void addNeighbour(Direction direction, Field neighbour){	//beállítjuk egy mezõ paraméterül kapott iránybeli szomszédját, egy paraméreül kapott típúsú mezõre
+
+	// EgyÃ©b, attributum mÃ³dosÃ­tÃ³ metÃ³dusok:
+
+	public void addNeighbour(Direction direction, Field neighbour){	//beï¿½llï¿½tjuk egy mezï¿½ paramï¿½terï¿½l kapott irï¿½nybeli szomszï¿½djï¿½t, egy paramï¿½reï¿½l kapott tï¿½pï¿½sï¿½ mezï¿½re
 		for (Map.Entry<Direction, Field> entry : neighbours.entrySet()) {
 			if (entry.getKey() == direction){
 				entry.setValue(neighbour);
 			}
 		}
 	}
-	
-	public void forceAddUnit(Unit unit){
+
+	/**
+	 * Az addUnitot az acceptek hÃ­vjÃ¡k, Ã©s csak akkor, ha az adott egysÃ©g engedÃ©lyezi,
+	 * hogy mellÃ©rakjÃ¡k unitot: a Unit dÃ¶nt, nem a Field, Ã­gy ennek mindenkÃ©pp sikerÃ¼lnie kell, kivÃ©ve, ha mÃ¡r
+	 * benne van az elem: de ezt a TreeSet.add megoldja
+	 * @param unit Ãºj elem
+     */
+	public void addUnit(Unit unit){
 		containedUnits.add(unit);
 	}
+
+	/**
+	 * ParamÃ©ter nÃ©lkÃ¼l minden elemet kitÃ¶rÃ¶l containedUnitbÃ³l
+	 */
+	public void removeUnit(){
+		containedUnits.clear();
+	}
+
+	/**
+	 * KitÃ¶rli unit-ot a containedUnitbÃ³l
+	 * @param unit tÃ¶rlendÅ‘ elem
+     */
+	void removeUnit(Unit unit){
+		if (!containedUnits.isEmpty()){
+			containedUnits.remove(unit);
+		}
+	}
+
+	// MÅ±kÃ¶dÃ©st vezÃ©rlÅ‘ metÃ³dusok:
 	
-	public int toInt(double d){
-		int x = (int) d;
-		return x;
+	public void doo(Player player){}
+	public void doo(Bullet bullet){}
+	public void doo(Replicator replicator){}
+
+	protected boolean checkAcceptance(Unit unit, ActionType actionType){
+		if(!containedUnits.isEmpty()) {
+			for (Unit u : containedUnits) {
+				if (!u.check(unit, actionType)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	// TesztelÃ©shez hasznÃ¡lt metÃ³dusok:
+
+	public void showUnits(){
+		for(Unit unit : containedUnits)
+			System.out.println(unit.toString());
+
 	}
 	
 	@Override
 	public String toString(){
-		return " (" + toInt(position.getX()) + "," + toInt(position.getY()) + ") pozíció, "
-				+ containedUnits.size() + " darab tárolt egység";
+		return " (" + (int)position.getX() + "," + (int)position.getY() + ") pozï¿½ciï¿½, "
+				+ containedUnits.size() + " darab tï¿½rolt egysï¿½g";
 		
 	}
-	
+
+	public void removeLastAdded() {
+		if(!containedUnits.isEmpty()){
+			containedUnits.remove(((TreeSet)containedUnits).last());
+		}
+	}
 }

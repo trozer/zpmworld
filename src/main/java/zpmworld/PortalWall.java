@@ -1,6 +1,6 @@
 package zpmworld;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class PortalWall extends Wall {
 
@@ -10,7 +10,18 @@ public class PortalWall extends Wall {
 		super();
 	}
 
+	public PortalWall(Point position) {
+		super(position);
+	}
+
+
 	public PortalWall(Portal portal) {
+		super();
+		this.portal = portal;
+	}
+
+	public PortalWall(Portal portal, Point position) {
+		super(position);
 		this.portal = portal;
 	}
 
@@ -22,19 +33,41 @@ public class PortalWall extends Wall {
 		this.portal = portal;
 	}
 
+	public Color getColor(){
+		if(portal != null){
+			return portal.getColor(this);
+		} else {
+			return null;
+		}
+	}
+
 	@Override
 	public void doo(Player player) {
 		switch (player.getAction().getType()) {
-        case MOVE:
-		if (portal.amIPortal(this)) {
-			if (portal.getPair(this) != null) {
-				player.step(portal.getPair(this));
-				portal.getPair(this).containedUnits.add(player);
-			}
-		}
-		break;
-		default:
-			break;
+			case MOVE:
+				if (portal.amIPortal(this)) {
+					Field pair = portal.getPair(this);
+
+					if(pair == null){
+						return;
+					}
+					if(!pair.checkAcceptance(player,ActionType.MOVE)){
+						return;
+					}
+
+					player.step(this);
+					containedUnits.add(player);
+
+					// SpeciÃ¡lis cselekvÃ©sek: ez ide nem is feltÃ©tlenÃ¼l kell (jÃ¡tÃ©k szabÃ¡lyai miatt soha nem kell)
+					if (!containedUnits.isEmpty()){
+						for(Unit unit : containedUnits){
+							unit.accept(player,this);
+						}
+					}
+				}
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -51,38 +84,14 @@ public class PortalWall extends Wall {
 	}
 
 	@Override
-	public Field getNeighbourInDirection(Direction dir) {
-		// TODO Auto-generated method stub
-		return super.getNeighbourInDirection(dir);
-	}
-
-	@Override
-	public boolean addUnit(Unit unit) {
-		// TODO Auto-generated method stub
-		return super.addUnit(unit);
-	}
-
-	@Override
-	public void removeUnit() {
-		// TODO Auto-generated method stub
-		super.removeUnit();
-	}
-
-	@Override
-	public void addNeighbour(Direction direction, Field neighbour) {
-		// TODO Auto-generated method stub
-		super.addNeighbour(direction, neighbour);
-	}
-
-	@Override
 	public String toString(){
 		if(portal.amIPortal(this))
-			return "portálfal: (" + toInt(position.getX()) + "," + toInt(position.getY()) + ") pozíció, " 
-				+ portal.getColor(this) + "színû portál van rajta, " 
-				+ containedUnits.size() + "darab tárolt egység";
+			return "portï¿½lfal: (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") pozï¿½ciï¿½, " 
+				+ portal.getColor(this).toString() + "szï¿½nï¿½ portï¿½l van rajta, "
+				+ containedUnits.size() + "darab tï¿½rolt egysï¿½g";
 		else
-			return "portálfal: (" + toInt(position.getX()) + "," + toInt(position.getY()) + ") pozíció, " 
-			+ "nincs rajta portál, " 
-			+ containedUnits.size() + "darab tárolt egység";
+			return "portï¿½lfal: (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") pozï¿½ciï¿½, " 
+			+ "nincs rajta portï¿½l, " 
+			+ containedUnits.size() + "darab tï¿½rolt egysï¿½g";
 	}
 }

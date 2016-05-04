@@ -1,67 +1,82 @@
 package zpmworld;
+import java.awt.Point;
 
 public class Abyss extends Field {
 
+	// Konstruktorok
 	public Abyss() {
 		super();
 	}
 
+	public Abyss(Point position) {
+		super(position);
+	}
+
+	// Mûködést befolyásoló metódusok
+
+	/**
+	 * Abyss esetén a Player MOVE és DROP is mindig sikerül, de más nem és nincs a playerrel kapcsolatos speciális
+	 * cselekvés (ha bullet képes megölni player, ha az nekimegy, akkor lehetne, de így játszhatóbb (player úgyis meghal))
+	 * @param player
+     */
 	@Override
 	public void doo(Player player) {
 
-		switch (player.getAction().getType()) {
+		ActionType actionType = player.getAction().getType();
+		if(!checkAcceptance(player,actionType)){
+			return;
+		}
+
+		switch (actionType) {
 			case MOVE:
 				player.step(this);
 				player.kill();
 				break;
+			case DROP:
+				Box tempBox = player.dropBox();
+				tempBox.kill();
 			default:
 				break;
 		}
 	}
 
-	public void doo(Replicator replicator) {
-
-		switch (replicator.getAction().getType()) {
-			case MOVE:
-				replicator.step(this);
-				replicator.replaceField();
-				break;
-			default:
-				break;
-		}
-	}
-
+	/**
+	 * Bullet esetén az acceptre bízzuk az ütközés kezelését, ha van containedUnit (ami itt csak
+	 * egy másik Bullet lehet). Cselekvést nem vizsgálunk, mert a Bullet csak MOVE-t tud.
+	 * @param bullet
+	 */
 	@Override
 	public void doo(Bullet bullet) {
-		//containedUnits.add(bullet);
+		if(!checkAcceptance(bullet, ActionType.MOVE)){
+			return;
+		}
+
 		bullet.step(this);
+		containedUnits.add(bullet);
+
+		if(!containedUnits.isEmpty()){
+			for(Unit unit : containedUnits){
+				unit.accept(bullet, this);
+			}
+		}
 	}
 
+	/**
+	 * Replikátor esetén mindig sikerül a rámozgás: még ha van is rajta bullet éppen, akkor is a replikátor speciális
+	 * viselkedése elõnyt élvez, így a bullet nem szûnik meg, de az abyss átalakul (így jobban játszható).
+	 * @param replicator
+     */
 	@Override
-	public Field getNeighbourInDirection(Direction dir) {
-		// TODO Auto-generated method stub
-		return super.getNeighbourInDirection(dir);
+	public void doo(Replicator replicator) {
+		if(!checkAcceptance(replicator, ActionType.MOVE)){	//ez nem is feltétlen kell, a játék szabályai miatt
+			return;
+		}
+
+		replicator.step(this);
+		replicator.replaceField();
 	}
 
-	@Override
-	public boolean addUnit(Unit unit) {
-		// TODO Auto-generated method stub
-		//containedUnits.add(unit);
-		unit.kill();
-		return true;
-	}
 
-	@Override
-	public void removeUnit() {
-		// TODO Auto-generated method stub
-		super.removeUnit();
-	}
-
-	@Override
-	public void addNeighbour(Direction direction, Field neighbour) {
-		// TODO Auto-generated method stub
-		super.addNeighbour(direction, neighbour);
-	}
 
 	@Override
 	public String toString(){
