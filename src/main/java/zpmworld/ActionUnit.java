@@ -60,7 +60,7 @@ public abstract class ActionUnit extends Unit{
 	
 	public void step(Field target){
 		if(currentField != null) {
-			currentField.removeUnit();
+			currentField.removeUnit(this);
 		}
 		currentField = target;
 	}

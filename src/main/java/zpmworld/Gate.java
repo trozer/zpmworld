@@ -154,6 +154,7 @@ public class Gate extends Field {
 		containedUnits.clear();
 	}
 
+
 	/*@Override
 	public String toString(){
 		if (opened)

@@ -20,7 +20,7 @@ public class Game implements KeyListener{
 	private boolean pause;
 	private Graphic graphic;
 
-	public static void main(String[] args){
+	/*public static void main(String[] args){
 		try {
 			Graphic graphic = new Graphic(800,600);
 			Game game = new Game(graphic);
@@ -33,7 +33,7 @@ public class Game implements KeyListener{
 			e.printStackTrace();
 		}
 	}
-
+*/
 	Game(Graphic graphic) throws Exception {
 		state = State.GAME;
 		pause = false;

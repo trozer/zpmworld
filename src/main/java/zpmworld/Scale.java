@@ -234,7 +234,13 @@ public class Scale extends Field {
 			myGate.close();
 		}
 	}
-	
+
+	@Override
+	void removeUnit(Unit unit) {
+		super.removeUnit(unit);
+		gateMechanism();
+	}
+
 	//Teszt
 
 	/*@Override

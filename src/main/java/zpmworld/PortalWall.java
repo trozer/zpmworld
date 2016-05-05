@@ -92,21 +92,21 @@ public class PortalWall extends Wall {
 		}
 	}
 
-	/*@Override
+	@Override
 	public String toString(){
 		if(portal.amIPortal(this))
 			return "port�lfal: (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") poz�ci�, " 
 				+ portal.getColor(this).toString() + "sz�n� port�l van rajta, "
-				+ containedUnits.size() + "darab t�rolt egys�g";
+				+ containedUnits.size() + "darab tárolt egys�g";
 		else
 			return "port�lfal: (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") poz�ci�, " 
 			+ "nincs rajta port�l, " 
 			+ containedUnits.size() + "darab t�rolt egys�g";
-	}*/
+	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return "PortalWall(" + this.hashCode() + ") : (" + (int)position.getX() + "," + (int)position.getY() +
 				") ; containedUnits: " + containedUnits.size() + "db ; portal: " + (portal == null ? "nincs " : ("van : " + portal.getColor(this)));
-	}
+	}*/
 }
