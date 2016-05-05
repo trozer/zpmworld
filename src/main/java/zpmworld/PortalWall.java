@@ -57,8 +57,26 @@ public class PortalWall extends Wall {
 						return;
 					}
 
-					player.step(this);
-					containedUnits.add(player);
+                    player.step(this);
+                    containedUnits.add(player);
+
+                    // Speciális cselekvések: ez ide nem is feltétlenül kell (játék szabályai miatt soha nem kell)
+                    if (!containedUnits.isEmpty()){
+                        Set<Unit> deleteUnits = new HashSet<Unit>();
+                        for(Unit unit : containedUnits){
+                            unit.accept(player,deleteUnits);
+                        }
+                        //takarítás
+                        for(Unit unit : deleteUnits){
+                            if(containedUnits.contains(unit)){
+                                containedUnits.remove(unit);
+                            }
+                        }
+                    }
+
+
+					player.step(pair);
+					pair.containedUnits.add(player);
 
 					// Speciális cselekvések: ez ide nem is feltétlenül kell (játék szabályai miatt soha nem kell)
 					if (!containedUnits.isEmpty()){
@@ -69,7 +87,7 @@ public class PortalWall extends Wall {
 						//takarítás
 						for(Unit unit : deleteUnits){
 							if(containedUnits.contains(unit)){
-								containedUnits.remove(unit);
+								pair.containedUnits.remove(unit);
 							}
 						}
 					}
