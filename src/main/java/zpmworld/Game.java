@@ -566,7 +566,6 @@ public class Game implements KeyListener{
 
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_W){
-			Oneill.toString();
 			if(Oneill.getCurrentDirection() == Direction.NORTH)
 				Oneill.move();
 			else
@@ -590,7 +589,45 @@ public class Game implements KeyListener{
 			else
 				Oneill.turn(Direction.SOUTH);
 		}
+		if(e.getKeyCode() == KeyEvent.VK_R){
+			Oneill.grab();
+		}
+		if(e.getKeyCode() == KeyEvent.VK_F){
+			Oneill.drop();
+		}
+
+		if(e.getKeyCode() == KeyEvent.VK_UP){
+			if(Jaffa.getCurrentDirection() == Direction.NORTH)
+				Jaffa.move();
+			else
+				Jaffa.turn(Direction.NORTH);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_LEFT){
+			if(Jaffa.getCurrentDirection() == Direction.WEST)
+				Jaffa.move();
+			else
+				Jaffa.turn(Direction.WEST);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+			if(Jaffa.getCurrentDirection() == Direction.EAST)
+				Jaffa.move();
+			else
+				Jaffa.turn(Direction.EAST);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_DOWN){
+			if(Jaffa.getCurrentDirection() == Direction.SOUTH)
+				Jaffa.move();
+			else
+				Jaffa.turn(Direction.SOUTH);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_O){
+			Jaffa.grab();
+		}
 		if(e.getKeyCode() == KeyEvent.VK_K){
+			Jaffa.drop();
+		}
+
+		if(e.getKeyCode() == KeyEvent.VK_B){
 			Graphics2D g = (Graphics2D) graphic.getGraphics();
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);

@@ -12,7 +12,7 @@ public class DrawablePlayer extends Drawable{
     private Player player;
 
     DrawablePlayer(Player player) throws IOException {
-        super(4);
+        super(5);
         this.player = player;
         setImgs();
     }
@@ -44,13 +44,22 @@ public class DrawablePlayer extends Drawable{
 
     public void setImgs() throws IOException {
         if(player.getName().equals("Jaffa")){
-
+            img.add(ImageIO.read(new File("jbal.PNG")));
+            img.add(ImageIO.read(new File("jfel.PNG")));
+            img.add(ImageIO.read(new File("jjobb.PNG")));
+            img.add(ImageIO.read(new File("jle.PNG")));
         }else{
             img.add(ImageIO.read(new File("obal.PNG")));
             img.add(ImageIO.read(new File("ofel.PNG")));
             img.add(ImageIO.read(new File("ojobb.PNG")));
             img.add(ImageIO.read(new File("ole.PNG")));
         }
+    }
+
+
+    @Override
+    public Unit getUnit(){
+        return player;
     }
 
     @Override

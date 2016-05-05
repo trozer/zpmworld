@@ -33,25 +33,33 @@ public class Graphic extends JPanel{
     }
 
     public void update(){
-     /*   if(updateSort) {
+        if(updateSort) {
             drawableUnits.sort(new Comparator<Drawable>() {
                 public int compare(Drawable o1, Drawable o2) {
                     return o1.compareTo(o2);
                 }
             });
             updateSort = false;
-        }*/
+        }
         //paintComponent(this.getGraphics());
     }
 
     @Override
-    protected void paintComponent(Graphics g){
-        super.paintComponent(g);
+    public void paint(Graphics g){
+        super.paint(g);
         for(Drawable drawable : drawableFields) {
             drawable.draw(g);
         }
-        for(Drawable drawable : drawableUnits){
-            drawable.draw(g);
+
+        Iterator<Drawable> drIt = drawableUnits.iterator();
+        while(drIt.hasNext()){
+            Drawable drawableUnit = drIt.next();
+            if(drawableUnit.getUnit().isDead()) {
+                drIt.remove();
+            }
+            else {
+                drawableUnit.draw(g);
+            }
         }
     }
 

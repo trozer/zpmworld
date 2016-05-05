@@ -1,7 +1,10 @@
 package zpmworld;
 
 import java.awt.Color;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
@@ -66,28 +69,35 @@ public class Stage implements Serializable
 		                    Road rtemp = new Road();
 							field = rtemp;
 		                    roads.add(field);
-							//game.registerDrawableField(new DrawableRoad(rtemp));
+							game.registerDrawableField(new DrawableRoad(rtemp));
 		                    break;
 		                case 'a':
-		                    field = new Abyss();
+							Abyss atemp = new Abyss();
+		                    field = atemp;
+							game.registerDrawableField(new DrawableAbyss(atemp));
 		                    break;
 		                case 'w':
-		                    field = new Wall();
+							Wall rwall = new Wall();
+		                    field = rwall;
+							game.registerDrawableField(new DrawableWall(rwall));
 		                    break;
 		                case 'p':
 		                	PortalWall portalWall = new PortalWall(portal); 
 		                	field = portalWall;
 		                	activatePortalWalls.add(portalWall);
+							game.registerDrawableField(new DrawablePortalWall(portalWall));
 		                    break;
 		                case 's':
 		                	Scale scale = new Scale();
 		                	field = scale;
 		                	connectScales.add(scale);
+							game.registerDrawableField(new DrawableScale(scale));
 		                    break;
 		                case 'g':
 		                	Gate gate = new Gate();
 		                	field = gate;
 		                	connectGates.add(gate);
+							game.registerDrawableField(new DrawableGate(gate));
 		                    break;
 		                default:
 		                    throw new Exception("Hiba: érvénytelen karakter a táblaleíró részben");       
@@ -182,6 +192,7 @@ public class Stage implements Serializable
 	    						Bullet bullet = new Bullet(new Action(ActionType.MOVE, dir, color),field);
 	    						units.add(bullet);
 	    						field.addUnit(bullet);
+								game.registerDrawableUnit(new DrawableBullet(bullet));
 	    					}else
 	    					if(unitType.equals("O'neill") || unitType.equals("Jaffa")){
 	    						Direction dir = directionByChar(unitElement.getAttribute("direction").charAt(0));
@@ -199,12 +210,12 @@ public class Stage implements Serializable
 
 	    						if(unitType.equals("O'neill")){
 	    							player = new Player(allZPM, dir,new Action(actionType, turnDir, color), field, game,box, "O'neill");
-									//game.registerDrawableUnit(new DrawablePlayer(player));
 									game.setOneill(player);
 	    						}else{
 	    							player = new Player(allZPM, dir,new Action(actionType, turnDir, color), field, game,box ,"Jaffa");
 	    							game.setJaffa(player);
 	    						}
+								game.registerDrawableUnit(new DrawablePlayer(player));
 	    						units.add(player);
 	    						field.addUnit(player);
 	    					}
@@ -214,12 +225,14 @@ public class Stage implements Serializable
 	    						Replicator replicator = new Replicator(game, dir, field);
 	    						units.add(replicator);
 	    						field.addUnit(replicator);
+								game.registerDrawableUnit(new DrawableReplicator(replicator));
 	    						game.setReplicator(replicator);
 	    					}
 	    					else
 	    					if(unitType.equals("Box")){
 	    						Box box = new Box(field);
 	    						units.add(box);
+								game.registerDrawableUnit(new DrawableBox(box));
 	    						if(!connectGates.contains(field))
 	    							field.addUnit(box);
 	    					}else
@@ -227,6 +240,7 @@ public class Stage implements Serializable
 	    						allZPM++;
 	    						ZPM zpm = new ZPM(field);
 	    						field.addUnit(zpm);
+								game.registerDrawableUnit(new DrawableZPM(zpm));
 	    						units.add(zpm);
 	    						zpms.add(zpm);
 	    					}else
@@ -378,6 +392,10 @@ public class Stage implements Serializable
     		roads.set(roads.indexOf(field), road);
     }
     
+    public List<Unit> getUnit(Field field){
+    	return fields.get(fields.indexOf(field)).getUnits();
+    }
+    
     //helper query, check boxes
     public List<Unit> listBoxes(){
     	List<Unit> boxes = new ArrayList<Unit>();
@@ -493,7 +511,7 @@ public class Stage implements Serializable
     }
     
     public void setUnitPos(Field fieldFrom, Field fieldTo){
-    	Set<Unit> fromUnits = fieldFrom.getUnits();
+    	List<Unit> fromUnits = fieldFrom.getUnits();
     	for(Unit unit : fromUnits){
     		fieldFrom.removeUnit(unit);
     		fieldTo.addUnit(unit);
