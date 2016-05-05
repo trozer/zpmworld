@@ -96,13 +96,13 @@ public class MainFrame extends JFrame{
             game.setState(State.GAME);
             Timer updateTimer = new Timer(GAMESPEED, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    if(game.getState() == State.GAME)
+                    if(game.getState() != State.PAUSE)
                         game.update();
                 }
             });
             Timer paintTimer = new Timer(FPS, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    if(game.getState() == State.GAME) {
+                    if(game.getState() != State.PAUSE) {
                         stageGraphic.repaint();
                     }
                 }
