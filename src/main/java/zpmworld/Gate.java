@@ -96,7 +96,11 @@ public class Gate extends Field {
 			}
 		}
 	}
-	
+
+	Boolean isOpened(){
+		return opened;
+	}
+
 	@Override
 	public void forceAddUnit(Unit unit){
 		containedUnits.add(unit);

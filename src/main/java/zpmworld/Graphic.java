@@ -41,20 +41,26 @@ public class Graphic extends JPanel{
             });
             updateSort = false;
         }
-        //paintComponent(this.getGraphics());
     }
 
     @Override
-    protected void paintComponent(Graphics g){
-        super.paintComponent(g);
+    public void paint(Graphics g){
+        super.paint(g);
         for(Drawable drawable : drawableFields) {
             drawable.draw(g);
         }
-        for(Drawable drawable : drawableUnits){
-            drawable.draw(g);
+
+        Iterator<Drawable> drIt = drawableUnits.iterator();
+        while(drIt.hasNext()){
+            Drawable drawableUnit = drIt.next();
+            if(drawableUnit.getUnit().isDead()) {
+                drIt.remove();
+            }
+            else {
+                drawableUnit.draw(g);
+            }
         }
     }
-
 
     public void setGame(Game game){
         this.game = game;

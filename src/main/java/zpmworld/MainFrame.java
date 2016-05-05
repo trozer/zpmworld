@@ -20,8 +20,11 @@ public class MainFrame extends JFrame{
     private Game game;
 
     //16:9-re van optimalizalva
-    public static int FWIDTH = 1366;
-    public static int FHEIGHT = 768;
+    private static int FWIDTH = 1366;
+    private static int FHEIGHT = 768;
+
+    private static int GAMESPEED = 16; //update millisec
+    private static int FPS = 16; //update millisec
 
     private  MainFrame() {
         super("ZPMWorld");
@@ -31,34 +34,35 @@ public class MainFrame extends JFrame{
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-        c.fill = GridBagConstraints.BOTH;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 0.75;
+        c.ipady = (int) (FHEIGHT*0.01);
+
+        menu = new Menu();
+        add(menu, c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 0;
+        c.weightx = 0.25;
+        c.gridheight = 2;
+
+        status = new Status(FHEIGHT);
+        status.setPreferredSize(new Dimension((int) (FWIDTH * 0.15), FHEIGHT));
+        add(status, c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 1;
+        c.weightx = 0.5;
         c.ipady = (int) (FHEIGHT*0.9);
-        c.ipadx = (int) (FWIDTH*0.65);
 
         stageGraphic = new Graphic((int) (FWIDTH * 0.8), FHEIGHT);
         stageGraphic.setPreferredSize(new Dimension((int) (FWIDTH * 0.8), FHEIGHT));
         add(stageGraphic, c);
 
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 0;
-        c.gridy = 0;
-        c.ipady = (int) (FHEIGHT*0.1);
-
-        menu = new Menu();
-        add(menu, c);
-
-        c.fill = GridBagConstraints.VERTICAL;
-        c.gridx = 1;
-        c.gridy = 0;
-        c.gridheight = 2;
-        c.ipadx = (int) (FWIDTH*0.35);
-        c.ipady = (int) (FHEIGHT);
-
-        status = new Status();
-        status.setPreferredSize(new Dimension((int) (FWIDTH * 0.2), FHEIGHT));
-        add(status, c);
 
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -87,12 +91,12 @@ public class MainFrame extends JFrame{
             game.newGame(new File("testMap.xml"));
             game.update();
             game.setState(State.GAME);
-            Timer updateTimer = new Timer(16, new ActionListener() {
+            Timer updateTimer = new Timer(GAMESPEED, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     game.update();
                 }
             });
-            Timer paintTimer = new Timer(16, new ActionListener() {
+            Timer paintTimer = new Timer(FPS, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     stageGraphic.repaint();
                 }

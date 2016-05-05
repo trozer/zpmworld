@@ -2,29 +2,32 @@
 <Stage>
 	<rows>
 		 <row id='0'>wwwwwwwwwwwwww</row>
-		 <row id='1'>wsrrrpwwsrrwrw</row>
-		 <row id='2'>wsrrrpwwsgrrpw</row>
-		 <row id='3'>wsargpwwsargpw</row>
-		 <row id='4'>wrprrpwwwprrpw</row>
-		 <row id='5'>wrrrrrrrrrsrww</row>
+		 <row id='1'>wsrrrpwwrrrwrw</row>
+		 <row id='2'>wprrrpwwsgrrpw</row>
+		 <row id='3'>wsargpwwaarapw</row>
+		 <row id='4'>wrprrpwwwrrrpw</row>
+		 <row id='5'>wrrrrrrrrrgrww</row>
 		 <row id='6'>wwwwwwwwwwwwww</row>
 	</rows>
  	<units>
   	<!--	<unit row='1' col='3' color="blue" direction="E">Bullet</unit> --><!-- minden attribútumot adjadtok meg, kivéve a játékosnál turndirt és colort (ezeket csak akkor, ha lő vagy fordul), ha nem így tesztek, hiba lesz -->
 		<unit row='1' col='4' >Box</unit><!-- ZPM-ek és Boxok hamarabb legyenek, mint a játékosok, ez nagyban megkönnyíti a dolgokat -->
-		<unit row='4' col='4' >ZPM</unit>
+		<unit row='2' col='10' >Box</unit>
+		<unit row='5' col='4' >ZPM</unit>
+		<unit row='5' col='11' >ZPM</unit>
 		<unit row='2' col='3' direction="E" action="NONE" box='false'>O'neill</unit>
-		<unit row='5' col='5' direction="N" action="NONE" box='true'>Jaffa</unit>
-	<!--	<unit row='5' col='1' direction="W" action="NONE" box='true'>Replicator</unit> -->
+		<unit row='5' col='1' direction="N" action="NONE" box='true'>Jaffa</unit> 
+		<unit row='1' col='9' direction="W" action="NONE" box='false'>Replicator</unit> 
 	</units>
 	<field_properties>
 		<connections>
-			<connection fRow='1' fCol='1' toRow='2' toCol='2'/> <!-- 0,1-es Scale csatlakozik az 1,6-os Gate-hez (from -> to analógia) -->
+			<connection fRow='1' fCol='1' toRow='2' toCol='9'/> <!-- 0,1-es Scale csatlakozik az 1,6-os Gate-hez (from -> to analógia) -->
 			<connection fRow='3' fCol='1' toRow='3' toCol='4'/>
+			<connection fRow='2' fCol='8' toRow='5' toCol='10'/>
 		</connections>
 		<portalwall_colors>
 			<portalwall_color row='2' col='5' color="blue"/>  <!-- a szín már jelenti egyben azt is hogy az adott portál "aktív" (tehát van rajta valami) -->
-			<portalwall_color row='1' col='5' color="yellow"/> <!-- ha a másik szín, "színpár", akkor az már átjárót is jelent egyben(Portal osztály gondoskodik erről)-->
+			<portalwall_color row='4' col='12' color="yellow"/> <!-- ha a másik szín, "színpár", akkor az már átjárót is jelent egyben(Portal osztály gondoskodik erről)-->
 		</portalwall_colors>
 	</field_properties>
 </Stage>

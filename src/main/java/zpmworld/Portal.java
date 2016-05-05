@@ -74,16 +74,16 @@ public class Portal {
 		return null;
 	}
 	
-	public String getColor(Field field){
+	public Color getColor(Field field){
 		if (blue == field) {
-			return "kék";
+			return Color.BLUE;
 		} else if (yellow == field) {
-			return "sárga";
+			return Color.YELLOW;
 		} else if (red == field) {
-			return "piros";
+			return Color.RED;
 		} else if (green == field) {
-			return "zöld";
+			return Color.GREEN;
 		}
-		return "";
+		return Color.WHITE;
 	}
 }
