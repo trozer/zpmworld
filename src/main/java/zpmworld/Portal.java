@@ -67,26 +67,26 @@ public class Portal {
 	}
 
 	public Field getPair(Field field) {
-		if (blue.equals(field)) {
+		if (blue != null && blue.equals(field)) {
 			return yellow;
-		} else if (yellow.equals(field)) {
+		} else if (yellow != null && yellow.equals(field)) {
 			return blue;
-		} else if (red.equals(field)) {
+		} else if (red != null && red.equals(field)) {
 			return green;
-		} else if (green.equals(field)) {
+		} else if (green != null && green.equals(field)) {
 			return red;
 		}
 		return null;
 	}
 	
 	public Color getColor(Field field){
-		if (blue.equals(field)) {
+		if (blue != null && blue.equals(field)) {
 			return Color.BLUE;
-		} else if (yellow.equals(field)) {
+		} else if (yellow != null && yellow.equals(field)) {
 			return Color.YELLOW;
-		} else if (red.equals(field)) {
+		} else if (red != null && red.equals(field)) {
 			return Color.RED;
-		} else if (green.equals(field)) {
+		} else if (green != null && green.equals(field)) {
 			return Color.GREEN;
 		}
 		return null;
