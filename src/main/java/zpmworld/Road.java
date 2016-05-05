@@ -16,7 +16,7 @@ public class Road extends Field {
 	public Road(Point position){
 		super(position);
 	}
-	// Mûködés
+	// Mï¿½kï¿½dï¿½s
 	@Override
 	public void doo(Player player){
 
@@ -28,17 +28,17 @@ public class Road extends Field {
 		switch (actionType) {
         	case MOVE:
 
-				// Ha mindenki ellenõrizte a MOVE-t, akkor a Field elvégzi annak alapértelmezett részét
+				// Ha mindenki ellenï¿½rizte a MOVE-t, akkor a Field elvï¿½gzi annak alapï¿½rtelmezett rï¿½szï¿½t
 				player.step(this);
 				containedUnits.add(player);
 
-				// Speciális cselekvések
+				// Speciï¿½lis cselekvï¿½sek
 				if (!containedUnits.isEmpty()){
 					Set<Unit> deleteUnits = new HashSet<Unit>();
 					for(Unit unit : containedUnits){
 						unit.accept(player,deleteUnits);
 					}
-					//takarítás
+					//takarï¿½tï¿½s
 					for(Unit unit : deleteUnits){
 						if(containedUnits.contains(unit)){
 							containedUnits.remove(unit);
@@ -47,13 +47,13 @@ public class Road extends Field {
 				}
         		break;
         
-			case GRAB:	//ha a játékos fel akar venni valamit
+			case GRAB:	//ha a jï¿½tï¿½kos fel akar venni valamit
         		if (!containedUnits.isEmpty()){
 					Set<Unit> deleteUnits = new HashSet<Unit>();
 					for(Unit unit : containedUnits){
 						unit.accept(player,deleteUnits);
 					}
-					//takarítás
+					//takarï¿½tï¿½s
 					for(Unit unit : deleteUnits){
 						if(containedUnits.contains(unit)){
 							containedUnits.remove(unit);
@@ -63,11 +63,13 @@ public class Road extends Field {
         		break;
 
 			case DROP:
-				// ha mindenki engedélyezte a DROP-ot, akkor accept nélkül átveszi a Road,
-				// hiszen nincs speciális cselekvés
+				// ha mindenki engedï¿½lyezte a DROP-ot, akkor accept nï¿½lkï¿½l ï¿½tveszi a Road,
+				// hiszen nincs speciï¿½lis cselekvï¿½s
 				Box box = player.dropBox();
-				box.setCurrentField(this);
-				containedUnits.add(box);
+				if(box != null) {
+					box.setCurrentField(this);
+					containedUnits.add(box);
+				}
 				break;
 
         default:
@@ -82,17 +84,17 @@ public class Road extends Field {
 			return;
 		}
 
-		// Alapértelmezett cselekvés: ha mindenki engedélyezte, akkor semmi akadálya
+		// Alapï¿½rtelmezett cselekvï¿½s: ha mindenki engedï¿½lyezte, akkor semmi akadï¿½lya
 		bullet.step(this);
 		containedUnits.add(bullet);
 
-		// Speciális cselekvés
+		// Speciï¿½lis cselekvï¿½s
 		if(!containedUnits.isEmpty()) {
 			Set<Unit> deleteUnits = new HashSet<Unit>();
 			for(Unit unit : containedUnits){
 				unit.accept(bullet,deleteUnits);
 			}
-			//takarítás
+			//takarï¿½tï¿½s
 			for(Unit unit : deleteUnits){
 				if(containedUnits.contains(unit)){
 					containedUnits.remove(unit);
@@ -104,20 +106,20 @@ public class Road extends Field {
 	@Override
 	 public void doo(Replicator replicator){
 
-		if(!checkAcceptance(replicator, ActionType.MOVE)){		//TODO nem feltétlen kell egyszerüsíteni... szebb a MOVEos megoldás
+		if(!checkAcceptance(replicator, ActionType.MOVE)){		//TODO nem feltï¿½tlen kell egyszerï¿½sï¿½teni... szebb a MOVEos megoldï¿½s
 			return;
 		}
 
 		replicator.step(this);
 		containedUnits.add(replicator);
 
-		// Speciális cselekvés
+		// Speciï¿½lis cselekvï¿½s
 		if(!containedUnits.isEmpty()) {
 			Set<Unit> deleteUnits = new HashSet<Unit>();
 			for(Unit unit : containedUnits){
 				unit.accept(replicator,deleteUnits);
 			}
-			//takarítás
+			//takarï¿½tï¿½s
 			for(Unit unit : deleteUnits){
 				if(containedUnits.contains(unit)){
 					containedUnits.remove(unit);
@@ -128,7 +130,7 @@ public class Road extends Field {
 	/*
 	@Override
 	public String toString(){
-		return "út:" + super.toString();
+		return "ï¿½t:" + super.toString();
 	}*/
 
 	@Override

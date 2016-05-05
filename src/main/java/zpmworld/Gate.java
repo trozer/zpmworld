@@ -74,8 +74,10 @@ public class Gate extends Field {
 					// ha mindenki engedélyezte a DROP-ot, akkor accept nélkül átveszi a Road,
 					// hiszen nincs speciális cselekvés
 					Box box = player.dropBox();
-					box.setCurrentField(this);
-					containedUnits.add(box);
+                    if(box != null) {
+                        box.setCurrentField(this);
+                        containedUnits.add(box);
+                    }
 					break;
 
 				default:

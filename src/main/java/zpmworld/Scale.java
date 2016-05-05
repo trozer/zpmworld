@@ -143,8 +143,10 @@ public class Scale extends Field {
 			 */
 			case DROP:
 				Box box = player.dropBox();
-				box.setCurrentField(this);
-				containedBoxes.add(box);
+                if(box != null) {
+                    box.setCurrentField(this);
+                    containedUnits.add(box);
+                }
 
 				gateMechanism();
 				break;

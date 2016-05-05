@@ -46,7 +46,12 @@ public class Portal {
 	}
 
 	public boolean amIPortal(Field field) {
-		return (blue.equals(field) || yellow.equals(field) || red.equals(field) || green.equals(field));
+        if(field == null)   return false;
+        if(blue != null && blue.equals(field)) return true;
+        if(yellow != null && yellow.equals(field)) return true;
+        if(red != null && red.equals(field)) return true;
+        if(green != null && green.equals(field)) return true;
+		return false;
 	}
 
 	public void createPortal(Field field, Color color) {
