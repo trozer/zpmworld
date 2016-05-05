@@ -1,6 +1,8 @@
 package zpmworld;
 
 import java.awt.Point;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Gate extends Field {
 	
@@ -40,16 +42,30 @@ public class Gate extends Field {
 
 					// Speciális cselekvések
 					if (!containedUnits.isEmpty()){
+						Set<Unit> deleteUnits = new HashSet<Unit>();
 						for(Unit unit : containedUnits){
-							unit.accept(player,this);
+							unit.accept(player,deleteUnits);
+						}
+						//takarítás
+						for(Unit unit : deleteUnits){
+							if(containedUnits.contains(unit)){
+								containedUnits.remove(unit);
+							}
 						}
 					}
 					break;
 
 				case GRAB:	//ha a játékos fel akar venni valamit
 					if (!containedUnits.isEmpty()){
+						Set<Unit> deleteUnits = new HashSet<Unit>();
 						for(Unit unit : containedUnits){
-							unit.accept(player,this);
+							unit.accept(player,deleteUnits);
+						}
+						//takarítás
+						for(Unit unit : deleteUnits){
+							if(containedUnits.contains(unit)){
+								containedUnits.remove(unit);
+							}
 						}
 					}
 					break;
@@ -80,9 +96,16 @@ public class Gate extends Field {
 			containedUnits.add(bullet);
 
 			// Speciális cselekvés
-			if(!containedUnits.isEmpty()) {
-				for (Unit unit : containedUnits) {
-					unit.accept(bullet, this);
+			if (!containedUnits.isEmpty()){
+				Set<Unit> deleteUnits = new HashSet<Unit>();
+				for(Unit unit : containedUnits){
+					unit.accept(bullet,deleteUnits);
+				}
+				//takarítás
+				for(Unit unit : deleteUnits){
+					if(containedUnits.contains(unit)){
+						containedUnits.remove(unit);
+					}
 				}
 			}
 
@@ -102,9 +125,16 @@ public class Gate extends Field {
 			replicator.step(this);
 			containedUnits.add(replicator);
 
-			if(!containedUnits.isEmpty()){
+			if (!containedUnits.isEmpty()){
+				Set<Unit> deleteUnits = new HashSet<Unit>();
 				for(Unit unit : containedUnits){
-					unit.accept(replicator, this);
+					unit.accept(replicator,deleteUnits);
+				}
+				//takarítás
+				for(Unit unit : deleteUnits){
+					if(containedUnits.contains(unit)){
+						containedUnits.remove(unit);
+					}
 				}
 			}
 		}
@@ -124,7 +154,7 @@ public class Gate extends Field {
 		containedUnits.clear();
 	}
 
-	@Override
+	/*@Override
 	public String toString(){
 		if (opened)
 			return "kapu:" + " (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") poz�ci�, "
@@ -134,6 +164,11 @@ public class Gate extends Field {
 			return "kapu:" + " (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") poz�ci�, "
 				+ "z�rva, "
 				+ containedUnits.size() + " darab t�rolt egys�g";
-	}
+	}*/
 
+	@Override
+	public String toString() {
+		return "Gate(" + this.hashCode() + ") : (" + (int)position.getX() + "," + (int)position.getY() +
+				") ; containedUnits: " + containedUnits.size() + "db ; opened=" + opened;
+	}
 }

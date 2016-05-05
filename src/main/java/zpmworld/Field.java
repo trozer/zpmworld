@@ -24,7 +24,7 @@ public abstract class Field {
 		neighbours.put(Direction.SOUTH, null);
 		neighbours.put(Direction.WEST, null);
 		neighbours.put(Direction.EAST, null);
-		containedUnits = new TreeSet<Unit>();		//TreeSet: kevés elem, így fontosabb a sorrend, mint a keresési gyorsaság (ellenben HashSettel)
+		containedUnits = new HashSet<Unit>();
 	}
 
 	public Field(Point position){
@@ -33,7 +33,7 @@ public abstract class Field {
 		neighbours.put(Direction.SOUTH, null);
 		neighbours.put(Direction.WEST, null);
 		neighbours.put(Direction.EAST, null);
-		containedUnits = new TreeSet<Unit>();
+		containedUnits = new HashSet<Unit>();
 		this.position = position;
 	}
 
@@ -122,11 +122,16 @@ public abstract class Field {
 
 	}
 	
-	@Override
+	/*@Override
 	public String toString(){
 		return " (" + (int)position.getX() + "," + (int)position.getY() + ") poz�ci�, "
 				+ containedUnits.size() + " darab t�rolt egys�g";
 		
+	}*/
+
+	@Override
+	public String toString() {
+		return "Field(" + this.hashCode() + ") : (" + (int)position.getX() + "," + (int)position.getY() + ") ; containedUnits: " + containedUnits.size() + "db ";
 	}
 
 	public void removeLastAdded() {

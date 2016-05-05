@@ -1,6 +1,10 @@
 package zpmworld;
 
 import java.awt.Point;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class Road extends Field {
 
@@ -30,16 +34,30 @@ public class Road extends Field {
 
 				// Speciális cselekvések
 				if (!containedUnits.isEmpty()){
+					Set<Unit> deleteUnits = new HashSet<Unit>();
 					for(Unit unit : containedUnits){
-						unit.accept(player,this);
+						unit.accept(player,deleteUnits);
+					}
+					//takarítás
+					for(Unit unit : deleteUnits){
+						if(containedUnits.contains(unit)){
+							containedUnits.remove(unit);
+						}
 					}
 				}
         		break;
         
 			case GRAB:	//ha a játékos fel akar venni valamit
         		if (!containedUnits.isEmpty()){
+					Set<Unit> deleteUnits = new HashSet<Unit>();
 					for(Unit unit : containedUnits){
-						unit.accept(player,this);
+						unit.accept(player,deleteUnits);
+					}
+					//takarítás
+					for(Unit unit : deleteUnits){
+						if(containedUnits.contains(unit)){
+							containedUnits.remove(unit);
+						}
 					}
     			}
         		break;
@@ -70,8 +88,15 @@ public class Road extends Field {
 
 		// Speciális cselekvés
 		if(!containedUnits.isEmpty()) {
-			for (Unit unit : containedUnits) {
-				unit.accept(bullet, this);
+			Set<Unit> deleteUnits = new HashSet<Unit>();
+			for(Unit unit : containedUnits){
+				unit.accept(bullet,deleteUnits);
+			}
+			//takarítás
+			for(Unit unit : deleteUnits){
+				if(containedUnits.contains(unit)){
+					containedUnits.remove(unit);
+				}
 			}
 		}
 	}
@@ -86,15 +111,28 @@ public class Road extends Field {
 		replicator.step(this);
 		containedUnits.add(replicator);
 
-		if(!containedUnits.isEmpty()){
+		// Speciális cselekvés
+		if(!containedUnits.isEmpty()) {
+			Set<Unit> deleteUnits = new HashSet<Unit>();
 			for(Unit unit : containedUnits){
-				unit.accept(replicator, this);
+				unit.accept(replicator,deleteUnits);
+			}
+			//takarítás
+			for(Unit unit : deleteUnits){
+				if(containedUnits.contains(unit)){
+					containedUnits.remove(unit);
+				}
 			}
 		}
 	}
-	
+	/*
 	@Override
 	public String toString(){
 		return "út:" + super.toString();
+	}*/
+
+	@Override
+	public String toString() {
+		return "Road(" + this.hashCode() + ") : (" + (int)position.getX() + "," + (int)position.getY() + ") ; containedUnits: " + containedUnits.size() + "db ";
 	}
 }

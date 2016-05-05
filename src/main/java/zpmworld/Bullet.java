@@ -2,7 +2,9 @@ package zpmworld;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class Bullet extends ActionUnit{
 
@@ -60,10 +62,10 @@ public class Bullet extends ActionUnit{
     }
 
     @Override
-    public void accept(Replicator replicator, Field field) {
-        field.removeUnit(replicator);
+    public void accept(Replicator replicator, Set<Unit> deleteUnits) {
+        deleteUnits.add(this);
+        deleteUnits.add(replicator);
         replicator.kill();
-        field.removeUnit(this);
         this.kill();
     }
 
@@ -77,15 +79,22 @@ public class Bullet extends ActionUnit{
     	else if (color == Color.GREEN) szin = "green";
     	else szin = "red";
     	
-    	if (currentDirection == Direction.NORTH) irany = "�szak";
+    	if (currentDirection == Direction.NORTH) irany = "észak";
 		else if (currentDirection == Direction.EAST) irany = "kelet";
-		else if (currentDirection == Direction.SOUTH) irany = "d�l";
+		else if (currentDirection == Direction.SOUTH) irany = "dél";
 		else irany = "nyugat";
     	
     	if (dead == false) elet = "�l";
 		else elet = "halott";
+
+        String pos;
+        if(currentField != null){
+            pos = "(" + currentField.getPosition().x + "," + currentField.getPosition().y + ")";
+        } else {
+            pos = "(null,null)";
+        }
     	
-    	return "l�ved�k: mozg�s cselekv�st akar v�grehajtani, " + irany + " ir�nyba n�z, " + szin + ", " + elet;
+    	return "lövedék:" + pos + " ; mozgás cselekvést akar végrehajtani, " + irany + " irányba néz, " + szin + ", " + elet;
     }
 
 }

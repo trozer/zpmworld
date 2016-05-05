@@ -1,9 +1,8 @@
 package zpmworld;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public abstract class Unit {
+public abstract class Unit{
 
 	// Attributumok
 
@@ -99,11 +98,9 @@ public abstract class Unit {
 	// Speciális cselekvés a target irányába, launcheren álló Unit felõl
 	//TODO jobb elnevezés a target és launcher nem szerencsés
 	//TODO field igazából nem is kell, hiszen az mindig a Unit.currentField...
-	public void accept(Player target, Field launcher){}
-	public void accept(Bullet target, Field launcher){}
-	public void accept(Replicator target, Field launcher){}
-	//TODO ?kell ez?
-	public void accept(Field launcher, Player target){}
+	public void accept(Player player, Set<Unit> deleteUnits){}
+	public void accept(Bullet bullet, Set<Unit> deleteUnits){}
+	public void accept(Replicator replicator, Set<Unit> deleteUnits){}
 
 	@Override
 	public

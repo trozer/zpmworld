@@ -1,7 +1,11 @@
 package zpmworld;
 
+import com.sun.deploy.panel.ITreeNode;
+
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class Box extends Unit{
 
@@ -35,11 +39,11 @@ public class Box extends Unit{
     }
 
     @Override
-    public void accept(Player target, Field launcher) {
-        switch (target.getAction().getType()){
+    public void accept(Player player, Set<Unit> deleteUnits) {
+        switch (player.getAction().getType()){
             case GRAB:
-                if(target.grabBox(this)){
-                    launcher.removeUnit(this);
+                if(player.grabBox(this)){
+                    deleteUnits.add(this);
                     this.currentField = null;
                 }
                 break;
@@ -53,7 +57,14 @@ public class Box extends Unit{
     	String life;
 		if (dead == false) life = "él";
 		else life = "halott";
+
+        String pos;
+        if(currentField != null){
+            pos = "(" + currentField.getPosition().x + "," + currentField.getPosition().y + ")";
+        } else {
+            pos = "(null,null)";
+        }
 		
-    	return "Doboz " + weight + " tömegû " + life;
+    	return "Doboz " +pos + " ; " + weight + " tömegû " + life;
     }
 }

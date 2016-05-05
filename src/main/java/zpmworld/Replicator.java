@@ -3,6 +3,7 @@ package zpmworld;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public class Replicator extends ActionUnit{
 	
@@ -61,10 +62,10 @@ public class Replicator extends ActionUnit{
 
 	// Speciális cselekvés bullet esetén
 	@Override
-	public void accept(Bullet bullet, Field field){
-		field.removeUnit(bullet);
+	public void accept(Bullet bullet, Set<Unit> deleteUnits){
+		deleteUnits.add(bullet);
+		deleteUnits.add(this);
 		bullet.kill();
-		field.removeUnit(this);
 		this.kill();
 	}
 

@@ -1,6 +1,8 @@
 package zpmworld;
 
 import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PortalWall extends Wall {
 
@@ -60,8 +62,15 @@ public class PortalWall extends Wall {
 
 					// Speciális cselekvések: ez ide nem is feltétlenül kell (játék szabályai miatt soha nem kell)
 					if (!containedUnits.isEmpty()){
+						Set<Unit> deleteUnits = new HashSet<Unit>();
 						for(Unit unit : containedUnits){
-							unit.accept(player,this);
+							unit.accept(player,deleteUnits);
+						}
+						//takarítás
+						for(Unit unit : deleteUnits){
+							if(containedUnits.contains(unit)){
+								containedUnits.remove(unit);
+							}
 						}
 					}
 				}
@@ -83,7 +92,7 @@ public class PortalWall extends Wall {
 		}
 	}
 
-	@Override
+	/*@Override
 	public String toString(){
 		if(portal.amIPortal(this))
 			return "port�lfal: (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") poz�ci�, " 
@@ -93,5 +102,11 @@ public class PortalWall extends Wall {
 			return "port�lfal: (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") poz�ci�, " 
 			+ "nincs rajta port�l, " 
 			+ containedUnits.size() + "darab t�rolt egys�g";
+	}*/
+
+	@Override
+	public String toString() {
+		return "PortalWall(" + this.hashCode() + ") : (" + (int)position.getX() + "," + (int)position.getY() +
+				") ; containedUnits: " + containedUnits.size() + "db ; portal: " + (portal == null ? "nincs " : ("van : " + portal.getColor(this)));
 	}
 }

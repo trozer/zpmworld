@@ -1,6 +1,7 @@
 package zpmworld;
 
 import java.awt.Point;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -90,8 +91,15 @@ public class Scale extends Field {
 
 				// Speciális cselekvések
 				if (!containedUnits.isEmpty()){
+					Set<Unit> deleteUnits = new HashSet<Unit>();
 					for(Unit unit : containedUnits){
-						unit.accept(player,this);
+						unit.accept(player,deleteUnits);
+					}
+					//takarítás
+					for(Unit unit : deleteUnits){
+						if(containedUnits.contains(unit)){
+							containedUnits.remove(unit);
+						}
 					}
 				}
 
@@ -99,15 +107,30 @@ public class Scale extends Field {
 				break;
 
 			case GRAB:	//ha a játékos leszed róla egy tárgyat, a hozzá tartozó kapu bezárul
+
 				if (!containedBoxes.isEmpty()){
+					Set<Unit> deleteUnits = new HashSet<Unit>();
 					for(Box box : containedBoxes){
-						box.accept(player,this);
+						box.accept(player,deleteUnits);
+					}
+					//takarítás
+					for(Unit unit : deleteUnits){
+						if(containedBoxes.contains(unit)){
+							containedBoxes.remove(unit);
+						}
 					}
 				}
 
 				if (!containedUnits.isEmpty()){
+					Set<Unit> deleteUnits = new HashSet<Unit>();
 					for(Unit unit : containedUnits){
-						unit.accept(player,this);
+						unit.accept(player,deleteUnits);
+					}
+					//takarítás
+					for(Unit unit : deleteUnits){
+						if(containedUnits.contains(unit)){
+							containedUnits.remove(unit);
+						}
 					}
 				}
 
@@ -146,9 +169,16 @@ public class Scale extends Field {
 		bullet.step(this);
 		containedUnits.add(bullet);
 
-		if(!containedUnits.isEmpty()) {
-			for (Unit unit : containedUnits) {
-				unit.accept(bullet, this);
+		if (!containedUnits.isEmpty()){
+			Set<Unit> deleteUnits = new HashSet<Unit>();
+			for(Unit unit : containedUnits){
+				unit.accept(bullet,deleteUnits);
+			}
+			//takarítás
+			for(Unit unit : deleteUnits){
+				if(containedUnits.contains(unit)){
+					containedUnits.remove(unit);
+				}
 			}
 		}
 
@@ -171,9 +201,16 @@ public class Scale extends Field {
 		replicator.step(this);
 		containedUnits.add(replicator);
 
-		if(!containedUnits.isEmpty()){
+		if (!containedUnits.isEmpty()){
+			Set<Unit> deleteUnits = new HashSet<Unit>();
 			for(Unit unit : containedUnits){
-				unit.accept(replicator, this);
+				unit.accept(replicator,deleteUnits);
+			}
+			//takarítás
+			for(Unit unit : deleteUnits){
+				if(containedUnits.contains(unit)){
+					containedUnits.remove(unit);
+				}
 			}
 		}
 
@@ -200,7 +237,7 @@ public class Scale extends Field {
 	
 	//Teszt
 
-	@Override
+	/*@Override
 	public String toString(){
 		int gross = 0;		//összsúly
 
@@ -230,5 +267,20 @@ public class Scale extends Field {
 					return "mérleg: (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") pozíció, "
 					+ openLimit + " súlyhatár, nincs lenyomva , nincs hozzákapcsolt kapu, " 
 					+ containedUnits.size() + " darab tárolt egység";
+	}*/
+	@Override
+	public String toString() {
+		int gross = 0;		//összsúly
+
+		for(Unit unit : containedUnits){
+			gross += unit.getWeight();
+		}
+
+		for(Box box : containedBoxes){
+			gross += box.getWeight();
+		}
+		return "Scale(" + this.hashCode() + ") : (" + (int)position.getX() + "," + (int)position.getY() + ") ; containedUnits: " +
+				containedUnits.size() + "db ; containedBoxes: " + containedBoxes.size() + " db ; összsúly: " + gross +
+				" ; openLimit: " + openLimit + " ; állapot: " + (gross<openLimit ? "zár" : "nyit");
 	}
 }

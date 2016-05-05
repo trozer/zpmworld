@@ -1,5 +1,7 @@
 package zpmworld;
 import java.awt.Point;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Abyss extends Field {
 
@@ -54,9 +56,16 @@ public class Abyss extends Field {
 		bullet.step(this);
 		containedUnits.add(bullet);
 
-		if(!containedUnits.isEmpty()){
+		if (!containedUnits.isEmpty()){
+			Set<Unit> deleteUnits = new HashSet<Unit>();
 			for(Unit unit : containedUnits){
-				unit.accept(bullet, this);
+				unit.accept(bullet,deleteUnits);
+			}
+			//takarítás
+			for(Unit unit : deleteUnits){
+				if(containedUnits.contains(unit)){
+					containedUnits.remove(unit);
+				}
 			}
 		}
 	}
@@ -80,6 +89,6 @@ public class Abyss extends Field {
 
 	@Override
 	public String toString(){
-		return "szakadék: " + super.toString();
+		return "Abyss(" + this.hashCode() + ") : (" + (int)position.getX() + "," + (int)position.getY() + ") ; containedUnits: " + containedUnits.size() + "db ";
 	}
 }

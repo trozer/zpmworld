@@ -1,7 +1,6 @@
 package zpmworld;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ZPM extends Unit{
 
@@ -37,14 +36,14 @@ public class ZPM extends Unit{
     /**
      * Az accept csak azt a cselekvést végzi el, ami õt magát a Fieldrõl a kezdeményezõ felé mozgatja. Az addZPM mindig
      * sikerült.
-     * @param launcher
      * @param target
      */
     @Override
-    public void accept(Player target, Field launcher) {
+    public void accept(Player target, Set<Unit> deleteUnits) {
         switch (target.getAction().getType()){
+            case MOVE:
             case GRAB:
-                launcher.removeUnit(this);
+                deleteUnits.add(this);
                 currentField = null;
                 target.addZPM(this);
                 break;
@@ -55,6 +54,12 @@ public class ZPM extends Unit{
 
     @Override
     public String toString(){
-    	return "ZPM";
+        String pos;
+        if(currentField != null){
+            pos = "(" + currentField.getPosition().x + "," + currentField.getPosition().y + ")";
+        } else {
+            pos = "(null,null)";
+        }
+    	return "ZPM " + pos;
     }
 }

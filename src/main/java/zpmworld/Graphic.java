@@ -33,14 +33,14 @@ public class Graphic extends JPanel{
     }
 
     public void update(){
-        if(updateSort) {
+     /*   if(updateSort) {
             drawableUnits.sort(new Comparator<Drawable>() {
                 public int compare(Drawable o1, Drawable o2) {
                     return o1.compareTo(o2);
                 }
             });
             updateSort = false;
-        }
+        }*/
         //paintComponent(this.getGraphics());
     }
 

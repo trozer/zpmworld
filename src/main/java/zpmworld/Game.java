@@ -26,8 +26,8 @@ public class Game implements KeyListener{
 			Game game = new Game(graphic);
 			System.out.println("Üdvözöllek a ZPM világ nevû játékban!");
 			//later check args and run appropiate command
-			File argFile = new File("testMap.xml");
-			game.newGame(argFile);
+			//File argFile = new File("t1.xml");
+			//game.newGame(argFile);
 			game.console();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -336,7 +336,7 @@ public class Game implements KeyListener{
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
-				break;
+				//break;
 			}
 		}
 	}
