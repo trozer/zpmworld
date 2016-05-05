@@ -20,13 +20,28 @@ public class DrawableBullet extends Drawable{
     public void draw(Graphics graphic){
         if(bullet.getCurrentField() != null) {
             Point pos = bullet.getCurrentField().getPosition();
-            graphic.drawImage(img.get(0), (int) pos.getX() * (int) sizeReference.getX(), (int) pos.getY() * (int) sizeReference.getY(),
-                    (int) (Scale * img.get(0).getWidth()), (int) (Scale * img.get(0).getHeight()), null);
+
+            int imageByDir = 0;
+            Color color = bullet.getColor();
+            if(color.equals(Color.BLUE))
+                imageByDir = 0;
+            if(color.equals(Color.YELLOW))
+                imageByDir = 1;
+            if(color.equals(Color.RED))
+                imageByDir = 2;
+            if(color.equals(Color.GREEN))
+                imageByDir = 3;
+
+            graphic.drawImage(img.get(imageByDir), (int) pos.getX() * (int) sizeReference.getX(), (int) pos.getY() * (int) sizeReference.getY(),
+                    (int) (Scale * img.get(imageByDir).getWidth()), (int) (Scale * img.get(imageByDir).getHeight()), null);
         }
     }
 
     public void setImgs() throws IOException {
-        img.add(ImageIO.read(new File("doboz.PNG")));
+        img.add(ImageIO.read(new File("bulletb.PNG")));
+        img.add(ImageIO.read(new File("bullety.PNG")));
+        img.add(ImageIO.read(new File("bulletr.PNG")));
+        img.add(ImageIO.read(new File("bulletg.PNG")));
     }
 
 

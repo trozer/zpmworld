@@ -482,7 +482,14 @@ public class Game implements KeyListener{
 	}
 
 	public void pause(){
-		pause = true;
+		if (state != State.PAUSE) {
+			pause = true;
+			state = State.PAUSE;
+		}
+		else {
+			state = State.GAME;
+			pause = false;
+		}
 	}
 
 	public void resume(){
@@ -596,6 +603,13 @@ public class Game implements KeyListener{
 			Oneill.drop();
 		}
 
+		if(e.getKeyCode() == KeyEvent.VK_E){
+			Oneill.shoot(Color.BLUE);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_Q){
+			Oneill.shoot(Color.YELLOW);
+		}
+
 		if(e.getKeyCode() == KeyEvent.VK_UP){
 			if(Jaffa.getCurrentDirection() == Direction.NORTH)
 				Jaffa.move();
@@ -627,7 +641,14 @@ public class Game implements KeyListener{
 			Jaffa.drop();
 		}
 
-		if(e.getKeyCode() == KeyEvent.VK_B){
+		if(e.getKeyCode() == KeyEvent.VK_N){
+			Jaffa.shoot(Color.GREEN);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_M){
+			Jaffa.shoot(Color.RED);
+		}
+
+		if(e.getKeyCode() == KeyEvent.VK_V){
 			Graphics2D g = (Graphics2D) graphic.getGraphics();
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);

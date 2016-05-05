@@ -1,6 +1,7 @@
 package zpmworld;
 
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -121,6 +122,11 @@ public class Player extends ActionUnit{
 				Bullet newBullet = new Bullet(action, currentField); // a lövedék létrejön a mezõn, amin a player áll, azért nem a következõ mezõn, mert akkor az ottani esetleges konfront nem lenne kezelve
 				currentField.addUnit(newBullet); //ez igazából nem is szükséges..
 				game.addUnit(newBullet);
+				try {
+					game.registerDrawableUnit(new DrawableBullet(newBullet));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				nextAction = null;
 				break;
 			default:

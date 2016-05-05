@@ -14,7 +14,6 @@ public class MainFrame extends JFrame{
     private static MainFrame mainFrame = null;
     private static Menu menu = null;
     private static Status status = null;
-    private static Thread updateLoop = null;
 
     private Graphic stageGraphic = null;
     private Game game;
@@ -23,7 +22,7 @@ public class MainFrame extends JFrame{
     private static int FWIDTH = 1366;
     private static int FHEIGHT = 768;
 
-    private static int GAMESPEED = 16; //update millisec
+    private static int GAMESPEED = 70; //update millisec
     private static int FPS = 16; //update millisec
 
     private  MainFrame() {
@@ -84,6 +83,10 @@ public class MainFrame extends JFrame{
         frame.revalidate();
     }
 
+    public void pause(){
+        game.pause();
+    }
+
     public void renderGame(){
         try {
             stageGraphic.requestFocus();
@@ -93,12 +96,15 @@ public class MainFrame extends JFrame{
             game.setState(State.GAME);
             Timer updateTimer = new Timer(GAMESPEED, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    game.update();
+                    if(game.getState() == State.GAME)
+                        game.update();
                 }
             });
             Timer paintTimer = new Timer(FPS, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    stageGraphic.repaint();
+                    if(game.getState() == State.GAME) {
+                        stageGraphic.repaint();
+                    }
                 }
             });
             updateTimer.setInitialDelay(100);

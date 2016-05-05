@@ -34,6 +34,11 @@ public class Menu extends JPanel{
         add(quitGame);
         pause = new JButton("Pause");
         add(pause);
+        pause.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                pause();
+            }
+        });
 
         setBorder(BorderFactory.createRaisedBevelBorder());
 
@@ -42,6 +47,8 @@ public class Menu extends JPanel{
     private void newGame(){
         mainFrame.renderGame();
     }
+
+    private void pause(){ mainFrame.pause(); }
 
     public void setMainFrame(MainFrame frame){
         mainFrame = frame;
