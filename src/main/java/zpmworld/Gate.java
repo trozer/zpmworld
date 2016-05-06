@@ -37,8 +37,9 @@ public class Gate extends Field {
 
 			switch (actionType) {
 				case MOVE:
+                    containedUnits.add(player);
 					player.step(this);
-					containedUnits.add(player);
+
 
 					// Speciális cselekvések
 					if (!containedUnits.isEmpty()){
@@ -94,8 +95,8 @@ public class Gate extends Field {
 				return;
 			}
 
-			bullet.step(this);
-			containedUnits.add(bullet);
+            containedUnits.add(bullet);
+            bullet.step(this);
 
 			// Speciális cselekvés
 			if (!containedUnits.isEmpty()){
@@ -124,8 +125,8 @@ public class Gate extends Field {
 				return;
 			}
 
+            containedUnits.add(replicator);
 			replicator.step(this);
-			containedUnits.add(replicator);
 
 			if (!containedUnits.isEmpty()){
 				Set<Unit> deleteUnits = new HashSet<Unit>();
