@@ -14,7 +14,7 @@ public class Replicator extends ActionUnit{
 		this.game = game;
 		this.currentDirection = direction;
 		this.currentField = field;
-		this.weight = 15;
+		this.weight = 0;
 		this.nextAction = new Action(ActionType.MOVE, direction, null);
 	}
 
@@ -49,11 +49,14 @@ public class Replicator extends ActionUnit{
 		if(nextAction == null || nextAction.getType() == ActionType.NONE) {
 			return;
 		}
+        Field target = currentField.getNeighbourInDirection(currentDirection);
 		//Ha move, akkor a megfelelo iranyban levo szomszedos mezo doo-jat hivja meg.
 		if (nextAction.getType() == ActionType.MOVE){
-			currentField.getNeighbourInDirection(currentDirection).doo(this);
+            if(target == null) return;
+            target.doo(this);
 			nextAction = makeNextAction();
 		} else if (nextAction.getType() == ActionType.TURN){
+            currentDirection = nextAction.getDirection();
 			nextAction = makeNextAction();
 		} else {
 			nextAction = makeNextAction();
