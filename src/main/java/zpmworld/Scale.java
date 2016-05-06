@@ -237,6 +237,10 @@ public class Scale extends Field {
 		}
 	}
 
+	public int getBoxNum(){
+		return containedBoxes.size();
+	}
+
 	@Override
 	void removeUnit(Unit unit) {
 		super.removeUnit(unit);

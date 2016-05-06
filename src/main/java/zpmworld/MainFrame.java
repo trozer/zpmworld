@@ -19,8 +19,8 @@ public class MainFrame extends JFrame{
     private Game game;
 
     //16:9-re van optimalizalva
-    private static int FWIDTH = 848;
-    private static int FHEIGHT = 480;
+    private static int FWIDTH = 1366;
+    private static int FHEIGHT = 768;
     private  MainFrame() {
         super("ZPMWorld");
         setPreferredSize(new DimensionUIResource(FWIDTH, FHEIGHT));
