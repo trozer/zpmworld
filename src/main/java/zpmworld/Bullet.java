@@ -54,10 +54,20 @@ public class Bullet extends ActionUnit{
 
     public void action(){
         if (nextAction.getType() == ActionType.MOVE){
-        	currentField.getNeighbourInDirection(currentDirection).doo(this);
+            Field target = currentField.getNeighbourInDirection(currentDirection);
+            if(target != null){
+                target.doo(this);
+            } else {
+                this.kill();
+            }
         } else { //ez csak biztosíték, elméletileg soha nem fut le
             this.nextAction = new Action(ActionType.MOVE, currentDirection, color);
-            currentField.getNeighbourInDirection(currentDirection).doo(this);
+            Field target = currentField.getNeighbourInDirection(currentDirection);
+            if(target != null){
+                target.doo(this);
+            } else {
+                this.kill();
+            }
         }
     }
 
