@@ -19,14 +19,23 @@ public class DrawableScale extends Drawable{
 
     public void draw(Graphics graphic){
         Point pos = field.getPosition();
-        if(field.getBoxNum() < 3) {
-            graphic.drawImage(img.get(0), (int) pos.getX() * (int) sizeReference.getX(), (int) pos.getY() * (int) sizeReference.getY(),
-                    (int) (Scale * img.get(0).getWidth()), (int) (Scale * img.get(0).getHeight()), null);
+        int imageByDir = 0;
+        switch (field.getBoxNum()){
+            case 0:
+                imageByDir = 0;
+                break;
+            case 1:
+                imageByDir = 0;
+                break;
+            case 2:
+                imageByDir = 2;
+                break;
+            default:
+                imageByDir = 3;
         }
-        else{
-            graphic.drawImage(img.get(1),(int)pos.getX()*(int)sizeReference.getX(),(int)pos.getY()*(int)sizeReference.getY(),
-                    (int)(Scale*img.get(1).getWidth()),(int)(Scale*img.get(1).getHeight()),null);
-        }
+
+            graphic.drawImage(img.get(imageByDir),(int)pos.getX()*(int)sizeReference.getX(),(int)pos.getY()*(int)sizeReference.getY(),
+                    (int)(Scale*img.get(imageByDir).getWidth()),(int)(Scale*img.get(imageByDir).getHeight()),null);
     }
 
     @Override
@@ -41,6 +50,9 @@ public class DrawableScale extends Drawable{
 
     public void setImgs() throws IOException {
         img.add(ImageIO.read(new File("merleg1.PNG")));
+        img.add(ImageIO.read(new File("merleg1le.PNG")));
+        img.add(ImageIO.read(new File("merleg2d.PNG")));
+        img.add(ImageIO.read(new File("merleg3d.PNG")));
         img.add(ImageIO.read(new File("merleg2.PNG")));
     }
 }
