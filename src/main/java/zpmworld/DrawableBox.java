@@ -12,7 +12,7 @@ public class DrawableBox extends Drawable{
     private Box box;
 
     DrawableBox(Box box) throws IOException {
-        super(2);
+        super(1);
         this.box = box;
         setImgs();
     }

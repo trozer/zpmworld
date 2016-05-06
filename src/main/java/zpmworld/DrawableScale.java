@@ -19,8 +19,14 @@ public class DrawableScale extends Drawable{
 
     public void draw(Graphics graphic){
         Point pos = field.getPosition();
-        graphic.drawImage(img.get(0),(int)pos.getX()*(int)sizeReference.getX(),(int)pos.getY()*(int)sizeReference.getY(),
-                (int)(Scale*img.get(0).getWidth()),(int)(Scale*img.get(0).getHeight()),null);
+        if(field.getBoxNum() < 3) {
+            graphic.drawImage(img.get(0), (int) pos.getX() * (int) sizeReference.getX(), (int) pos.getY() * (int) sizeReference.getY(),
+                    (int) (Scale * img.get(0).getWidth()), (int) (Scale * img.get(0).getHeight()), null);
+        }
+        else{
+            graphic.drawImage(img.get(1),(int)pos.getX()*(int)sizeReference.getX(),(int)pos.getY()*(int)sizeReference.getY(),
+                    (int)(Scale*img.get(1).getWidth()),(int)(Scale*img.get(1).getHeight()),null);
+        }
     }
 
     @Override
@@ -35,5 +41,6 @@ public class DrawableScale extends Drawable{
 
     public void setImgs() throws IOException {
         img.add(ImageIO.read(new File("merleg1.PNG")));
+        img.add(ImageIO.read(new File("merleg2.PNG")));
     }
 }
