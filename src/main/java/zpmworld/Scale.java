@@ -145,7 +145,7 @@ public class Scale extends Field {
 				Box box = player.dropBox();
                 if(box != null) {
                     box.setCurrentField(this);
-                    containedUnits.add(box);
+                    containedBoxes.add(box);
                 }
 
 				gateMechanism();
