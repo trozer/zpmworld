@@ -69,6 +69,23 @@ public class Scale extends Field {
 		return openLimit;
 	}
 
+    public boolean isPressed(){ //igazzal tér vissza, ha a rajta lévõ egységek összsúlya nagyobb, mint a kapu nyitásához szükséges súly
+        int gross = 0;		//összsúly
+
+        for(Unit unit : containedUnits){
+            gross += unit.getWeight();
+        }
+        for(Box box : containedBoxes){
+            gross += box.getWeight();
+        }
+
+        if(gross >= openLimit){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 	// Mûködés
 
 	@Override
