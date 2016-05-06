@@ -50,7 +50,10 @@ public class PortalWall extends Wall {
 				if (portal.amIPortal(this)) {
 					Field pair = portal.getPair(this);
 
-					if(pair == null){
+                    if(!checkAcceptance(player,ActionType.MOVE)){
+                        return;
+                    }
+                    if(pair == null){
 						return;
 					}
 					if(!pair.checkAcceptance(player,ActionType.MOVE)){
