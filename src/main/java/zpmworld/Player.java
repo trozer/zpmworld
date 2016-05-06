@@ -142,7 +142,12 @@ public class Player extends ActionUnit{
 	//Meghal a jatekos, veget er a jatek.
 	public void kill(){
 		dead = true;
-		game.lose();
+        if(name == "O'neill"){
+            game.lose();
+        } else {
+            game.win();
+        }
+
 	}
 
 	public String toString(){
