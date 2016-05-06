@@ -2,7 +2,7 @@ package zpmworld;
 
 import java.util.*;
 
-public abstract class Unit{
+public abstract class Unit implements Comparable{
 
 	// Attributumok
 
@@ -95,7 +95,11 @@ public abstract class Unit{
 		return returnBool;
 	}
 
-	// Speciális cselekvés a target irányába, launcheren álló Unit felõl
+    public int compareTo(Object o) {
+        return this.hashCode() - o.hashCode();
+    }
+
+    // Speciális cselekvés a target irányába, launcheren álló Unit felõl
 	//TODO jobb elnevezés a target és launcher nem szerencsés
 	//TODO field igazából nem is kell, hiszen az mindig a Unit.currentField...
 	public void accept(Player player, Set<Unit> deleteUnits){}
