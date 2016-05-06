@@ -55,7 +55,7 @@
 		<unit row='3' col='22' >ZPM</unit>
 		<unit row='1' col='24' >ZPM</unit>
 		<unit row='13' col='1' direction="E" action="NONE" box='false'>O'neill</unit>
-		<unit row='12' col='20' direction="N" action="NONE" box='true'>Jaffa</unit>
+		<unit row='12' col='20' direction="N" action="NONE" box='false'>Jaffa</unit>
 		<unit row='14' col='10' direction="W" action="NONE" box='false'>Replicator</unit>
 	</units>
 	<field_properties>
