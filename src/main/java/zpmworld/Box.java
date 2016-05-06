@@ -1,16 +1,13 @@
 package zpmworld;
 
-import com.sun.deploy.panel.ITreeNode;
-
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 public class Box extends Unit{
 
     public Box(Field currentField) {
-        super(currentField, 0);
+        super(currentField, 8);
     }
 
     public Box(Field currentField, int weight){
