@@ -66,6 +66,7 @@
 			<connection fRow='8' fCol='7' toRow='11' toCol='9'/>
 			<connection fRow='15' fCol='11' toRow='7' toCol='16'/>
 			<connection fRow='10' fCol='22' toRow='12' toCol='24'/>
+			<connection fRow='10' fCol='13' toRow='12' toCol='13'/>
 			<connection fRow='3' fCol='8' toRow='3' toCol='7'/>
 		</connections>
 		<portalwall_colors>
