@@ -396,12 +396,32 @@ public class Stage implements Serializable
     	Road road = new Road();
     	Field oldField = fields.get(fields.indexOf(field));
     	road.setPosition(oldField.getPosition());
-    	road.addNeighbour(Direction.NORTH, field.getNeighbourInDirection(Direction.NORTH));
-    	road.addNeighbour(Direction.WEST, field.getNeighbourInDirection(Direction.WEST));
-    	road.addNeighbour(Direction.EAST, field.getNeighbourInDirection(Direction.EAST));
-    	road.addNeighbour(Direction.SOUTH, field.getNeighbourInDirection(Direction.SOUTH));
+
+        Field neighbourTemp = field.getNeighbourInDirection(Direction.NORTH);
+    	road.addNeighbour(Direction.NORTH, neighbourTemp);
+        if(neighbourTemp != null) neighbourTemp.addNeighbour(Direction.SOUTH, road);    //az északi szomszédunknak mi a déli szomszédai vagyunk
+
+        neighbourTemp = field.getNeighbourInDirection(Direction.WEST);
+    	road.addNeighbour(Direction.WEST, neighbourTemp);
+        if(neighbourTemp != null) neighbourTemp.addNeighbour(Direction.EAST, road);
+
+        neighbourTemp = field.getNeighbourInDirection(Direction.EAST);
+    	road.addNeighbour(Direction.EAST, neighbourTemp);
+        if(neighbourTemp != null) neighbourTemp.addNeighbour(Direction.WEST, road);
+
+        neighbourTemp = field.getNeighbourInDirection(Direction.SOUTH);
+    	road.addNeighbour(Direction.SOUTH, neighbourTemp);
+        if(neighbourTemp != null) neighbourTemp.addNeighbour(Direction.NORTH, road);
+
     	fields.set(fields.indexOf(field), road);
-    	
+
+        try { //kitöröljük a field-hez tartozó Drawable-t és beregisztráljuk az új út Drawable-jét
+            game.deleteDrawableField(field);
+            game.registerDrawableField(new DrawableRoad(road));
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
     	boolean isRoad = false;
     	for(Field r : roads){
     		if(r.getPosition().equals(field.getPosition()))
