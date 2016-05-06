@@ -12,7 +12,7 @@ public class DrawableBullet extends Drawable{
     private Bullet bullet;
 
     DrawableBullet(Bullet bullet) throws IOException {
-        super(2);
+        super(6);
         this.bullet = bullet;
         setImgs();
     }

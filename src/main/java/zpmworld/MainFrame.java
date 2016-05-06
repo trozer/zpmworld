@@ -22,9 +22,6 @@ public class MainFrame extends JFrame{
     private static int FWIDTH = 1366;
     private static int FHEIGHT = 768;
 
-    private static int GAMESPEED = 70; //update millisec
-    private static int FPS = 16; //update millisec
-
     private  MainFrame() {
         super("ZPMWorld");
         setPreferredSize(new DimensionUIResource(FWIDTH, FHEIGHT));
@@ -94,24 +91,6 @@ public class MainFrame extends JFrame{
             stageGraphic.setGame(game);
             game.newGame(new File("testMap.xml"));
             game.update();
-            game.setState(State.GAME);
-            Timer updateTimer = new Timer(GAMESPEED, new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if(game.getState() != State.PAUSE)
-                        game.update();
-                }
-            });
-            Timer paintTimer = new Timer(FPS, new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if(game.getState() != State.PAUSE) {
-                        stageGraphic.repaint();
-                    }
-                }
-            });
-            updateTimer.setInitialDelay(100);
-            paintTimer.setInitialDelay(200);
-            updateTimer.start();
-            paintTimer.start();
             //game.console() //ha konzolon akar valaki tesztelni...
         } catch (Exception e) {
             e.printStackTrace();
