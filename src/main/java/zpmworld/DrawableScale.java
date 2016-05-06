@@ -20,6 +20,7 @@ public class DrawableScale extends Drawable{
     public void draw(Graphics graphic){
         Point pos = field.getPosition();
         int imageByDir = 0;
+
         switch (field.getBoxNum()){
             case 0:
                 imageByDir = 0;
@@ -33,6 +34,15 @@ public class DrawableScale extends Drawable{
             default:
                 imageByDir = 3;
         }
+
+        if(field.isPressed() && field.getBoxNum() == 0)
+            imageByDir = 1;
+
+        if(field.isPressed() && field.getBoxNum() == 1)
+            imageByDir = 1;
+
+        if(field.isPressed() && field.getBoxNum() == 2)
+            imageByDir = 4;
 
             graphic.drawImage(img.get(imageByDir),(int)pos.getX()*(int)sizeReference.getX(),(int)pos.getY()*(int)sizeReference.getY(),
                     (int)(Scale*img.get(imageByDir).getWidth()),(int)(Scale*img.get(imageByDir).getHeight()),null);
@@ -53,6 +63,6 @@ public class DrawableScale extends Drawable{
         img.add(ImageIO.read(new File("merleg1le.PNG")));
         img.add(ImageIO.read(new File("merleg2d.PNG")));
         img.add(ImageIO.read(new File("merleg3d.PNG")));
-        img.add(ImageIO.read(new File("merleg2.PNG")));
+        img.add(ImageIO.read(new File("merleg1dle.PNG")));
     }
 }

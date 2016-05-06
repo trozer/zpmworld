@@ -380,6 +380,21 @@ public class Stage implements Serializable
 
     }
 
+	public void createReplicator(){
+		Field empty = getEmptyRoad();
+		Replicator rep = new Replicator(game, Direction.EAST, empty);
+		empty.addUnit(rep);
+		units.add(rep);
+		game.setReplicator(rep);
+		try {
+			game.registerDrawableUnit(new DrawableReplicator(rep));
+		} catch (IOException e){
+			//TODO hibakezelés
+			e.printStackTrace();
+		}
+
+	}
+
     // új lövedék létrehozázásához szebb, ha az új lövedék létrehozásához használt sémát használjuk
     public void createBullet(Bullet bullet){
         units.add(bullet);
