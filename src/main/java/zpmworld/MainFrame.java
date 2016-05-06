@@ -1,5 +1,9 @@
 package zpmworld;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import javax.swing.*;
 import javax.swing.plaf.DimensionUIResource;
 import java.awt.*;
@@ -17,6 +21,8 @@ public class MainFrame extends JFrame{
 
     private Graphic stageGraphic = null;
     private Game game;
+
+    private Clip music = null;
 
     //16:9-re van optimalizalva
     private static int FWIDTH = 1280;
@@ -84,11 +90,23 @@ public class MainFrame extends JFrame{
     }
 
     public void pause(){
+        if(music != null)
+            if(!game.isPause())
+                music.stop();
+            else
+                music.loop(Clip.LOOP_CONTINUOUSLY);
         game.pause();
     }
 
     public void renderGame(){
         try {
+            AudioInputStream audioInputStream =
+                    AudioSystem.getAudioInputStream(
+                            new File("bg.wav"));
+            Clip clip = AudioSystem.getClip();
+            this.music = clip;
+            clip.open(audioInputStream);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
             stageGraphic.requestFocus();
             stageGraphic.setGame(game);
             game.newGame(new File("finalMap.xml"));

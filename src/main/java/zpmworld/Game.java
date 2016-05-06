@@ -508,6 +508,10 @@ public class Game implements KeyListener{
 		state = State.LOSE;
 	}
 
+	public boolean isPause(){
+		return pause;
+	}
+
 	public void setJaffa(Player Jaffa){
 		this.Jaffa = Jaffa;
 	}
