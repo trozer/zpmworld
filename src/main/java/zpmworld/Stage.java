@@ -36,7 +36,7 @@ public class Stage implements Serializable
         lastLog = new ArrayList<String>();
         log = true;
         portal = null;
-        allZPM = 0;
+        allZPM = 20;
         init(file, game);
     }
 
@@ -97,7 +97,7 @@ public class Stage implements Serializable
 							game.registerDrawableField(new DrawableGate(gate));
 		                    break;
 		                default:
-		                    throw new Exception("Hiba: érvénytelen karakter a táblaleíró részben");       
+		                    throw new Exception("Hiba: ï¿½rvï¿½nytelen karakter a tï¿½blaleï¿½rï¿½ rï¿½szben");       
 	                }
 	                buildFields.get(i).add(field);
 	    		}
@@ -241,7 +241,7 @@ public class Stage implements Serializable
 	    						units.add(zpm);
 	    						zpms.add(zpm);
 	    					}else
-	    						throw new Exception("Hiba: ismeretlen egységtípus");
+	    						throw new Exception("Hiba: ismeretlen egysï¿½gtï¿½pus");
 	    				}
 	    			}
 	    		}
@@ -265,7 +265,7 @@ public class Stage implements Serializable
 		case 'W': return Direction.WEST;
 		case 'S': return Direction.SOUTH;
 		default:
-			throw new Exception("Hiba: érvénytelen a megadott irány");
+			throw new Exception("Hiba: ï¿½rvï¿½nytelen a megadott irï¿½ny");
 		}
     }
     
@@ -283,7 +283,7 @@ public class Stage implements Serializable
 		if(rColor.equals("green")){
 			color = Color.GREEN;
 		}else
-			throw new Exception("Hiba: érvénytelen a megadott szín");
+			throw new Exception("Hiba: ï¿½rvï¿½nytelen a megadott szï¿½n");
 		return color;
     }
     
@@ -307,7 +307,7 @@ public class Stage implements Serializable
 		if(type.equals("NONE")){
 			action = ActionType.NONE;
 		}else
-			throw new Exception("Hiba: érvénytelen a megadott akció");
+			throw new Exception("Hiba: ï¿½rvï¿½nytelen a megadott akciï¿½");
 		return action;
     }
     
@@ -322,12 +322,12 @@ public class Stage implements Serializable
     		String west = (field.getNeighbourInDirection(Direction.WEST) == null) ? "null" : field.getNeighbourInDirection(Direction.WEST).toString();
     		String east = (field.getNeighbourInDirection(Direction.EAST) == null) ? "null" : field.getNeighbourInDirection(Direction.EAST).toString();
     		String south = (field.getNeighbourInDirection(Direction.SOUTH) == null) ? "null" : field.getNeighbourInDirection(Direction.SOUTH).toString();
-			System.out.println( field.toString() + " szomszédok: "
-					+ " \nÉszak: " +north
+			System.out.println( field.toString() + " szomszï¿½dok: "
+					+ " \nï¿½szak: " +north
 					+ " \nNyugat: " + west
 					+ " \nKelet: " + east
-					+ " \nDél: " + south + "\n");
-			System.out.println("Rajta levõ egység: ");
+					+ " \nDï¿½l: " + south + "\n");
+			System.out.println("Rajta levï¿½ egysï¿½g: ");
 			field.showUnits();
 			System.out.println("\n\n");
 		}
@@ -480,7 +480,9 @@ public class Stage implements Serializable
         while (iterator.hasNext()) {
         	Unit nextElement = iterator.next();
 			if(nextElement.isDead()){
-				nextElement.getCurrentField().removeUnit(nextElement);
+                if(nextElement.getCurrentField() != null){
+				    nextElement.getCurrentField().removeUnit(nextElement);
+                }
 				iterator.remove();
 			}
 		}
