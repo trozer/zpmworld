@@ -7,7 +7,7 @@ import java.util.Set;
 public class Box extends Unit{
 
     public Box(Field currentField) {
-        super(currentField, 5);
+        super(currentField, 16);
     }
 
     public Box(Field currentField, int weight){

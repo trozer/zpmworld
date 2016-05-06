@@ -16,8 +16,8 @@
 		<unit row='5' col='4' >ZPM</unit>
 		<unit row='5' col='11' >ZPM</unit>
 		<unit row='2' col='3' direction="E" action="NONE" box='false'>O'neill</unit>
-		<unit row='5' col='1' direction="N" action="NONE" box='true'>Jaffa</unit> 
-		<unit row='1' col='9' direction="W" action="NONE" box='false'>Replicator</unit> 
+		<unit row='5' col='1' direction="N" action="NONE" box='true'>Jaffa</unit>
+		<unit row='1' col='9' direction="W" action="NONE" box='false'>Replicator</unit>
 	</units>
 	<field_properties>
 		<connections>
