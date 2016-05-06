@@ -36,8 +36,8 @@
 		<unit row='7' col='14' >Box</unit>
 		<unit row='11' col='14' >Box</unit>
 		<unit row='15' col='10' >Box</unit>
-		<unit row='6' col='5' >Box</unit>
-		<unit row='7' col='5' >Box</unit>
+		<unit row='6' col='6' >Box</unit>
+		<unit row='7' col='6' >Box</unit>
 		<unit row='8' col='11' >Box</unit>
 		<unit row='11' col='16' >Box</unit>
 		<unit row='4' col='24' >Box</unit>
@@ -66,6 +66,7 @@
 			<connection fRow='8' fCol='7' toRow='11' toCol='9'/>
 			<connection fRow='15' fCol='11' toRow='7' toCol='16'/>
 			<connection fRow='10' fCol='22' toRow='12' toCol='24'/>
+			<connection fRow='3' fCol='8' toRow='3' toCol='7'/>
 		</connections>
 		<portalwall_colors>
 		</portalwall_colors>
