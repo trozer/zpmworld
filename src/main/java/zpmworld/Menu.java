@@ -14,11 +14,13 @@ public class Menu extends JPanel{
     private JButton saveGame;
     private JButton quitGame;
     private JButton pause;
+    private boolean isPaused;
 
     private MainFrame mainFrame;
 
     Menu(){
         super(new FlowLayout(FlowLayout.LEFT));
+        isPaused = false;
         newGame = new JButton("New Game");
         newGame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -36,6 +38,13 @@ public class Menu extends JPanel{
         add(pause);
         pause.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                if(isPaused){
+                    pause.setText("Pause");
+                    isPaused = false;
+                } else {
+                    pause.setText("Resume");
+                    isPaused = true;
+                }
                 pause();
             }
         });
