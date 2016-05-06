@@ -1,6 +1,7 @@
 package zpmworld;
 
 import java.awt.Color;
+import java.io.IOException;
 import java.util.*;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -367,6 +368,24 @@ public class Stage implements Serializable
     	empty.addUnit(drop);
     	units.add(drop);
     	zpms.add(drop);
+        try {
+            game.registerDrawableUnit(new DrawableZPM(drop));
+        } catch (IOException e){
+            //TODO hibakezelés
+            e.printStackTrace();
+        }
+
+    }
+
+    // új lövedék létrehozázásához szebb, ha az új lövedék létrehozásához használt sémát használjuk
+    public void createBullet(Bullet bullet){
+        units.add(bullet);
+        try {
+            game.registerDrawableUnit(new DrawableBullet(bullet));
+        } catch (IOException e){
+            //TODO hibakezelés
+            e.printStackTrace();
+        }
     }
     
     //given field's must be initialized
