@@ -1,75 +1,34 @@
 <?xml version="1.0"?>
 <Stage>
 	<rows>
-		<row id='0' >wwwwwwwwwwwwwwwwwwwwwwwwww</row>
-		<row id='1' >wprarrrpwpraaapwrwrrrrrrrw</row>
-		<row id='2' >wrrrwrrwrrwaaarwrwrwwwwwrw</row>
-		<row id='3' >wrpwrrrgsrwaaaawrwrarrrwrw</row>
-		<row id='4' >wrswrrrwrrwparpwrwraarawrw</row>
-		<row id='5' >wrwrgwwwrrwraawwrwrrarawrw</row>
-		<row id='6' >wraarwrswrwprapwrwarrrawrw</row>
-		<row id='7' >wrwrpwrrwrwwwrrwgwwwwwwwrw</row>
-		<row id='8' >wgwrrwrswrrrwaawrrrrrrrrpw</row>
-		<row id='9' >wrpwrarpwawrwaawrwwwwwwwrw</row>
-		<row id='10'>wswrrrwwwrwrwspwrwrrraswrw</row>
-		<row id='11'>wrwrwgrrrgwrwrrwrwrwpwrwrw</row>
-		<row id='12'>grwrrwwwpwwrwgwwrwrwrwrpgw</row>
-		<row id='13'>wpwrwrrrwrrrrrrrrwrwrrraaw</row>
-		<row id='14'>wawrwraawrrrrrrwwwrwwwwwsw</row>
-		<row id='15'>wrprprrrwrrsrrrwrprrrrrrrw</row>
-		<row id='16'>wwwwwwwwwwwwwwwwwwwwwwwwww</row>
+		 <row id='0'>wwwwwwwwwwwwww</row>
+		 <row id='1'>wsrrrpwwrrrwrw</row>
+		 <row id='2'>wprrrpwwsgrrpw</row>
+		 <row id='3'>wsargpwwaarapw</row>
+		 <row id='4'>wrprrpwwwrrrpw</row>
+		 <row id='5'>wrrrrrrrrrgrww</row>
+		 <row id='6'>wwwwwwwwwwwwww</row>
 	</rows>
-	<units>
-		<unit row='11' col='1' >Box</unit>
-		<unit row='6' col='1' >Box</unit>
-		<unit row='5' col='1' >Box</unit>
-		<unit row='7' col='1' >Box</unit>
-		<unit row='13' col='7' >Box</unit>
-		<unit row='11' col='13' >Box</unit>
-		<unit row='2' col='16' >Box</unit>
-		<unit row='3' col='16' >Box</unit>
-		<unit row='4' col='16' >Box</unit>
-		<unit row='5' col='16' >Box</unit>
-		<unit row='15' col='16' >Box</unit>
-		<unit row='15' col='24' >Box</unit>
-		<unit row='11' col='22' >Box</unit>
-		<unit row='7' col='14' >Box</unit>
-		<unit row='11' col='14' >Box</unit>
-		<unit row='15' col='10' >Box</unit>
-		<unit row='6' col='6' >Box</unit>
-		<unit row='7' col='6' >Box</unit>
-		<unit row='8' col='11' >Box</unit>
-		<unit row='11' col='16' >Box</unit>
-		<unit row='4' col='24' >Box</unit>
-		<unit row='5' col='24' >Box</unit>
-
-		<unit row='15' col='1' >ZPM</unit>
-		<unit row='5' col='3' >ZPM</unit>
-		<unit row='12' col='4' >ZPM</unit>
-		<unit row='15' col='7' >ZPM</unit>
-		<unit row='5' col='8' >ZPM</unit>
+ 	<units>
+  	<!--	<unit row='1' col='3' color="blue" direction="E">Bullet</unit> --><!-- minden attribútumot adjadtok meg, kivéve a játékosnál turndirt és colort (ezeket csak akkor, ha lő vagy fordul), ha nem így tesztek, hiba lesz -->
+		<unit row='1' col='4' >Box</unit><!-- ZPM-ek és Boxok hamarabb legyenek, mint a játékosok, ez nagyban megkönnyíti a dolgokat -->
+		<unit row='2' col='10' >Box</unit>
+		<unit row='5' col='4' >ZPM</unit>
 		<unit row='5' col='11' >ZPM</unit>
-		<unit row='7' col='13' >ZPM</unit>
-		<unit row='1' col='16' >ZPM</unit>
-		<unit row='3' col='20' >ZPM</unit>
-		<unit row='3' col='22' >ZPM</unit>
-		<unit row='1' col='24' >ZPM</unit>
-		<unit row='12' col='1' direction="E" action="NONE" box='false'>O'neill</unit>
-		<unit row='12' col='20' direction="N" action="NONE" box='true'>Jaffa</unit>
-		<unit row='14' col='10' direction="W" action="NONE" box='false'>Replicator</unit>
+		<unit row='2' col='3' direction="E" action="NONE" box='false'>O'neill</unit>
+		<unit row='5' col='1' direction="N" action="NONE" box='true'>Jaffa</unit> 
+		<unit row='1' col='9' direction="W" action="NONE" box='false'>Replicator</unit> 
 	</units>
 	<field_properties>
 		<connections>
-			<connection fRow='10' fCol='1' toRow='8' toCol='1'/>
-			<connection fRow='4' fCol='2' toRow='5' toCol='4'/>
-			<connection fRow='6' fCol='7' toRow='11' toCol='5'/>
-			<connection fRow='8' fCol='7' toRow='11' toCol='9'/>
-			<connection fRow='15' fCol='11' toRow='7' toCol='16'/>
-			<connection fRow='10' fCol='22' toRow='12' toCol='24'/>
-			<connection fRow='10' fCol='13' toRow='12' toCol='13'/>
-			<connection fRow='3' fCol='8' toRow='3' toCol='7'/>
+			<connection fRow='1' fCol='1' toRow='2' toCol='9'/> <!-- 0,1-es Scale csatlakozik az 1,6-os Gate-hez (from -> to analógia) -->
+			<connection fRow='3' fCol='1' toRow='3' toCol='4'/>
+			<connection fRow='2' fCol='8' toRow='5' toCol='10'/>
 		</connections>
 		<portalwall_colors>
+			<portalwall_color row='2' col='5' color="blue"/>  <!-- a szín már jelenti egyben azt is hogy az adott portál "aktív" (tehát van rajta valami) -->
+			<portalwall_color row='4' col='12' color="yellow"/> <!-- ha a másik szín, "színpár", akkor az már átjárót is jelent egyben(Portal osztály gondoskodik erről)-->
 		</portalwall_colors>
 	</field_properties>
 </Stage>
+<!-- mindezeken felül szerintem a teszteseteknél ki tudtok alakítani egy-egy rövid lépéssorozatot, ami már nem szükséges az inicializációhoz. -->

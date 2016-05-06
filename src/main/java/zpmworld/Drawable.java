@@ -14,10 +14,14 @@ public abstract class Drawable implements Comparable{
     protected List<BufferedImage> img;
     protected Point sizeReference;
     protected double Scale;
+    protected int deadTime;
+    protected int sinceDead;
 
     Drawable(int index){
         Zindex = index;
         img = new ArrayList<BufferedImage>();
+        deadTime = 0;
+        sinceDead = 0;
     }
 
     public void setSizeReference(Point ref){
@@ -36,6 +40,10 @@ public abstract class Drawable implements Comparable{
         if(Zindex < drawable.getZindex()) return -1;
         else if(Zindex == drawable.getZindex()) return 0;
         else return 1;
+    }
+
+    public boolean finallyDead(){
+        return true;
     }
 
     public int getZindex(){

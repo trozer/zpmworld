@@ -56,7 +56,7 @@ public class Graphic extends JPanel{
         Iterator<Drawable> drIt = drawableUnits.iterator();
         while(drIt.hasNext()){
             Drawable drawableUnit = drIt.next();
-            if(drawableUnit.getUnit().isDead()) {
+            if(drawableUnit.getUnit().isDead() && drawableUnit.finallyDead()) {
                 drIt.remove();
             }
             else {
@@ -76,14 +76,14 @@ public class Graphic extends JPanel{
     }
 
     public void registerDrawableField(Drawable fieldDrawable){
-        fieldDrawable.setSizeReference(new Point((int)((WIDTH*0.0641)*Scale),(int)((HEIGHT*0.093)*Scale)));
+        fieldDrawable.setSizeReference(new Point((int)((WIDTH*0.0639)*Scale),(int)((HEIGHT*0.093)*Scale)));
         fieldDrawable.setScale((HEIGHT/(double)540)*Scale);
         drawableFields.add(fieldDrawable);
         updateSort = true;
     }
 
     public void registerDrawableUnit(Drawable unitDrawable){
-        unitDrawable.setSizeReference(new Point((int)((WIDTH*0.0641)*Scale),(int)((HEIGHT*0.093)*Scale)));
+        unitDrawable.setSizeReference(new Point((int)((WIDTH*0.0639)*Scale),(int)((HEIGHT*0.093)*Scale)));
         unitDrawable.setScale((HEIGHT/(double)540)*Scale);
         drawableUnits.add(unitDrawable);
         updateSort = true;

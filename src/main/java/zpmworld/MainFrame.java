@@ -19,9 +19,8 @@ public class MainFrame extends JFrame{
     private Game game;
 
     //16:9-re van optimalizalva
-    private static int FWIDTH = 1366;
-    private static int FHEIGHT = 768;
-
+    private static int FWIDTH = 848;
+    private static int FHEIGHT = 480;
     private  MainFrame() {
         super("ZPMWorld");
         setPreferredSize(new DimensionUIResource(FWIDTH, FHEIGHT));
@@ -33,8 +32,10 @@ public class MainFrame extends JFrame{
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 0;
-        c.weightx = 0.75;
-        c.ipady = (int) (FHEIGHT*0.01);
+        c.weightx = 0.8;
+
+        double yRatio = 0.08/((double)FHEIGHT/(double)480);
+        c.ipady = (int) (FHEIGHT*(yRatio));
 
         menu = new Menu();
         add(menu, c);
@@ -42,7 +43,7 @@ public class MainFrame extends JFrame{
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 0;
-        c.weightx = 0.25;
+        c.weightx = 0.2;
         c.gridheight = 2;
 
         status = new Status(FHEIGHT);
@@ -53,10 +54,11 @@ public class MainFrame extends JFrame{
         c.gridx = 0;
         c.gridy = 1;
         c.weightx = 0.5;
-        c.ipady = (int) (FHEIGHT*0.9);
+        c.ipady = (int) (FHEIGHT*(1.0-yRatio));
 
-        //harmadik parameterrel lehet allitani a "nagyitast"
-        stageGraphic = new Graphic((int) (FWIDTH * 0.8), FHEIGHT, 0.6);
+        //harmadik parameterrel lehet allitani a "nagyitast" (az elso szamot allitsuk, a tobbi alkalmazkodik az ablakhoz)
+        double scale = 0.560*((1.0-(yRatio-0.08)));
+        stageGraphic = new Graphic((int) (FWIDTH * 0.8), FHEIGHT, scale);
         stageGraphic.setPreferredSize(new Dimension((int) (FWIDTH * 0.8), FHEIGHT));
         add(stageGraphic, c);
 
@@ -89,7 +91,7 @@ public class MainFrame extends JFrame{
         try {
             stageGraphic.requestFocus();
             stageGraphic.setGame(game);
-            game.newGame(new File("testMap.xml"));
+            game.newGame(new File("finalMap.xml"));
             game.update();
             //game.console() //ha konzolon akar valaki tesztelni...
         } catch (Exception e) {

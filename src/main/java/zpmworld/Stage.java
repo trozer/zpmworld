@@ -28,7 +28,7 @@ public class Stage implements Serializable
     private Portal portal;
     private boolean log;
     private List<String> lastLog;
-    private Game game;
+	private Game game;
 
     public Stage (File file, Game game) throws Exception {
         units =  new ArrayList<Unit>();
@@ -39,6 +39,7 @@ public class Stage implements Serializable
         log = true;
         portal = null;
         allZPM = 20;
+		this.game = game;
         init(file, game);
     }
 
@@ -103,7 +104,6 @@ public class Stage implements Serializable
 	                }
 	                buildFields.get(i).add(field);
 	    		}
-                this.game = game;
 	    	}
 	    	
 	    	//set neighbours
