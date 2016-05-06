@@ -24,13 +24,73 @@ public class DrawableBullet extends Drawable{
             int imageByDir = 0;
             Color color = bullet.getColor();
             if(color.equals(Color.BLUE))
-                imageByDir = 0;
+                switch (bullet.getCurrentDirection()){
+                    case WEST:
+                        imageByDir = 0;
+                        break;
+                    case NORTH:
+                        imageByDir = 1;
+                        break;
+                    case EAST:
+                        imageByDir = 2;
+                        break;
+                    case SOUTH:
+                        imageByDir = 3;
+                        break;
+                    case NONE:
+                        break;
+                }
             if(color.equals(Color.YELLOW))
-                imageByDir = 1;
+                switch (bullet.getCurrentDirection()){
+                    case WEST:
+                        imageByDir = 0;
+                        break;
+                    case NORTH:
+                        imageByDir = 1;
+                        break;
+                    case EAST:
+                        imageByDir = 2;
+                        break;
+                    case SOUTH:
+                        imageByDir = 3;
+                        break;
+                    case NONE:
+                        break;
+                }
             if(color.equals(Color.RED))
-                imageByDir = 2;
+                switch (bullet.getCurrentDirection()){
+                    case WEST:
+                        imageByDir = 0;
+                        break;
+                    case NORTH:
+                        imageByDir = 1;
+                        break;
+                    case EAST:
+                        imageByDir = 2;
+                        break;
+                    case SOUTH:
+                        imageByDir = 3;
+                        break;
+                    case NONE:
+                        break;
+                }
             if(color.equals(Color.GREEN))
-                imageByDir = 3;
+                switch (bullet.getCurrentDirection()){
+                    case WEST:
+                        imageByDir = 0;
+                        break;
+                    case NORTH:
+                        imageByDir = 1;
+                        break;
+                    case EAST:
+                        imageByDir = 2;
+                        break;
+                    case SOUTH:
+                        imageByDir = 3;
+                        break;
+                    case NONE:
+                        break;
+                }
 
             graphic.drawImage(img.get(imageByDir), (int) pos.getX() * (int) sizeReference.getX(), (int) pos.getY() * (int) sizeReference.getY(),
                     (int) (Scale * img.get(imageByDir).getWidth()), (int) (Scale * img.get(imageByDir).getHeight()), null);
@@ -38,10 +98,28 @@ public class DrawableBullet extends Drawable{
     }
 
     public void setImgs() throws IOException {
-        img.add(ImageIO.read(new File("bulletb.PNG")));
-        img.add(ImageIO.read(new File("bullety.PNG")));
-        img.add(ImageIO.read(new File("bulletr.PNG")));
-        img.add(ImageIO.read(new File("bulletg.PNG")));
+        if (bullet.getColor().equals(Color.BLUE)){
+            img.add(ImageIO.read(new File("bulletbbal.PNG")));
+            img.add(ImageIO.read(new File("bulletbfel.PNG")));
+            img.add(ImageIO.read(new File("bulletbjobb.PNG")));
+            img.add(ImageIO.read(new File("bulletble.PNG")));
+        }else if(bullet.getColor().equals(Color.YELLOW)){
+            img.add(ImageIO.read(new File("bullety.PNG")));
+            img.add(ImageIO.read(new File("bullety.PNG")));
+            img.add(ImageIO.read(new File("bullety.PNG")));
+            img.add(ImageIO.read(new File("bullety.PNG")));
+        }else if(bullet.getColor().equals(Color.GREEN)){
+            img.add(ImageIO.read(new File("bulletgbal.PNG")));
+            img.add(ImageIO.read(new File("bulletgfel.PNG")));
+            img.add(ImageIO.read(new File("bulletgjobb.PNG")));
+            img.add(ImageIO.read(new File("bulletgle.PNG")));
+        }else if(bullet.getColor().equals(Color.RED)){
+            img.add(ImageIO.read(new File("bulletrbal.PNG")));
+            img.add(ImageIO.read(new File("bulletrfel.PNG")));
+            img.add(ImageIO.read(new File("bulletrjobb.PNG")));
+            img.add(ImageIO.read(new File("bulletrle.PNG")));
+        }
+
     }
 
 
