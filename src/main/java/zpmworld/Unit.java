@@ -96,7 +96,7 @@ public abstract class Unit implements Comparable{
 	}
 
     public int compareTo(Object o) {
-        return 0;
+        return this.hashCode() - o.hashCode();
     }
 
     // Speciális cselekvés a target irányába, launcheren álló Unit felõl
