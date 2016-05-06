@@ -16,7 +16,7 @@
 		<row id='12'>wrwrrwwwpwwrwgwwrwrwrwrpgw</row>
 		<row id='13'>grwrwrrrwrrrrrrrrwrwrrraaw</row>
 		<row id='14'>wawrwraawrrrrrrwwwrwwwwwsw</row>
-		<row id='15'>wrprprrrwrrsrrrwrprrrrrrrw</row>
+		<row id='15'>wrprprrrwrrsrrrwrprrrrrrpw</row>
 		<row id='16'>wwwwwwwwwwwwwwwwwwwwwwwwww</row>
 	</rows>
 	<units>
@@ -31,7 +31,7 @@
 		<unit row='4' col='16' >Box</unit>
 		<unit row='5' col='16' >Box</unit>
 		<unit row='15' col='16' >Box</unit>
-		<unit row='15' col='24' >Box</unit>
+		<unit row='15' col='23' >Box</unit>
 		<unit row='11' col='22' >Box</unit>
 		<unit row='7' col='14' >Box</unit>
 		<unit row='11' col='14' >Box</unit>
@@ -67,6 +67,7 @@
 			<connection fRow='15' fCol='11' toRow='7' toCol='16'/>
 			<connection fRow='10' fCol='22' toRow='12' toCol='24'/>
 			<connection fRow='3' fCol='8' toRow='3' toCol='7'/>
+			<connection fRow='10' fCol='13' toRow='12' toCol='13'/>
 		</connections>
 		<portalwall_colors>
 		</portalwall_colors>
