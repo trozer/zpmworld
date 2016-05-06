@@ -11,12 +11,12 @@
 		<row id='7' >wrwrpwrrwrwwwrrwgwwwwwwwrw</row>
 		<row id='8' >wgwrrwrswrrrwaawrrrrrrrrpw</row>
 		<row id='9' >wrpwrarpwawrwaawrwwwwwwwrw</row>
-		<row id='10'>wswrrrwwwrwrwspwrwrrraswrw</row>
+		<row id='10'>wswrrrwwwrwrwspwrwrrraswsw</row>
 		<row id='11'>wrwrwgrrrgwrwrrwrwrwpwrwrw</row>
 		<row id='12'>wrwrrwwwpwwrwgwwrwrwrwrpgw</row>
 		<row id='13'>grwrwrrrwrrrrrrrrwrwrrraaw</row>
 		<row id='14'>wawrwraawrrrrrrwwwrwwwwwsw</row>
-		<row id='15'>wrprprrrwrrsrrrwrprrrrrrrw</row>
+		<row id='15'>wrprprrrwrrsrrrwrprrrrrrpw</row>
 		<row id='16'>wwwwwwwwwwwwwwwwwwwwwwwwww</row>
 	</rows>
 	<units>
@@ -31,7 +31,7 @@
 		<unit row='4' col='16' >Box</unit>
 		<unit row='5' col='16' >Box</unit>
 		<unit row='15' col='16' >Box</unit>
-		<unit row='15' col='24' >Box</unit>
+		<unit row='15' col='23' >Box</unit>
 		<unit row='11' col='22' >Box</unit>
 		<unit row='7' col='14' >Box</unit>
 		<unit row='11' col='14' >Box</unit>
@@ -55,7 +55,7 @@
 		<unit row='3' col='22' >ZPM</unit>
 		<unit row='1' col='24' >ZPM</unit>
 		<unit row='13' col='1' direction="E" action="NONE" box='false'>O'neill</unit>
-		<unit row='12' col='20' direction="N" action="NONE" box='true'>Jaffa</unit>
+		<unit row='12' col='20' direction="N" action="NONE" box='false'>Jaffa</unit>
 		<unit row='14' col='10' direction="W" action="NONE" box='false'>Replicator</unit>
 	</units>
 	<field_properties>
@@ -67,6 +67,8 @@
 			<connection fRow='15' fCol='11' toRow='7' toCol='16'/>
 			<connection fRow='10' fCol='22' toRow='12' toCol='24'/>
 			<connection fRow='3' fCol='8' toRow='3' toCol='7'/>
+			<connection fRow='10' fCol='13' toRow='12' toCol='13'/>
+			<connection fRow='10' fCol='24' toRow='12' toCol='24'/>
 		</connections>
 		<portalwall_colors>
 		</portalwall_colors>

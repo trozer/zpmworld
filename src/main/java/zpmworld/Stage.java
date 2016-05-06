@@ -204,18 +204,21 @@ public class Stage implements Serializable
 	    							turnDir = directionByChar(unitElement.getAttribute("turndir").charAt(0));
 	    						if(actionType == ActionType.SHOOT)
 	    							color = colorByString(unitElement.getAttribute("color"));
-	    						if(unitElement.getAttribute("box").equals("true"))
-	    							box = new Box(field);
-								Player player;
+	    						if(unitElement.getAttribute("box").equals("true")) {
+                                    box = new Box(null);    //eleve fel lesz véve, így a currentFieldje null
+                                    game.registerDrawableUnit(new DrawableBox(box));    // be is regisztráljuk, hogy ki lehessen rajzolni
+                                }
+                                Player player;
 
 	    						if(unitType.equals("O'neill")){
-	    							player = new Player(allZPM, dir,new Action(actionType, turnDir, color), field, game,box, "O'neill");
+	    							player = new Player(allZPM, dir,new Action(actionType, turnDir, color), field, game, box, "O'neill");
 									game.setOneill(player);
 	    						}else{
-	    							player = new Player(allZPM, dir,new Action(actionType, turnDir, color), field, game,box ,"Jaffa");
+	    							player = new Player(allZPM, dir,new Action(actionType, turnDir, color), field, game, box ,"Jaffa");
 	    							game.setJaffa(player);
 	    						}
 								game.registerDrawableUnit(new DrawablePlayer(player));
+
 	    						units.add(player);
 	    						field.addUnit(player);
 	    					}
