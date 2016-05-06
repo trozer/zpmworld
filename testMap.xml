@@ -13,8 +13,8 @@
 		<row id='9' >wrpwrarpwawrwaawrwwwwwwwrw</row>
 		<row id='10'>wswrrrwwwrwrwspwrwrrraswrw</row>
 		<row id='11'>wrwrwgrrrgwrwrrwrwrwpwrwrw</row>
-		<row id='12'>wrwrrwwwpwwrwgwwrwrwrwrpgw</row>
-		<row id='13'>grwrwrrrwrrrrrrrrwrwrrraaw</row>
+		<row id='12'>grwrrwwwpwwrwgwwrwrwrwrpgw</row>
+		<row id='13'>wpwrwrrrwrrrrrrrrwrwrrraaw</row>
 		<row id='14'>wawrwraawrrrrrrwwwrwwwwwsw</row>
 		<row id='15'>wrprprrrwrrsrrrwrprrrrrrrw</row>
 		<row id='16'>wwwwwwwwwwwwwwwwwwwwwwwwww</row>
@@ -54,7 +54,7 @@
 		<unit row='3' col='20' >ZPM</unit>
 		<unit row='3' col='22' >ZPM</unit>
 		<unit row='1' col='24' >ZPM</unit>
-		<unit row='13' col='1' direction="E" action="NONE" box='false'>O'neill</unit>
+		<unit row='12' col='1' direction="E" action="NONE" box='false'>O'neill</unit>
 		<unit row='12' col='20' direction="N" action="NONE" box='true'>Jaffa</unit>
 		<unit row='14' col='10' direction="W" action="NONE" box='false'>Replicator</unit>
 	</units>
