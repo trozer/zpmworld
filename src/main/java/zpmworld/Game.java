@@ -8,7 +8,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.nio.channels.Pipe;
 import java.util.StringTokenizer;
 import java.util.List;
 import java.io.File;
@@ -545,6 +544,9 @@ public class Game implements KeyListener{
 	public void addUnit(Unit unit){
 		stage.addUnit(unit);
 	}
+    public void createBullet(Bullet bullet){
+        stage.createBullet(bullet);
+    }
 	public void createZPM(){
 		stage.createZPM();
 	}
