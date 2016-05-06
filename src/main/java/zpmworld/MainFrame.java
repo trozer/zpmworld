@@ -58,7 +58,8 @@ public class MainFrame extends JFrame{
         c.weightx = 0.5;
         c.ipady = (int) (FHEIGHT*0.9);
 
-        stageGraphic = new Graphic((int) (FWIDTH * 0.8), FHEIGHT);
+        //harmadik parameterrel lehet allitani a "nagyitast"
+        stageGraphic = new Graphic((int) (FWIDTH * 0.8), FHEIGHT, 0.7);
         stageGraphic.setPreferredSize(new Dimension((int) (FWIDTH * 0.8), FHEIGHT));
         add(stageGraphic, c);
 

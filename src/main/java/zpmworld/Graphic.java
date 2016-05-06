@@ -14,8 +14,9 @@ public class Graphic extends JPanel{
     private List<Drawable> drawableUnits;
     private Game game;
     private boolean updateSort;
+    double Scale;
 
-    public Graphic(int WIDTH, int HEIGHT){
+    public Graphic(int WIDTH, int HEIGHT, double Scale){
         super();
         updateSort = true;
         this.WIDTH = WIDTH;
@@ -24,6 +25,7 @@ public class Graphic extends JPanel{
         drawableUnits = new ArrayList<Drawable>();
         setBorder(BorderFactory.createRaisedBevelBorder());
         setFocusable(true);
+        this.Scale = Scale;
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -69,15 +71,15 @@ public class Graphic extends JPanel{
     }
 
     public void registerDrawableField(Drawable fieldDrawable){
-        fieldDrawable.setSizeReference(new Point((int)(WIDTH*0.065),(int)(HEIGHT*0.093)));
-        fieldDrawable.setScale(HEIGHT/(double)540);
+        fieldDrawable.setSizeReference(new Point((int)((WIDTH*0.0641)*Scale),(int)((HEIGHT*0.093)*Scale)));
+        fieldDrawable.setScale((HEIGHT/(double)540)*Scale);
         drawableFields.add(fieldDrawable);
         updateSort = true;
     }
 
     public void registerDrawableUnit(Drawable unitDrawable){
-        unitDrawable.setSizeReference(new Point((int)(WIDTH*0.065),(int)(HEIGHT*0.093)));
-        unitDrawable.setScale((HEIGHT/(double)540));
+        unitDrawable.setSizeReference(new Point((int)((WIDTH*0.0641)*Scale),(int)((HEIGHT*0.093)*Scale)));
+        unitDrawable.setScale((HEIGHT/(double)540)*Scale);
         drawableUnits.add(unitDrawable);
         updateSort = true;
     }
