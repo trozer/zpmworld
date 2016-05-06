@@ -121,7 +121,7 @@ public class Player extends ActionUnit{
 				Action action = new Action(ActionType.MOVE, currentDirection, nextAction.getColor());
 				Bullet newBullet = new Bullet(action, currentField); // a lövedék létrejön a mezõn, amin a player áll, azért nem a következõ mezõn, mert akkor az ottani esetleges konfront nem lenne kezelve
 				currentField.addUnit(newBullet); //ez igazából nem is szükséges..
-				game.addUnit(newBullet);
+				game.createBullet(newBullet);
 				try {
 					game.registerDrawableUnit(new DrawableBullet(newBullet));
 				} catch (IOException e) {
