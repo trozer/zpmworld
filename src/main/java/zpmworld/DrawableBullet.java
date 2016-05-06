@@ -104,10 +104,10 @@ public class DrawableBullet extends Drawable{
             img.add(ImageIO.read(new File("bulletbjobb.PNG")));
             img.add(ImageIO.read(new File("bulletble.PNG")));
         }else if(bullet.getColor().equals(Color.YELLOW)){
-            img.add(ImageIO.read(new File("bullety.PNG")));
-            img.add(ImageIO.read(new File("bullety.PNG")));
-            img.add(ImageIO.read(new File("bullety.PNG")));
-            img.add(ImageIO.read(new File("bullety.PNG")));
+            img.add(ImageIO.read(new File("bulletybal.PNG")));
+            img.add(ImageIO.read(new File("bulletyfel.PNG")));
+            img.add(ImageIO.read(new File("bulletyjobb.PNG")));
+            img.add(ImageIO.read(new File("bulletyfle.PNG")));
         }else if(bullet.getColor().equals(Color.GREEN)){
             img.add(ImageIO.read(new File("bulletgbal.PNG")));
             img.add(ImageIO.read(new File("bulletgfel.PNG")));
