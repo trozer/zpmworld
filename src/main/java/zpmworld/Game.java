@@ -1,6 +1,9 @@
 package zpmworld;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
@@ -14,11 +17,14 @@ import java.util.Random;
 public class Game implements KeyListener{
 	private State state;
 	private Stage stage;
-	private ActionUnit Jaffa;
-	private ActionUnit Oneill;
+	private Player Jaffa;
+	private Player Oneill;
 	private ActionUnit Replicator;
 	private boolean pause;
 	private Graphic graphic;
+
+	private static final int GAMESPEED = 90; //update millisec
+	private static final int FPS = 16; //update millisec
 
 	/*public static void main(String[] args){
 		try {
@@ -500,11 +506,11 @@ public class Game implements KeyListener{
 		state = State.LOSE;
 	}
 
-	public void setJaffa(ActionUnit Jaffa){
+	public void setJaffa(Player Jaffa){
 		this.Jaffa = Jaffa;
 	}
 
-	public void setOneill(ActionUnit Oneill){
+	public void setOneill(Player Oneill){
 		this.Oneill = Oneill;
 	}
 
@@ -550,17 +556,42 @@ public class Game implements KeyListener{
 	}
 	public void newGame(File file) throws Exception{
 		try {
+			graphic.clear();
 			this.stage = new Stage(file, this);
+			setLoop();
 		} catch (Exception e){
 			throw new Exception(e);
 		}
 	}
 	public void newGame() throws Exception{
 		try {
+			graphic.clear();
 			this.stage = new Stage(new File("testMap.xml"), this);
+			setLoop();
 		} catch (Exception e){
 			throw new Exception(e);
 		}
+	}
+
+	private void setLoop(){
+		setState(State.GAME);
+		Timer updateTimer = new Timer(GAMESPEED, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getState() != State.PAUSE)
+					update();
+			}
+		});
+		Timer paintTimer = new Timer(FPS, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(getState() != State.PAUSE) {
+					graphic.repaint();
+				}
+			}
+		});
+		updateTimer.setInitialDelay(100);
+		paintTimer.setInitialDelay(200);
+		updateTimer.start();
+		paintTimer.start();
 	}
 	public void setStage(Stage stage){
 		this.stage = stage;
@@ -597,10 +628,10 @@ public class Game implements KeyListener{
 				Oneill.turn(Direction.SOUTH);
 		}
 		if(e.getKeyCode() == KeyEvent.VK_R){
-			Oneill.grab();
-		}
-		if(e.getKeyCode() == KeyEvent.VK_F){
-			Oneill.drop();
+			if(Oneill.getBox() == null)
+				Oneill.grab();
+			else
+				Oneill.drop();
 		}
 
 		if(e.getKeyCode() == KeyEvent.VK_E){
@@ -635,10 +666,10 @@ public class Game implements KeyListener{
 				Jaffa.turn(Direction.SOUTH);
 		}
 		if(e.getKeyCode() == KeyEvent.VK_O){
-			Jaffa.grab();
-		}
-		if(e.getKeyCode() == KeyEvent.VK_K){
-			Jaffa.drop();
+			if(Jaffa.getBox() == null)
+				Jaffa.grab();
+			else
+				Jaffa.drop();
 		}
 
 		if(e.getKeyCode() == KeyEvent.VK_N){

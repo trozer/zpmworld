@@ -65,6 +65,11 @@ public class Graphic extends JPanel{
         }
     }
 
+    public void clear(){
+        drawableFields = new ArrayList<Drawable>();
+        drawableUnits = new ArrayList<Drawable>();
+        getGraphics().clearRect(0,0,WIDTH,HEIGHT);
+    }
 
     public void setGame(Game game){
         this.game = game;
