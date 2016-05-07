@@ -104,7 +104,7 @@ public class MainFrame extends JFrame{
                 music.stop();
             AudioInputStream audioInputStream =
                     AudioSystem.getAudioInputStream(
-                            new File("bg.wav"));
+                            new File("sg_techno.wav"));
             Clip clip = AudioSystem.getClip();
             this.music = clip;
             clip.open(audioInputStream);
