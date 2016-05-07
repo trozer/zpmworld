@@ -2,10 +2,7 @@ package zpmworld;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Player extends ActionUnit{
 
@@ -14,8 +11,9 @@ public class Player extends ActionUnit{
 	private int allZPM;
 	private Game game;
 	private String name;
+    private boolean enabledToKill;      //ha true, a Player lövései halálosak a másik Player számára
 
-	//Konstruktor TODO több
+    //Konstruktor TODO több
 	public Player(int allZPM, Direction direction, Action action, Field currentField, Game game, Box box, String name){
 		super(currentField, 15);
 		this.box = box;
@@ -26,6 +24,7 @@ public class Player extends ActionUnit{
 		this.zpm = new ArrayList<ZPM>();
 		this.name = name;
 		this.nextAction = action;
+        this.enabledToKill = false;
 	}
 
 	public Player(int allZPM, Direction direction, Field currentField, Game game, String name, int weight){
@@ -35,6 +34,7 @@ public class Player extends ActionUnit{
 		this.name = name;
 		this.zpm = new ArrayList<ZPM>();
 		this.box = null;
+        this.enabledToKill = false;
 	}
 
 	@Override
@@ -68,9 +68,14 @@ public class Player extends ActionUnit{
 		return name;
 	}
 
+    public boolean getEnabledToKill() {
+        return enabledToKill;
+    }
+
 	//ZPM felvetele. Ha elfogyott a palyarol az osszes, akkor nyertunk
 	public void addZPM(ZPM zpm){
 		this.zpm.add(zpm);
+        enabledToKill = game.enableToKill(this);
 		if (name.equals("O'neill") && this.zpm.size() % 2 == 0){
 			game.createZPM();
 		}
@@ -138,10 +143,15 @@ public class Player extends ActionUnit{
 		}
 	}
 
-	/*@Override
+	@Override
 	public void accept(Bullet bullet, Set<Unit> deleteUnits) {
-		//TODO ha akarjuk h lövedékkel ki is lehessen nyírni a Playert, akkor itt lehet megcsinálni
-	}*/
+        if(game.killEnabledToEnemy(this)){
+            deleteUnits.add(bullet);
+            deleteUnits.add(this);
+            bullet.kill();
+            this.kill();
+        }
+	}
 
 	//Meghal a jatekos, veget er a jatek.
 	public void kill(){
@@ -191,4 +201,5 @@ public class Player extends ActionUnit{
 		return name + ": " + pos + " ; " + cselekves + "cselekvést akar végrehajtani, " + irany + " irányba néz, " + weight + " tömegû, "
 				+ doboz + zpm.size() + " db begyûjtött ZPM van nála, " + elet;
 	}
+
 }
