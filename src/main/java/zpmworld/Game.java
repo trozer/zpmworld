@@ -686,7 +686,7 @@ public class Game implements KeyListener{
 			else
 				Jaffa.turn(Direction.SOUTH);
 		}
-		if(e.getKeyCode() == KeyEvent.VK_O){
+		if(e.getKeyCode() == KeyEvent.VK_B){
 			if(Jaffa.getBox() == null)
 				Jaffa.grab();
 			else
