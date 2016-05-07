@@ -80,7 +80,7 @@ public class Game implements KeyListener{
 			stage.update();
 			stage.collectUnits();
 			graphic.update();
-			if(Replicator.isDead()){
+			if(Replicator != null && Replicator.isDead()){
 				stage.createReplicator();
 			}
 		}
@@ -548,6 +548,10 @@ public class Game implements KeyListener{
 			Replicator.turn(dir);
 		}
 	}
+
+    public boolean ONeillWon() {
+        return Oneill.getCollectedZPM() >= Jaffa.getCollectedZPM();
+    }
 
 	public void win(){
 		state = State.WIN;

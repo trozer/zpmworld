@@ -75,7 +75,11 @@ public class Player extends ActionUnit{
 			game.createZPM();
 		}
 		if (game.getAllZPM() == 0) {
-			game.win();
+            if(game.ONeillWon()) {
+                game.win();
+            } else {
+                game.lose();
+            }
 		}
 	}
 
