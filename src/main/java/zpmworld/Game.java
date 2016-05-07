@@ -80,7 +80,7 @@ public class Game implements KeyListener{
 			stage.update();
 			stage.collectUnits();
 			graphic.update();
-			if(Replicator.isDead()){
+			if(Replicator != null && Replicator.isDead()){
 				stage.createReplicator();
 			}
 		}
