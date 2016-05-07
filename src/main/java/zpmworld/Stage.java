@@ -30,6 +30,7 @@ public class Stage implements Serializable
     private List<String> lastLog;
 	private Game game;
 
+
     public Stage (File file, Game game) throws Exception {
         units =  new ArrayList<Unit>();
         fields = new ArrayList<Field>();
@@ -38,7 +39,7 @@ public class Stage implements Serializable
         lastLog = new ArrayList<String>();
         log = true;
         portal = null;
-        allZPM = 20;
+        allZPM = 0;     //játék kezdetén lévő zpm-ek darabszáma
 		this.game = game;
         init(file, game);
     }
@@ -468,11 +469,11 @@ public class Stage implements Serializable
     	return zpms;
     }
     
-    int getAllZPM(){
+    public int getOriginalZPMNumber(){    // visszaadja a játék kezdetén lévő zpm-ek darabszámát
     	return allZPM;
     }
     
-    int getZPM(){
+    public int getAllZPM(){   //visszaadja az összes pályán lévő zpm darabszámát
     	int count = 0;
     	for(ZPM zpm : zpms){
     		if(zpm.getCurrentField() != null)
