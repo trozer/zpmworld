@@ -22,10 +22,14 @@ public class Status extends JPanel {
     private JLabel Jaffascore;
     private JLabel Jaffabox;
     private JLabel Jaffaend;
+    private JLabel Oneillskull;
+    private JLabel Jaffaskull;
 
 
     private BufferedImage hasbox = null;
     private BufferedImage nobox = null;
+    private BufferedImage onskull = null;
+    private BufferedImage offskull = null;
 
 
     // TODO majd valaki ezt fejezze be :D
@@ -34,12 +38,14 @@ public class Status extends JPanel {
         setLayout(new GridBagLayout());
         Jaffa = new JPanel();
         Oneill = new JPanel();
-        Oneill.setLayout(new GridLayout(4, 1));
-        Jaffa.setLayout(new GridLayout(4, 1));
+        Oneill.setLayout(new GridLayout(5, 1));
+        Jaffa.setLayout(new GridLayout(5, 1));
 
         try {
             hasbox = ImageIO.read(new File("statusbox.PNG"));
             nobox = ImageIO.read(new File("statusnobox.PNG"));
+            onskull = ImageIO.read(new File("onskull.PNG"));
+            offskull = ImageIO.read(new File("offskull.PNG"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,6 +60,9 @@ public class Status extends JPanel {
 
         Oneillbox = new JLabel(new ImageIcon(nobox));
         Oneill.add(Oneillbox);
+
+        Oneillskull = new JLabel(new ImageIcon(offskull));
+        Oneill.add(Oneillskull);
 
         Oneillend = new JLabel("");
         Oneillend.setFont(new Font(Oneillend.getFont().getName(), Font.BOLD, 40));
@@ -71,6 +80,9 @@ public class Status extends JPanel {
 
         Jaffabox = new JLabel(new ImageIcon(nobox));
         Jaffa.add(Jaffabox);
+
+        Jaffaskull = new JLabel(new ImageIcon(offskull));
+        Jaffa.add(Jaffaskull);
 
         Jaffaend = new JLabel("");
         Jaffaend.setFont(new Font(Jaffaend.getFont().getName(), Font.BOLD, 40));
@@ -118,7 +130,7 @@ public class Status extends JPanel {
         }
     }
 
-    public void update(int sumzpm, int oneillzpm, int jaffazpm, Box oneillbox, Box jaffabox) {
+    public void update(int sumzpm, int oneillzpm, int jaffazpm, Box oneillbox, Box jaffabox, boolean oneillkill, boolean jaffakill) {
         Oneillscore.setText("have: " + oneillzpm + ",  free: " + sumzpm + " ZPM");
         Jaffascore.setText("have: " + jaffazpm + ",  free: " + sumzpm + " ZPM");
         if (oneillbox != null){
@@ -126,13 +138,22 @@ public class Status extends JPanel {
         }
         else {
             Oneillbox.setIcon(new ImageIcon(nobox));
-
         }
         if (jaffabox != null) {
             Jaffabox.setIcon(new ImageIcon(hasbox));
         }
         else {
             Jaffabox.setIcon(new ImageIcon(nobox));
+        }
+        if(oneillkill){
+            Oneillskull.setIcon(new ImageIcon(onskull));
+        } else{
+            Oneillskull.setIcon(new ImageIcon(offskull));
+        }
+        if(jaffakill){
+            Jaffaskull.setIcon(new ImageIcon(onskull));
+        } else{
+            Jaffaskull.setIcon(new ImageIcon(offskull));
         }
     }
 

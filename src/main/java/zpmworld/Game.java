@@ -618,7 +618,7 @@ public class Game implements KeyListener{
 			public void actionPerformed(ActionEvent e) {
 				if(getState() != State.PAUSE)
 					update();
-					status.update(getAllZPM(), Oneill.getCollectedZPM(), Jaffa.getCollectedZPM(), Oneill.getBox(), Jaffa.getBox());
+					status.update(getAllZPM(), Oneill.getCollectedZPM(), Jaffa.getCollectedZPM(), Oneill.getBox(), Jaffa.getBox(), Oneill.getEnabledToKill(), Jaffa.getEnabledToKill());
 			}
 		});
 		Timer paintTimer = new Timer(FPS, new ActionListener() {
