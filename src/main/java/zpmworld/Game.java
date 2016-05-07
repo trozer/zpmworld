@@ -576,8 +576,9 @@ public class Game implements KeyListener{
 		try {
 			graphic.clear();
 			status.clear();
+			if(stage == null)
+				setLoop();
 			this.stage = new Stage(file, this);
-			setLoop();
 		} catch (Exception e){
 			throw new Exception(e);
 		}
@@ -586,8 +587,9 @@ public class Game implements KeyListener{
 		try {
 			graphic.clear();
 			status.clear();
+			if(stage == null)
+				setLoop();
 			this.stage = new Stage(new File("testMap.xml"), this);
-			setLoop();
 		} catch (Exception e){
 			throw new Exception(e);
 		}

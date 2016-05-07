@@ -96,6 +96,7 @@ public class MainFrame extends JFrame{
             else
                 music.loop(Clip.LOOP_CONTINUOUSLY);
         game.pause();
+        stageGraphic.requestFocus();
     }
 
     public void renderGame(){
