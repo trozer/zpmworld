@@ -185,7 +185,7 @@ public class Game implements KeyListener{
 							throw new Exception("Hibás lekérdezendõ egységazonosító!");
 						}
 					} else {
-						stage.getZPM();
+						stage.getAllZPM();
 					}
 				} else if ("getField".startsWith(command)) {
 					int posX = Integer.parseInt(readString(tokenizer));
@@ -549,6 +549,23 @@ public class Game implements KeyListener{
 		}
 	}
 
+    public boolean killEnabledToEnemy(Player player) {
+        if(player.getName() == "O'neill"){
+            return Jaffa.getEnabledToKill();
+        } else {
+            return Oneill.getEnabledToKill();
+        }
+    }
+
+
+    public boolean enableToKill(Player player) {
+        if(Math.ceil(stage.getOriginalZPMNumber() * 0.4) <= player.getCollectedZPM()){     //ha az eredeti zpm-szám legalább 40%-át begyûjtötte már, akkor ölhet
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public boolean ONeillWon() {
         return Oneill.getCollectedZPM() >= Jaffa.getCollectedZPM();
     }
@@ -567,7 +584,7 @@ public class Game implements KeyListener{
 		stage.createZPM();
 	}
 	public int getAllZPM(){
-		return stage.getZPM();
+		return stage.getAllZPM();
 	}
 	public void replaceField(Field field){
 		stage.replaceField(field);
