@@ -100,6 +100,8 @@ public class MainFrame extends JFrame{
 
     public void renderGame(){
         try {
+            if(music != null)
+                music.stop();
             AudioInputStream audioInputStream =
                     AudioSystem.getAudioInputStream(
                             new File("bg.wav"));
