@@ -549,6 +549,10 @@ public class Game implements KeyListener{
 		}
 	}
 
+    public boolean ONeillWon() {
+        return Oneill.getCollectedZPM() >= Jaffa.getCollectedZPM();
+    }
+
 	public void win(){
 		state = State.WIN;
 		status.endgame(true);
