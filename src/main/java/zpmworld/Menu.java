@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 /**
  * Created by Tóth on 2016. 05. 03..
@@ -49,6 +50,12 @@ public class Menu extends JPanel{
             }
         });
 
+        quitGame.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                exit();
+            }
+        });
+
         setBorder(BorderFactory.createRaisedBevelBorder());
 
     }
@@ -61,6 +68,10 @@ public class Menu extends JPanel{
 
     public void setMainFrame(MainFrame frame){
         mainFrame = frame;
+    }
+
+    public void exit(){
+        mainFrame.exit();
     }
 
 }

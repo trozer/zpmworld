@@ -9,6 +9,7 @@ import javax.swing.plaf.DimensionUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
 /**
@@ -97,6 +98,11 @@ public class MainFrame extends JFrame{
                 music.loop(Clip.LOOP_CONTINUOUSLY);
         game.pause();
         stageGraphic.requestFocus();
+    }
+
+    public void exit(){
+        //TODO jatekot el kell menteni stb...
+        mainFrame.dispatchEvent(new WindowEvent(mainFrame,WindowEvent.WINDOW_CLOSING));
     }
 
     public void renderGame(){
