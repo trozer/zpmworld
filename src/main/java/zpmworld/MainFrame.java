@@ -75,7 +75,7 @@ public class MainFrame extends JFrame{
         setVisible(true);
         setLocationRelativeTo(null);
         try {
-            game = new Game(stageGraphic);
+            game = new Game(stageGraphic, status);
             stageGraphic.addKeyListener(game);
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,7 +86,7 @@ public class MainFrame extends JFrame{
 
     public static void main(String[] args){
         MainFrame frame = getMainFrame();
-        frame.revalidate();
+        //frame.revalidate();
     }
 
     public void pause(){
@@ -109,6 +109,7 @@ public class MainFrame extends JFrame{
             clip.loop(Clip.LOOP_CONTINUOUSLY);
             stageGraphic.requestFocus();
             stageGraphic.setGame(game);
+            status.setGame(game);
             game.newGame(new File("finalMap.xml"));
             game.update();
             //game.console() //ha konzolon akar valaki tesztelni...

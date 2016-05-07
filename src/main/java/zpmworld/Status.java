@@ -1,15 +1,31 @@
 package zpmworld;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Tóth on 2016. 05. 04..
  */
 public class Status extends JPanel {
 
-    JPanel Jaffa;
-    JPanel Oneill;
+    private Game game;
+
+    private JPanel Jaffa;
+    private JPanel Oneill;
+    private JLabel Oneillscore;
+    private JLabel Oneillbox;
+    private JLabel Oneillend;
+    private JLabel Jaffascore;
+    private JLabel Jaffabox;
+    private JLabel Jaffaend;
+
+
+    private BufferedImage hasbox = null;
+    private BufferedImage nobox = null;
 
 
     // TODO majd valaki ezt fejezze be :D
@@ -18,19 +34,55 @@ public class Status extends JPanel {
         setLayout(new GridBagLayout());
         Jaffa = new JPanel();
         Oneill = new JPanel();
-        Oneill.setLayout(new FlowLayout());
-        Jaffa.setLayout(new FlowLayout());
+        Oneill.setLayout(new GridLayout(4, 1));
+        Jaffa.setLayout(new GridLayout(4, 1));
+
+        try {
+            hasbox = ImageIO.read(new File("statusbox.PNG"));
+            nobox = ImageIO.read(new File("statusnobox.PNG"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         JLabel Oneilllabel = new JLabel("O'Neill");
         Oneilllabel.setFont(new Font(Oneilllabel.getFont().getName(), Font.BOLD, 40));
-        Oneilllabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         Oneill.add(Oneilllabel);
+
+        Oneillscore = new JLabel("");
+        Oneillscore.setFont(new Font(Oneillscore.getFont().getName(), Font.BOLD, 16));
+        Oneill.add(Oneillscore);
+
+
+
+        Oneillbox = new JLabel(new ImageIcon(nobox));
+        Oneill.add(Oneillbox);
+
+        Oneillend = new JLabel("");
+        Oneillend.setFont(new Font(Oneillend.getFont().getName(), Font.BOLD, 40));
+        Oneillend.setVisible(false);
+        Oneill.add(Oneillend);
+
+
 
         JLabel Jaffalabel = new JLabel("Jaffa");
         Jaffalabel.setFont(new Font(Jaffalabel.getFont().getName(), Font.BOLD, 40));
-        Jaffalabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         Jaffa.add(Jaffalabel);
+
+        Jaffascore = new JLabel("");
+        Jaffascore.setFont(new Font(Jaffascore.getFont().getName(), Font.BOLD, 16));
+        Jaffa.add(Jaffascore);
+
+
+
+        Jaffabox = new JLabel(new ImageIcon(nobox));
+        Jaffa.add(Jaffabox);
+
+        Jaffaend = new JLabel("");
+        Jaffaend.setFont(new Font(Jaffaend.getFont().getName(), Font.BOLD, 40));
+        Jaffaend.setVisible(false);
+        Jaffa.add(Jaffaend);
+
 
         GridBagConstraints c = new GridBagConstraints();
 
@@ -38,22 +90,63 @@ public class Status extends JPanel {
         c.gridx = 0;
         c.gridy = 0;
         c.weightx = 0.5;
-        c.weighty = 0.5;
-      //  c.ipady = (int) (HEIGHT*0.192);
+        //c.ipady = (int) (HEIGHT*0.392);
 
-       add(Oneill, c);
+        add(Oneill, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 1;
+        c.gridy = 2;
         c.weightx = 0.5;
-        c.weighty = 0.5;
-     // c.ipady = (int) (HEIGHT*0.192);
+        //c.ipady = (int) (HEIGHT*0.392);
 
         add(Jaffa, c);
 
         setBorder(BorderFactory.createRaisedBevelBorder());
         Jaffa.setBorder(BorderFactory.createRaisedBevelBorder());
         Oneill.setBorder(BorderFactory.createRaisedBevelBorder());
+    }
+
+    public void endgame(boolean oneillwins) {
+        if (oneillwins) {
+            Oneillend.setText("WIN");
+            Oneillend.setForeground(Color.GREEN);
+            Oneillend.setVisible(true);
+            Jaffaend.setText("LOOSE");
+            Jaffaend.setForeground(Color.RED);
+            Jaffaend.setVisible(true);
+        }
+        else {
+            Oneillend.setText("LOOSE");
+            Oneillend.setForeground(Color.RED);
+            Oneillend.setVisible(true);
+            Jaffaend.setText("WIN");
+            Jaffaend.setForeground(Color.GREEN);
+            Jaffaend.setVisible(true);
+        }
+    }
+
+    public void update(int sumzpm, int oneillzpm, int jaffazpm, Box oneillbox, Box jaffabox) {
+        Oneillscore.setText("have: " + oneillzpm + ",  free: " + sumzpm + " ZPM");
+        Jaffascore.setText("have: " + jaffazpm + ",  free: " + sumzpm + " ZPM");
+        if (oneillbox != null){
+            //Oneillbox.imageUpdate(hasbox, , Oneillbox.getX(), Oneillbox.getY(), Oneillbox.getWidth(), Oneillbox.getHeight());
+            Oneillbox.setIcon(new ImageIcon(hasbox));
+        }
+        else {
+            Oneillbox.setIcon(new ImageIcon(nobox));
+
+        }
+        if (jaffabox != null) {
+            Jaffabox.setIcon(new ImageIcon(hasbox));
+        }
+        else {
+            Jaffabox.setIcon(new ImageIcon(nobox));
+        }
+        repaint();
+    }
+
+    public void setGame(Game game){
+        this.game = game;
     }
 }

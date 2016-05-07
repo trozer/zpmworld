@@ -21,6 +21,7 @@ public class Game implements KeyListener{
 	private ActionUnit Replicator;
 	private boolean pause;
 	private Graphic graphic;
+	private Status status;
 
 	private static final int GAMESPEED = 90; //update millisec
 	private static final int FPS = 16; //update millisec
@@ -39,10 +40,11 @@ public class Game implements KeyListener{
 		}
 	}
 */
-	Game(Graphic graphic) throws Exception {
+	Game(Graphic graphic, Status status) throws Exception {
 		state = State.GAME;
 		pause = false;
 		this.graphic = graphic;
+		this.status = status;
 	}
 
 	public void registerDrawableField(Drawable fieldDrawable){
@@ -588,6 +590,7 @@ public class Game implements KeyListener{
 			public void actionPerformed(ActionEvent e) {
 				if(getState() != State.PAUSE)
 					update();
+					status.update(getAllZPM(), Oneill.getCollectedZPM(), Jaffa.getCollectedZPM(), Oneill.getBox(), Jaffa.getBox());
 			}
 		});
 		Timer paintTimer = new Timer(FPS, new ActionListener() {
