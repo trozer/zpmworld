@@ -44,7 +44,6 @@ public class Status extends JPanel {
             e.printStackTrace();
         }
 
-
         JLabel Oneilllabel = new JLabel("O'Neill");
         Oneilllabel.setFont(new Font(Oneilllabel.getFont().getName(), Font.BOLD, 40));
         Oneill.add(Oneilllabel);
@@ -52,8 +51,6 @@ public class Status extends JPanel {
         Oneillscore = new JLabel("");
         Oneillscore.setFont(new Font(Oneillscore.getFont().getName(), Font.BOLD, 16));
         Oneill.add(Oneillscore);
-
-
 
         Oneillbox = new JLabel(new ImageIcon(nobox));
         Oneill.add(Oneillbox);
@@ -64,7 +61,6 @@ public class Status extends JPanel {
         Oneill.add(Oneillend);
 
 
-
         JLabel Jaffalabel = new JLabel("Jaffa");
         Jaffalabel.setFont(new Font(Jaffalabel.getFont().getName(), Font.BOLD, 40));
         Jaffa.add(Jaffalabel);
@@ -72,8 +68,6 @@ public class Status extends JPanel {
         Jaffascore = new JLabel("");
         Jaffascore.setFont(new Font(Jaffascore.getFont().getName(), Font.BOLD, 16));
         Jaffa.add(Jaffascore);
-
-
 
         Jaffabox = new JLabel(new ImageIcon(nobox));
         Jaffa.add(Jaffabox);
@@ -90,7 +84,6 @@ public class Status extends JPanel {
         c.gridx = 0;
         c.gridy = 0;
         c.weightx = 0.5;
-        //c.ipady = (int) (HEIGHT*0.392);
 
         add(Oneill, c);
 
@@ -98,7 +91,6 @@ public class Status extends JPanel {
         c.gridx = 0;
         c.gridy = 2;
         c.weightx = 0.5;
-        //c.ipady = (int) (HEIGHT*0.392);
 
         add(Jaffa, c);
 
@@ -130,7 +122,6 @@ public class Status extends JPanel {
         Oneillscore.setText("have: " + oneillzpm + ",  free: " + sumzpm + " ZPM");
         Jaffascore.setText("have: " + jaffazpm + ",  free: " + sumzpm + " ZPM");
         if (oneillbox != null){
-            //Oneillbox.imageUpdate(hasbox, , Oneillbox.getX(), Oneillbox.getY(), Oneillbox.getWidth(), Oneillbox.getHeight());
             Oneillbox.setIcon(new ImageIcon(hasbox));
         }
         else {
@@ -143,7 +134,11 @@ public class Status extends JPanel {
         else {
             Jaffabox.setIcon(new ImageIcon(nobox));
         }
-        repaint();
+    }
+
+    public void clear(){
+        Oneillend.setVisible(false);
+        Jaffaend.setVisible(false);
     }
 
     public void setGame(Game game){

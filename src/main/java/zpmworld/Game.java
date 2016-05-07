@@ -507,7 +507,9 @@ public class Game implements KeyListener{
 	}
 
 	public void lose(){
+
 		state = State.LOSE;
+		status.endgame(false);
 	}
 
 	public boolean isPause(){
@@ -549,6 +551,7 @@ public class Game implements KeyListener{
 
 	public void win(){
 		state = State.WIN;
+		status.endgame(true);
 	}
 	public void addUnit(Unit unit){
 		stage.addUnit(unit);
@@ -568,6 +571,7 @@ public class Game implements KeyListener{
 	public void newGame(File file) throws Exception{
 		try {
 			graphic.clear();
+			status.clear();
 			this.stage = new Stage(file, this);
 			setLoop();
 		} catch (Exception e){
@@ -577,6 +581,7 @@ public class Game implements KeyListener{
 	public void newGame() throws Exception{
 		try {
 			graphic.clear();
+			status.clear();
 			this.stage = new Stage(new File("testMap.xml"), this);
 			setLoop();
 		} catch (Exception e){
