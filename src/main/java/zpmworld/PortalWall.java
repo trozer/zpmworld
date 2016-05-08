@@ -113,7 +113,21 @@ public class PortalWall extends Wall {
 		}
 	}
 
-	@Override
+    @Override
+    public Field getNeighbourInDirection(Direction dir) {   //ha a játékos kilőtte maga alól a portált, a következő cselekedete (kivéve turn) megöli (szebb lenne ha a lövedék becsapódásakor halna meg, de nagyon bonyolult megcsinálni)
+        if(!portal.amIPortal(this)){
+            if(!containedUnits.isEmpty()){
+                for(Unit unit : containedUnits){
+                    unit.kill();
+                }
+                containedUnits.clear();
+                return null;
+            }
+        }
+        return super.getNeighbourInDirection(dir);
+    }
+
+    @Override
 	public String toString(){
 		if(portal.amIPortal(this))
 			return "port�lfal: (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") poz�ci�, " 
