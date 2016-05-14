@@ -116,12 +116,12 @@ public class Status extends JPanel {
             Oneillend.setText("WIN");
             Oneillend.setForeground(Color.GREEN);
             Oneillend.setVisible(true);
-            Jaffaend.setText("LOOSE");
+            Jaffaend.setText("LOSE");
             Jaffaend.setForeground(Color.RED);
             Jaffaend.setVisible(true);
         }
         else {
-            Oneillend.setText("LOOSE");
+            Oneillend.setText("LOSE");
             Oneillend.setForeground(Color.RED);
             Oneillend.setVisible(true);
             Jaffaend.setText("WIN");
