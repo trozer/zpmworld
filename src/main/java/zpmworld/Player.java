@@ -88,6 +88,10 @@ public class Player extends ActionUnit{
 		}
 	}
 
+    public void addZPMSimply(ZPM zpm){
+        this.zpm.add(zpm);
+    }
+
 	//Doboz lerakasa.
 	public Box dropBox(){
 		Box temp = this.box;
