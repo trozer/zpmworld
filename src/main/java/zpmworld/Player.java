@@ -1,5 +1,9 @@
 package zpmworld;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import java.awt.Color;
 import java.io.IOException;
 import java.util.*;
@@ -26,6 +30,19 @@ public class Player extends ActionUnit{
 		this.nextAction = action;
         this.enabledToKill = false;
 	}
+
+    public Player(int allZPM, Direction direction, Action action, Field currentField, Game game, Box box, String name, List<ZPM> zpms){
+        super(currentField, 15);
+        this.box = box;
+        this.allZPM = allZPM;
+        this.currentDirection = direction;
+        this.currentField = currentField;
+        this.game = game;
+        this.zpm = zpms;
+        this.name = name;
+        this.nextAction = action;
+        this.enabledToKill = false;
+    }
 
 	public Player(int allZPM, Direction direction, Field currentField, Game game, String name, int weight){
 		super(currentField, weight, direction, new Action(ActionType.NONE, null, null));
@@ -112,6 +129,7 @@ public class Player extends ActionUnit{
 
 	@Override
 	public void action() {
+        enabledToKill = game.enableToKill(this); //TODO nem szép megoldás, de ha kezdetben már van nála zpm, akkor jobb mint a semmi
 		if(nextAction == null || nextAction.getType() == ActionType.NONE) {
 			return;
 		}
@@ -167,6 +185,99 @@ public class Player extends ActionUnit{
         }
 
 	}
+
+    @Override
+    public Element getXmlElement(Document doc) {
+        int row;
+        int col;
+        if(this.getCurrentField().getPosition() == null){
+            return null;
+        } else {
+            col = this.getCurrentField().getPosition().x;
+            row = this.getCurrentField().getPosition().y;
+        }
+
+        Element unitElement = doc.createElement("unit");
+        Attr attrType = doc.createAttribute("row");
+        attrType.setValue(String.valueOf(row));
+        unitElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("col");
+        attrType.setValue(String.valueOf(col));
+        unitElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("direction");
+        String dir = "";
+        switch (this.currentDirection){
+            case EAST:
+                dir = "E";
+                break;
+            case NORTH:
+                dir = "N";
+                break;
+            case WEST:
+                dir = "W";
+                break;
+            case SOUTH:
+                dir = "S";
+                break;
+            default:
+                dir = "NONE";
+                break;
+        }
+        attrType.setValue(dir);
+        unitElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("action");
+        String act = "";
+        if(nextAction == null){
+            act = "NONE";
+        } else {
+            switch (this.nextAction.getType()) {
+                case MOVE:
+                    act = "MOVE";
+                    break;
+                case TURN:
+                    act = "TURN";
+                    break;
+                case SHOOT:
+                    act = "SHOOT";
+                    break;
+                case DROP:
+                    act = "DROP";
+                    break;
+                case GRAB:
+                    act = "GRAB";
+                    break;
+                default:
+                    act = "NONE";
+                    break;
+            }
+        }
+        attrType.setValue(act);
+        unitElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("box");
+        if(box == null){
+            attrType.setValue("false");
+        } else {
+            attrType.setValue("true");
+        }
+        unitElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("zpm");
+        attrType.setValue(String.valueOf(this.zpm.size()));
+        unitElement.setAttributeNode(attrType);
+
+        if(name == "O'neill") {
+            unitElement.appendChild(doc.createTextNode("O'neill"));
+        } else {
+            unitElement.appendChild(doc.createTextNode("Jaffa"));
+        }
+        return unitElement;
+
+        //<unit row='0' col='4' direction="E" action="NONE" box='false' zpm="6">O'neill</unit>
+    }
 
 	public String toString(){
 		String cselekves;

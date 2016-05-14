@@ -1,5 +1,9 @@
 package zpmworld;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -125,6 +129,38 @@ public class PortalWall extends Wall {
             }
         }
         return super.getNeighbourInDirection(dir);
+    }
+
+    @Override
+    public Element getXmlElement(Document doc) {
+        Element portalWallElement = doc.createElement("portalwall_color");
+        Attr attrType = doc.createAttribute("row");
+        attrType.setValue(String.valueOf(this.position.y));
+        portalWallElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("col");
+        attrType.setValue(String.valueOf(this.position.x));
+        portalWallElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("color");
+        Color color = portal.getColor(this);
+        if(color == null)
+            return null;
+        if(color == Color.BLUE){
+            attrType.setValue("blue");
+        } else if (color == Color.YELLOW){
+            attrType.setValue("yellow");
+        } else if (color == Color.RED){
+            attrType.setValue("red");
+        } else if (color == Color.GREEN) {
+            attrType.setValue("green");
+        } else {
+            return null;
+        }
+
+        portalWallElement.setAttributeNode(attrType);
+        return portalWallElement;
+        //<portalwall_color row='2' col='5' color="blue"/>
     }
 
     @Override

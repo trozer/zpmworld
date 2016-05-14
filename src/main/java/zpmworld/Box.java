@@ -1,5 +1,9 @@
 package zpmworld;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -48,7 +52,31 @@ public class Box extends Unit{
                 break;
         }
     }
-    
+
+    @Override
+    public Element getXmlElement(Document doc) {
+        int row;
+        int col;
+        if(this.getCurrentField() == null || this.getCurrentField().getPosition() == null){
+            return null;
+        } else {
+            col = this.getCurrentField().getPosition().x;
+            row = this.getCurrentField().getPosition().y;
+        }
+
+        Element unitElement = doc.createElement("unit");
+        Attr attrType = doc.createAttribute("row");
+        attrType.setValue(String.valueOf(row));
+        unitElement.setAttributeNode(attrType);
+        attrType = doc.createAttribute("col");
+        attrType.setValue(String.valueOf(col));
+        unitElement.setAttributeNode(attrType);
+
+
+        unitElement.appendChild(doc.createTextNode("Box"));
+        return unitElement;
+    }
+
     @Override
     public String toString(){
     	String life;

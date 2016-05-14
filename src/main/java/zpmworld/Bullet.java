@@ -1,5 +1,9 @@
 package zpmworld;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -77,6 +81,68 @@ public class Bullet extends ActionUnit{
         deleteUnits.add(replicator);
         replicator.kill();
         this.kill();
+    }
+
+    @Override
+    public Element getXmlElement(Document doc) {
+        int row;
+        int col;
+        if(this.getCurrentField().getPosition() == null){
+            return null;
+        } else {
+            col = this.getCurrentField().getPosition().x;
+            row = this.getCurrentField().getPosition().y;
+        }
+
+        Element unitElement = doc.createElement("unit");
+        Attr attrType = doc.createAttribute("row");
+        attrType.setValue(String.valueOf(row));
+        unitElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("col");
+        attrType.setValue(String.valueOf(col));
+        unitElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("direction");
+        String dir = "";
+        switch (this.currentDirection){
+            case EAST:
+                dir = "E";
+                break;
+            case NORTH:
+                dir = "N";
+                break;
+            case WEST:
+                dir = "W";
+                break;
+            case SOUTH:
+                dir = "S";
+                break;
+            default:
+                dir = "NONE";
+                break;
+        }
+        attrType.setValue(dir);
+        unitElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("color");
+        if(color == Color.BLUE){
+            attrType.setValue("blue");
+        } else if (color == Color.YELLOW){
+            attrType.setValue("yellow");
+        } else if (color == Color.RED){
+            attrType.setValue("red");
+        } else if (color == Color.GREEN) {
+            attrType.setValue("green");
+        } else {
+            return null;
+        }
+
+        unitElement.setAttributeNode(attrType);
+        unitElement.appendChild(doc.createTextNode("Bullet"));
+
+        return unitElement;
+        //<unit row='1' col='3' color="blue" direction="E">Bullet</unit>
     }
 
     public String toString(){

@@ -1,6 +1,10 @@
 package zpmworld;
 
-import java.awt.Point;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -51,8 +55,18 @@ public class Scale extends Field {
 			myGate = gate;
 	}
 
+    @Override
+    public void addUnit(Unit unit) {
+        if(unit.getClass() == Box.class) {  //a Stage.init utolsó for ciklusa valamiért Box paraméter mellett sem hívja addUnit(Box)-t
+            return;
+        }
+        super.addUnit(unit);
+    }
+
+    @Override
 	public void addUnit(Box box){
 		containedBoxes.add(box);
+        gateMechanism();
 	}
 
 	public void removeUnit(Box box){
@@ -297,7 +311,31 @@ public class Scale extends Field {
 					+ openLimit + " súlyhatár, nincs lenyomva , nincs hozzákapcsolt kapu, " 
 					+ containedUnits.size() + " darab tárolt egység";
 	}*/
-	@Override
+
+    @Override
+    public Element getXmlElement(Document doc) {
+        Element scaleElement = doc.createElement("connection");
+        Attr attrType = doc.createAttribute("fRow");
+        attrType.setValue(String.valueOf(this.position.y));
+        scaleElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("fCol");
+        attrType.setValue(String.valueOf(this.position.x));
+        scaleElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("toRow");
+        attrType.setValue(String.valueOf(this.myGate.getPosition().y));
+        scaleElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("toCol");
+        attrType.setValue(String.valueOf(this.myGate.getPosition().x));
+        scaleElement.setAttributeNode(attrType);
+
+        return scaleElement;
+        //<connection fRow='0' fCol='1' toRow='1' toCol='6'/>
+    }
+
+    @Override
 	public String toString() {
 		int gross = 0;		//összsúly
 

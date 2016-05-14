@@ -1,5 +1,9 @@
 package zpmworld;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -98,6 +102,38 @@ public class Replicator extends ActionUnit{
 
 		return new Action(ActionType.TURN, dir, null);
 	}
+
+    @Override
+    public Element getXmlElement(Document doc) {
+        int row;
+        int col;
+        if(this.getCurrentField().getPosition() == null){
+            return null;
+        } else {
+            col = this.getCurrentField().getPosition().x;
+            row = this.getCurrentField().getPosition().y;
+        }
+
+        Element unitElement = doc.createElement("unit");
+        Attr attrType = doc.createAttribute("row");
+        attrType.setValue(String.valueOf(row));
+        unitElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("col");
+        attrType.setValue(String.valueOf(col));
+        unitElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("direction");
+        attrType.setValue("W");     //úgyis random generál, szóval mindegy a kezdeti érték
+        unitElement.setAttributeNode(attrType);
+
+        attrType = doc.createAttribute("action");
+        attrType.setValue("NONE");     //úgyis random generál, szóval mindegy a kezdeti érték
+        unitElement.setAttributeNode(attrType);
+
+        unitElement.appendChild(doc.createTextNode("Replicator"));
+        return unitElement;
+    }
 	
 	public String toString(){
 		String irany;

@@ -8,10 +8,21 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
-import java.util.List;
+import java.util.*;
 import java.io.File;
-import java.util.Random;
+import java.util.List;
+import javax.swing.Timer;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import jdk.nashorn.internal.ir.WhileNode;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class Game implements KeyListener{
 	private State state;
@@ -25,6 +36,8 @@ public class Game implements KeyListener{
 
 	private static final int GAMESPEED = 90; //update millisec
 	private static final int FPS = 16; //update millisec
+
+    private Map<Class,Character> classCharacterMap;
 
 	/*public static void main(String[] args){
 		try {
@@ -45,7 +58,19 @@ public class Game implements KeyListener{
 		pause = false;
 		this.graphic = graphic;
 		this.status = status;
+        classCharacterMap = initClassMap();
 	}
+
+    private Map<Class,Character> initClassMap(){
+        Map<Class,Character> retMap = new HashMap<Class, Character>();
+        retMap.put(Abyss.class,'a');
+        retMap.put(Road.class,'r');
+        retMap.put(Wall.class,'w');
+        retMap.put(PortalWall.class,'p');
+        retMap.put(Scale.class,'s');
+        retMap.put(Gate.class,'g');
+        return retMap;
+    }
 
 	public void registerDrawableField(Drawable fieldDrawable){
 		graphic.registerDrawableField(fieldDrawable);
@@ -87,7 +112,118 @@ public class Game implements KeyListener{
 	}
 
 	public void loadGame(){}
-	public void saveGame(){}
+	public void saveGame(){
+        List<Field> inGameFields = null;
+        List<Unit> inGameUnits = null;
+        if(stage != null) {
+            inGameFields = stage.getFields();
+            inGameUnits = stage.getUnits();
+        } else {
+            return;
+        }
+
+        try {
+            DocumentBuilderFactory dbFactory =
+                    DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder =
+                    dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.newDocument();
+            // root element Stage
+            Element rootElement = doc.createElement("Stage");
+            doc.appendChild(rootElement);
+
+            Element rows = doc.createElement("rows");
+            rootElement.appendChild(rows);
+
+            //  rows
+            int i = 0;
+            int j = 0;
+            while(stage.getField(new Point(j,i)) != null){
+                StringBuilder rowBuilder = new StringBuilder();
+                while(stage.getField(new Point(j,i)) != null){
+                    Field field = stage.getField(new Point(j,i));
+                    char classChar = classCharacterMap.get(field.getClass());
+                    rowBuilder.append(classChar);
+
+                    j++;
+                }
+                //sor xml
+                Element rowElement = doc.createElement("row");
+                Attr attrType = doc.createAttribute("id");
+                attrType.setValue(String.valueOf(i));
+
+                rowElement.setAttributeNode(attrType);
+                rowElement.appendChild(doc.createTextNode(rowBuilder.toString()));
+                rows.appendChild(rowElement);
+
+                j = 0;
+                i++;
+            }
+
+            // units
+            Element units = doc.createElement("units");
+            rootElement.appendChild(units);
+
+            for(Unit unit : inGameUnits){
+                if(unit.getXmlElement(doc) != null) {
+                    units.appendChild(unit.getXmlElement(doc));
+                }
+            }
+
+            // field connection, portalwall colors
+
+            Element field_properties = doc.createElement("field_properties");
+            rootElement.appendChild(field_properties);
+
+            for(Field field : inGameFields){
+                if(field.getXmlElement(doc) != null) {
+                    field_properties.appendChild(field.getXmlElement(doc));
+                }
+            }
+
+
+          /*  Element supercar = doc.createElement("supercars");
+            rootElement.appendChild(supercar);
+
+            // setting attribute to element
+            Attr attr = doc.createAttribute("company");
+            attr.setValue("Ferrari");
+            supercar.setAttributeNode(attr);
+
+            // carname element
+            Element carname = doc.createElement("carname");
+            Attr attrType = doc.createAttribute("type");
+            attrType.setValue("formula one");
+            carname.setAttributeNode(attrType);
+            carname.appendChild(
+                    doc.createTextNode("Ferrari 101"));
+            supercar.appendChild(carname);
+
+            Element carname1 = doc.createElement("carname");
+            Attr attrType1 = doc.createAttribute("type");
+            attrType1.setValue("sports");
+            carname1.setAttributeNode(attrType1);
+            carname1.appendChild(
+                    doc.createTextNode("Ferrari 202"));
+            supercar.appendChild(carname1);
+*/
+            // write the content into xml file
+            TransformerFactory transformerFactory =
+                    TransformerFactory.newInstance();
+            Transformer transformer =
+                    transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result =
+                    new StreamResult(new File("saveGame.xml"));
+            transformer.transform(source, result);
+           /* // Output to console for testing
+            StreamResult consoleResult =
+                    new StreamResult(System.out);
+            transformer.transform(source, consoleResult);*/
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 	public void console(){
 
@@ -508,8 +644,10 @@ public class Game implements KeyListener{
 
 	public void lose(){
 
-		state = State.LOSE;
-		status.endgame(false);
+        if(state == State.GAME) {
+            state = State.LOSE;
+            status.endgame(false);
+        }
 	}
 
 	public boolean isPause(){
@@ -571,8 +709,10 @@ public class Game implements KeyListener{
     }
 
 	public void win(){
-		state = State.WIN;
-		status.endgame(true);
+        if(state == State.GAME) {
+            state = State.WIN;
+            status.endgame(true);
+        }
 	}
 	public void addUnit(Unit unit){
 		stage.addUnit(unit);
@@ -590,6 +730,7 @@ public class Game implements KeyListener{
 		stage.replaceField(field);
 	}
 	public void newGame(File file) throws Exception{
+        state = State.GAME;
 		try {
 			graphic.clear();
 			status.clear();

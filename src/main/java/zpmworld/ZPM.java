@@ -1,5 +1,9 @@
 package zpmworld;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import java.util.*;
 
 public class ZPM extends Unit{
@@ -50,6 +54,31 @@ public class ZPM extends Unit{
             default:
                 break;
         }
+    }
+
+    @Override
+    public Element getXmlElement(Document doc) {
+        int row;
+        int col;
+        if(this.getCurrentField() == null) return null;
+        if(this.getCurrentField().getPosition() == null){
+            return null;
+        } else {
+            col = this.getCurrentField().getPosition().x;
+            row = this.getCurrentField().getPosition().y;
+        }
+
+        Element unitElement = doc.createElement("unit");
+        Attr attrType = doc.createAttribute("row");
+        attrType.setValue(String.valueOf(row));
+        unitElement.setAttributeNode(attrType);
+        attrType = doc.createAttribute("col");
+        attrType.setValue(String.valueOf(col));
+        unitElement.setAttributeNode(attrType);
+
+
+        unitElement.appendChild(doc.createTextNode("ZPM"));
+        return unitElement;
     }
 
     @Override

@@ -1,5 +1,8 @@
 package zpmworld;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import java.util.*;
 import java.awt.Point;
 
@@ -81,6 +84,10 @@ public abstract class Field {
 		containedUnits.add(unit);
 	}
 
+    public void addUnit(Box box){
+        return;
+    }
+
 	/**
 	 * Paraméter nélkül minden elemet kitöröl containedUnitból
 	 */
@@ -128,6 +135,10 @@ public abstract class Field {
 				+ containedUnits.size() + " darab t�rolt egys�g";
 		
 	}*/
+
+    public Element getXmlElement(Document doc){
+        return null;
+    }
 
 	@Override
 	public String toString() {

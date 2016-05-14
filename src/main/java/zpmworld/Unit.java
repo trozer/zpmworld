@@ -1,5 +1,9 @@
 package zpmworld;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import java.util.*;
 
 public abstract class Unit implements Comparable{
@@ -111,4 +115,6 @@ public abstract class Unit implements Comparable{
 	String toString(){
 		return "UNIT VAGYOK";
 	}
+
+    public abstract Element getXmlElement(Document doc);
 }

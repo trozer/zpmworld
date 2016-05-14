@@ -100,8 +100,14 @@ public class MainFrame extends JFrame{
         stageGraphic.requestFocus();
     }
 
+    public void save(){
+        game.saveGame();
+        stageGraphic.requestFocus();
+    }
+
     public void exit(){
         //TODO jatekot el kell menteni stb...
+        save();
         mainFrame.dispatchEvent(new WindowEvent(mainFrame,WindowEvent.WINDOW_CLOSING));
     }
 
@@ -111,7 +117,7 @@ public class MainFrame extends JFrame{
                 music.stop();
             AudioInputStream audioInputStream =
                     AudioSystem.getAudioInputStream(
-                            new File("sg_rock.wav"));
+                            new File("bg.wav"));
             Clip clip = AudioSystem.getClip();
             this.music = clip;
             clip.open(audioInputStream);
@@ -133,5 +139,33 @@ public class MainFrame extends JFrame{
             menu.setMainFrame(mainFrame);
         }
         return mainFrame;
+    }
+
+    public void load() {
+        try {
+            File file = new File("saveGame.xml");
+            if(!file.exists()) {
+                return;
+            }
+            if(music != null)
+                music.stop();
+            AudioInputStream audioInputStream =
+                    AudioSystem.getAudioInputStream(
+                            new File("bg.wav"));
+            Clip clip = AudioSystem.getClip();
+            this.music = clip;
+            clip.open(audioInputStream);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            stageGraphic.requestFocus();
+            stageGraphic.setGame(game);
+            status.setGame(game);
+
+            game.newGame(file);
+            game.update();
+            //game.console() //ha konzolon akar valaki tesztelni...
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        stageGraphic.requestFocus();
     }
 }

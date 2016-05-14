@@ -44,271 +44,279 @@ public class Stage implements Serializable
         init(file, game);
     }
 
-    public void init(File stage, Game game) throws Exception{
-    		portal = new Portal();
-    		
-	    	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-	    	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-	    	Document doc = dBuilder.parse(stage);
-	    	doc.getDocumentElement().normalize();
-	    	NodeList fieldRows = doc.getElementsByTagName("row");
-	    	
-	    	List<List<Field>> buildFields = new ArrayList<List<Field>>();
-	    	List<Scale> connectScales = new ArrayList<Scale>();
-	    	List<Gate> connectGates = new ArrayList<Gate>();
-	    	List<PortalWall> activatePortalWalls = new ArrayList<PortalWall>();
-	    	
-	    	//read fields row by row
-	    	for(int i = 0; i < fieldRows.getLength(); i++){
-	    		String row = fieldRows.item(i).getTextContent();
-	    		buildFields.add(new ArrayList<Field>());
-	    		
-	    		for(int j = 0; j < row.length(); j++){
-	    			Field field;
-	                switch (row.charAt(j)) {
-		                case 'r':
-		                    Road rtemp = new Road();
-							field = rtemp;
-		                    roads.add(field);
-							game.registerDrawableField(new DrawableRoad(rtemp));
-		                    break;
-		                case 'a':
-							Abyss atemp = new Abyss();
-		                    field = atemp;
-							game.registerDrawableField(new DrawableAbyss(atemp));
-		                    break;
-		                case 'w':
-							Wall rwall = new Wall();
-		                    field = rwall;
-							game.registerDrawableField(new DrawableWall(rwall));
-		                    break;
-		                case 'p':
-		                	PortalWall portalWall = new PortalWall(portal); 
-		                	field = portalWall;
-		                	activatePortalWalls.add(portalWall);
-							game.registerDrawableField(new DrawablePortalWall(portalWall));
-		                    break;
-		                case 's':
-		                	Scale scale = new Scale();
-		                	field = scale;
-		                	connectScales.add(scale);
-							game.registerDrawableField(new DrawableScale(scale));
-		                    break;
-		                case 'g':
-		                	Gate gate = new Gate();
-		                	field = gate;
-		                	connectGates.add(gate);
-							game.registerDrawableField(new DrawableGate(gate));
-		                    break;
-		                default:
-		                    throw new Exception("Hiba: �rv�nytelen karakter a t�blale�r� r�szben");       
-	                }
-	                buildFields.get(i).add(field);
-	    		}
-	    	}
-	    	
-	    	//set neighbours
-	    	for(int i = 0; i < buildFields.size(); i++){
-	    		for(int j = 0; j < buildFields.get(i).size(); j++){
-	    			if((j - 1) >= 0){
-	    				buildFields.get(i).get(j).addNeighbour(Direction.WEST,
-	    						buildFields.get(i).get(j - 1));
-	    			}
-	    			if((j + 1) < buildFields.get(i).size()){
-	    				buildFields.get(i).get(j).addNeighbour(Direction.EAST,
-	    						buildFields.get(i).get(j + 1));
-	    			}
-	    			if((i - 1) >= 0){
-	    				buildFields.get(i).get(j).addNeighbour(Direction.NORTH,
-	    						buildFields.get(i - 1).get(j));
-	    			}
-	    			if((i + 1) < buildFields.size()){
-	    				buildFields.get(i).get(j).addNeighbour(Direction.SOUTH,
-	    						buildFields.get(i + 1).get(j));
-	    			}
-	    			buildFields.get(i).get(j).setPosition(new Point(j,i));
-	    			fields.add(buildFields.get(i).get(j));
-	    		}
-	    	}
-	    	
-	    	//make connection between scales and gates
-	    	NodeList nConnections = doc.getElementsByTagName("connection");
-	    	
-	    	for(int i = 0; i < nConnections.getLength(); i++){
-	    		Node nConnection = nConnections.item(i);
-	    		if(nConnection.getNodeType() == Node.ELEMENT_NODE){
-	    			Element connectionElement = (Element) nConnection;
-	    			
-	    			Point fromPos = new Point(Integer.parseInt(connectionElement.getAttribute("fCol")),
-	    									  Integer.parseInt(connectionElement.getAttribute("fRow")));
-	    			Point toPos = new Point(Integer.parseInt(connectionElement.getAttribute("toCol")),
-							  				Integer.parseInt(connectionElement.getAttribute("toRow")));
-	    			for(Scale scale : connectScales){
-	    				for(Gate gate : connectGates){
-	    					if(scale.getPosition().equals(fromPos) &&
-	    					   gate.getPosition().equals(toPos)){
-	    						scale.setGate(gate);
-	    					}
-	    				}
-	    			}
-	    		}
-	    	}
-	    	
-	    	
-	    	//activate portalwalls
-	    	NodeList nPortalWallColors = doc.getElementsByTagName("portalwall_color");
-	    	
-	    	for(int i = 0; i < nPortalWallColors.getLength(); i++){
-	    		Node nPortalWallColor = nPortalWallColors.item(i);
-	    		if(nPortalWallColor.getNodeType() == Node.ELEMENT_NODE){
-	    			Element portalWallColorElement = (Element) nPortalWallColor;
-	    			
-	    			Point Pos = new Point(Integer.parseInt(portalWallColorElement.getAttribute("col")),
-	    									  Integer.parseInt(portalWallColorElement.getAttribute("row")));
-					Color color = colorByString(portalWallColorElement.getAttribute("color"));
-					for(PortalWall portalWall : activatePortalWalls){
-						if(portalWall.getPosition().equals(Pos)){
-							portal.createPortal(portalWall, color);
-						}
-					}
-	    		}
-	    	}
-	    	
-	    	NodeList nUnits = doc.getElementsByTagName("unit");
-	    	//add units
-            Player oneill = null;
-            Player jaffa = null;
-            List<ZPM> ZPMsToCheck = new ArrayList<ZPM>();
-            List<Box> boxesToCheck = new ArrayList<Box>();
-	    	for (Field field : fields){
-	    		for(int i = 0; i < nUnits.getLength(); i++){
-	    			Node nUnit = nUnits.item(i);
-	    			if(nUnit.getNodeType() == Node.ELEMENT_NODE){
-	    				Element unitElement = (Element) nUnit;
-	    				
-	    				Point unitPos = new Point( Integer.parseInt(unitElement.getAttribute("col")),
-	    										   Integer.parseInt(unitElement.getAttribute("row")));
-	    				
-	    				if(field.getPosition().equals(unitPos)){
-	    					String unitType = unitElement.getTextContent();
-	    					if(unitType.equals("Bullet")){
-	    						Color color = colorByString(unitElement.getAttribute("color"));
-	    						Direction dir = directionByChar(unitElement.getAttribute("direction").charAt(0));;
-	    						Bullet bullet = new Bullet(new Action(ActionType.MOVE, dir, color),field);
-	    						units.add(bullet);
-	    						field.addUnit(bullet);
-								game.registerDrawableUnit(new DrawableBullet(bullet));
-	    					}else
-	    					if(unitType.equals("O'neill") || unitType.equals("Jaffa")){
-	    						Direction dir = directionByChar(unitElement.getAttribute("direction").charAt(0));
-	    						ActionType actionType = actionTypeByString(unitElement.getAttribute("action"));
-	    						Direction turnDir = Direction.NORTH; //default, this is not affect actions (exclude turn) 
-	    						Color color = null;
-	    						Box box = null;
-	    						if(actionType == ActionType.TURN)
-	    							turnDir = directionByChar(unitElement.getAttribute("turndir").charAt(0));
-	    						if(actionType == ActionType.SHOOT)
-	    							color = colorByString(unitElement.getAttribute("color"));
-	    						if(unitElement.getAttribute("box").equals("true")) {
-                                    box = new Box(null);    //eleve fel lesz véve, így a currentFieldje null
-                                    game.registerDrawableUnit(new DrawableBox(box));    // be is regisztráljuk, hogy ki lehessen rajzolni
+    public void init(File stage, Game game) throws Exception {
+        portal = new Portal();
+
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.parse(stage);
+        doc.getDocumentElement().normalize();
+        NodeList fieldRows = doc.getElementsByTagName("row");
+
+        List<List<Field>> buildFields = new ArrayList<List<Field>>();
+        List<Scale> connectScales = new ArrayList<Scale>();
+        List<Gate> connectGates = new ArrayList<Gate>();
+        List<PortalWall> activatePortalWalls = new ArrayList<PortalWall>();
+
+        //read fields row by row
+        for (int i = 0; i < fieldRows.getLength(); i++) {
+            String row = fieldRows.item(i).getTextContent();
+            buildFields.add(new ArrayList<Field>());
+
+            for (int j = 0; j < row.length(); j++) {
+                Field field;
+                switch (row.charAt(j)) {
+                    case 'r':
+                        Road rtemp = new Road();
+                        field = rtemp;
+                        roads.add(field);
+                        game.registerDrawableField(new DrawableRoad(rtemp));
+                        break;
+                    case 'a':
+                        Abyss atemp = new Abyss();
+                        field = atemp;
+                        game.registerDrawableField(new DrawableAbyss(atemp));
+                        break;
+                    case 'w':
+                        Wall rwall = new Wall();
+                        field = rwall;
+                        game.registerDrawableField(new DrawableWall(rwall));
+                        break;
+                    case 'p':
+                        PortalWall portalWall = new PortalWall(portal);
+                        field = portalWall;
+                        activatePortalWalls.add(portalWall);
+                        game.registerDrawableField(new DrawablePortalWall(portalWall));
+                        break;
+                    case 's':
+                        Scale scale = new Scale();
+                        field = scale;
+                        connectScales.add(scale);
+                        game.registerDrawableField(new DrawableScale(scale));
+                        break;
+                    case 'g':
+                        Gate gate = new Gate();
+                        field = gate;
+                        connectGates.add(gate);
+                        game.registerDrawableField(new DrawableGate(gate));
+                        break;
+                    default:
+                        throw new Exception("Hiba: �rv�nytelen karakter a t�blale�r� r�szben");
+                }
+                buildFields.get(i).add(field);
+            }
+        }
+
+        //set neighbours
+        for (int i = 0; i < buildFields.size(); i++) {
+            for (int j = 0; j < buildFields.get(i).size(); j++) {
+                if ((j - 1) >= 0) {
+                    buildFields.get(i).get(j).addNeighbour(Direction.WEST,
+                            buildFields.get(i).get(j - 1));
+                }
+                if ((j + 1) < buildFields.get(i).size()) {
+                    buildFields.get(i).get(j).addNeighbour(Direction.EAST,
+                            buildFields.get(i).get(j + 1));
+                }
+                if ((i - 1) >= 0) {
+                    buildFields.get(i).get(j).addNeighbour(Direction.NORTH,
+                            buildFields.get(i - 1).get(j));
+                }
+                if ((i + 1) < buildFields.size()) {
+                    buildFields.get(i).get(j).addNeighbour(Direction.SOUTH,
+                            buildFields.get(i + 1).get(j));
+                }
+                buildFields.get(i).get(j).setPosition(new Point(j, i));
+                fields.add(buildFields.get(i).get(j));
+            }
+        }
+
+        //make connection between scales and gates
+        NodeList nConnections = doc.getElementsByTagName("connection");
+
+        for (int i = 0; i < nConnections.getLength(); i++) {
+            Node nConnection = nConnections.item(i);
+            if (nConnection.getNodeType() == Node.ELEMENT_NODE) {
+                Element connectionElement = (Element) nConnection;
+
+                Point fromPos = new Point(Integer.parseInt(connectionElement.getAttribute("fCol")),
+                        Integer.parseInt(connectionElement.getAttribute("fRow")));
+                Point toPos = new Point(Integer.parseInt(connectionElement.getAttribute("toCol")),
+                        Integer.parseInt(connectionElement.getAttribute("toRow")));
+                for (Scale scale : connectScales) {
+                    for (Gate gate : connectGates) {
+                        if (scale.getPosition().equals(fromPos) &&
+                                gate.getPosition().equals(toPos)) {
+                            scale.setGate(gate);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        //activate portalwalls
+        NodeList nPortalWallColors = doc.getElementsByTagName("portalwall_color");
+
+        for (int i = 0; i < nPortalWallColors.getLength(); i++) {
+            Node nPortalWallColor = nPortalWallColors.item(i);
+            if (nPortalWallColor.getNodeType() == Node.ELEMENT_NODE) {
+                Element portalWallColorElement = (Element) nPortalWallColor;
+
+                Point Pos = new Point(Integer.parseInt(portalWallColorElement.getAttribute("col")),
+                        Integer.parseInt(portalWallColorElement.getAttribute("row")));
+                Color color = colorByString(portalWallColorElement.getAttribute("color"));
+                for (PortalWall portalWall : activatePortalWalls) {
+                    if (portalWall.getPosition().equals(Pos)) {
+                        portal.createPortal(portalWall, color);
+                    }
+                }
+            }
+        }
+
+        NodeList nUnits = doc.getElementsByTagName("unit");
+        //add units
+        Player oneill = null;
+        Player jaffa = null;
+        List<ZPM> ZPMsToCheck = new ArrayList<ZPM>();
+        List<Box> boxesToCheck = new ArrayList<Box>();
+        for (Field field : fields) {
+            for (int i = 0; i < nUnits.getLength(); i++) {
+                Node nUnit = nUnits.item(i);
+                if (nUnit.getNodeType() == Node.ELEMENT_NODE) {
+                    Element unitElement = (Element) nUnit;
+
+                    Point unitPos = new Point(Integer.parseInt(unitElement.getAttribute("col")),
+                            Integer.parseInt(unitElement.getAttribute("row")));
+
+                    if (field.getPosition().equals(unitPos)) {
+                        String unitType = unitElement.getTextContent();
+                        if (unitType.equals("Bullet")) {
+                            Color color = colorByString(unitElement.getAttribute("color"));
+                            Direction dir = directionByChar(unitElement.getAttribute("direction").charAt(0));
+                            Bullet bullet = new Bullet(new Action(ActionType.MOVE, dir, color), field);
+                            units.add(bullet);
+                            field.addUnit(bullet);
+                            game.registerDrawableUnit(new DrawableBullet(bullet));
+                        } else if (unitType.equals("O'neill") || unitType.equals("Jaffa")) {
+                            Direction dir = directionByChar(unitElement.getAttribute("direction").charAt(0));
+                            ActionType actionType = actionTypeByString(unitElement.getAttribute("action"));
+                            Direction turnDir = Direction.NORTH; //default, this is not affect actions (exclude turn)
+                            List<ZPM> playerZPMs = new ArrayList<ZPM>();
+                            String numStr = unitElement.getAttribute("zpm");
+                            int numOfZPMs;
+                            if(numStr == null || numStr == "" || numStr == "0"){
+                                numOfZPMs = 0;
+                            } else {
+                                numOfZPMs = Integer.valueOf(numStr);
+                                for(int j = 0; j < numOfZPMs; ++j){
+                                    ZPM zpm = new ZPM(null);
+                                    units.add(zpm);
+                                    playerZPMs.add(zpm);
                                 }
+                            }
+                            Color color = null;
+                            Box box = null;
+                            if (actionType == ActionType.TURN)
+                                turnDir = directionByChar(unitElement.getAttribute("turndir").charAt(0));
+                            if (actionType == ActionType.SHOOT)
+                                color = colorByString(unitElement.getAttribute("color"));
+                            if (unitElement.getAttribute("box").equals("true")) {
+                                box = new Box(null);    //eleve fel lesz véve, így a currentFieldje null
+                                units.add(box);
+                                game.registerDrawableUnit(new DrawableBox(box));    // be is regisztráljuk, hogy ki lehessen rajzolni
+                            }
 
-	    						if(unitType.equals("O'neill")){
-	    							oneill = new Player(allZPM, dir,new Action(actionType, turnDir, color), field, game, box, "O'neill");
-									game.setOneill(oneill);
-                                    game.registerDrawableUnit(new DrawablePlayer(oneill));
-                                    units.add(oneill);
-                                    field.addUnit(oneill);
-	    						}else{
-	    							jaffa = new Player(allZPM, dir,new Action(actionType, turnDir, color), field, game, box ,"Jaffa");
-	    							game.setJaffa(jaffa);
-                                    game.registerDrawableUnit(new DrawablePlayer(jaffa));
-                                    units.add(jaffa);
-                                    field.addUnit(jaffa);
-	    						}
-	    					}
-	    					else
-	    					if(unitType.equals("Replicator")){
-	    						Direction dir = directionByChar(unitElement.getAttribute("direction").charAt(0));
-	    						Replicator replicator = new Replicator(game, dir, field);
-	    						units.add(replicator);
-	    						field.addUnit(replicator);
-								game.registerDrawableUnit(new DrawableReplicator(replicator));
-	    						game.setReplicator(replicator);
-	    					}
-	    					else
-	    					if(unitType.equals("Box")){
-	    						Box box = new Box(field);
-	    						units.add(box);
-                                boxesToCheck.add(box);
-								game.registerDrawableUnit(new DrawableBox(box));
-	    						if(!connectGates.contains(field))
-	    							field.addUnit(box);
-	    					}else
-	    					if(unitType.equals("ZPM")){
-	    						allZPM++;
-	    						ZPM zpm = new ZPM(field);
-	    						field.addUnit(zpm);
-								game.registerDrawableUnit(new DrawableZPM(zpm));
-	    						units.add(zpm);
-	    						zpms.add(zpm);
-                                ZPMsToCheck.add(zpm);
-	    					}else
-	    						throw new Exception("Hiba: ismeretlen egys�gt�pus");
-	    				}
-	    			}
-	    		}
-	    	}
-
-            // ellenőrizni, hogy Oneill vagy Jaffa alá nincs-e berakva ZPM, vagy Box
-            if(!ZPMsToCheck.isEmpty()) {
-                for (ZPM zpm : ZPMsToCheck) {
-                    if (oneill != null && zpm.getCurrentField().getPosition().x == oneill.getCurrentField().getPosition().x && zpm.getCurrentField().getPosition().y == oneill.getCurrentField().getPosition().y) { //ha egy mezőn állnak
-                        zpm.getCurrentField().removeUnit(zpm);
-                        zpm.setCurrentField(null);
-                        oneill.addZPMSimply(zpm);
-                    } else if (jaffa != null && zpm.getCurrentField().getPosition().x == jaffa.getCurrentField().getPosition().x && zpm.getCurrentField().getPosition().y == jaffa.getCurrentField().getPosition().y) {
-                        zpm.getCurrentField().removeUnit(zpm);
-                        zpm.setCurrentField(null);
-                        jaffa.addZPMSimply(zpm);
+                            if (unitType.equals("O'neill")) {
+                                oneill = new Player(allZPM, dir, new Action(actionType, turnDir, color), field, game, box, "O'neill", playerZPMs);
+                                game.setOneill(oneill);
+                                game.registerDrawableUnit(new DrawablePlayer(oneill));
+                                units.add(oneill);
+                                field.addUnit(oneill);
+                            } else {
+                                jaffa = new Player(allZPM, dir, new Action(actionType, turnDir, color), field, game, box, "Jaffa", playerZPMs);
+                                game.setJaffa(jaffa);
+                                game.registerDrawableUnit(new DrawablePlayer(jaffa));
+                                units.add(jaffa);
+                                field.addUnit(jaffa);
+                            }
+                        } else if (unitType.equals("Replicator")) {
+                            Direction dir = directionByChar(unitElement.getAttribute("direction").charAt(0));
+                            Replicator replicator = new Replicator(game, dir, field);
+                            units.add(replicator);
+                            field.addUnit(replicator);
+                            game.registerDrawableUnit(new DrawableReplicator(replicator));
+                            game.setReplicator(replicator);
+                        } else if (unitType.equals("Box")) {
+                            Box box = new Box(field);
+                            units.add(box);
+                            boxesToCheck.add(box);
+                            game.registerDrawableUnit(new DrawableBox(box));
+                            if (!connectGates.contains(field))
+                                field.addUnit(box);
+                        } else if (unitType.equals("ZPM")) {
+                            allZPM++;
+                            ZPM zpm = new ZPM(field);
+                            field.addUnit(zpm);
+                            game.registerDrawableUnit(new DrawableZPM(zpm));
+                            units.add(zpm);
+                            zpms.add(zpm);
+                            ZPMsToCheck.add(zpm);
+                        } else
+                            throw new Exception("Hiba: ismeretlen egys�gt�pus");
                     }
                 }
             }
+        }
 
-            if(!boxesToCheck.isEmpty()) {
-                for (Box box : boxesToCheck) {
-                    if (oneill != null && box.getCurrentField() != null && box.getCurrentField().getPosition().x == oneill.getCurrentField().getPosition().x && box.getCurrentField().getPosition().y == oneill.getCurrentField().getPosition().y) { //ha egy mezőn állnak
-                        if (!oneill.grabBox(box)) {
-                            box.getCurrentField().removeUnit(box);
-                            box.setCurrentField(null);
-                            box.kill();
-                        } else {
-                            box.getCurrentField().removeUnit(box);
-                            box.setCurrentField(null);
-                        }
-                    } else if (jaffa != null && box.getCurrentField() != null && box.getCurrentField().getPosition().x == jaffa.getCurrentField().getPosition().x && box.getCurrentField().getPosition().y == jaffa.getCurrentField().getPosition().y) {
-                        if (!jaffa.grabBox(box)) {
-                            box.getCurrentField().removeUnit(box);
-                            box.setCurrentField(null);
-                            box.kill();
-                        } else {
-                            box.getCurrentField().removeUnit(box);
-                            box.setCurrentField(null);
-                        }
+        // ellenőrizni, hogy Oneill vagy Jaffa alá nincs-e berakva ZPM, vagy Box
+        if (!ZPMsToCheck.isEmpty()) {
+            for (ZPM zpm : ZPMsToCheck) {
+                if (oneill != null && zpm.getCurrentField().getPosition().x == oneill.getCurrentField().getPosition().x && zpm.getCurrentField().getPosition().y == oneill.getCurrentField().getPosition().y) { //ha egy mezőn állnak
+                    zpm.getCurrentField().removeUnit(zpm);
+                    zpm.setCurrentField(null);
+                    oneill.addZPMSimply(zpm);
+                } else if (jaffa != null && zpm.getCurrentField().getPosition().x == jaffa.getCurrentField().getPosition().x && zpm.getCurrentField().getPosition().y == jaffa.getCurrentField().getPosition().y) {
+                    zpm.getCurrentField().removeUnit(zpm);
+                    zpm.setCurrentField(null);
+                    jaffa.addZPMSimply(zpm);
+                }
+            }
+        }
+
+        if (!boxesToCheck.isEmpty()) {
+            for (Box box : boxesToCheck) {
+                if (oneill != null && box.getCurrentField() != null && box.getCurrentField().getPosition().x == oneill.getCurrentField().getPosition().x && box.getCurrentField().getPosition().y == oneill.getCurrentField().getPosition().y) { //ha egy mezőn állnak
+                    if (!oneill.grabBox(box)) {
+                        box.getCurrentField().removeUnit(box);
+                        box.setCurrentField(null);
+                        box.kill();
+                    } else {
+                        box.getCurrentField().removeUnit(box);
+                        box.setCurrentField(null);
+                    }
+                } else if (jaffa != null && box.getCurrentField() != null && box.getCurrentField().getPosition().x == jaffa.getCurrentField().getPosition().x && box.getCurrentField().getPosition().y == jaffa.getCurrentField().getPosition().y) {
+                    if (!jaffa.grabBox(box)) {
+                        box.getCurrentField().removeUnit(box);
+                        box.setCurrentField(null);
+                        box.kill();
+                    } else {
+                        box.getCurrentField().removeUnit(box);
+                        box.setCurrentField(null);
                     }
                 }
             }
-	    	
-	    	for(Field field : fields){
-	    		for(Unit unit : units){
-	    			if(unit.getCurrentField() != null && unit.getCurrentField().equals(field) && !field.getUnits().contains(unit))
-	    				field.addUnit(unit);
-	    		}
-	    	}
+        }
 
-	    	
-	    	//checkMap();
+        for (Field field : fields) {
+            for (Unit unit : units) {
+                if (unit.getCurrentField() != null && unit.getCurrentField().equals(field) && !field.getUnits().contains(unit))
+                    field.addUnit(unit);
+            }
+        }
+
+
+        //checkMap();
     }
     
     public Direction directionByChar(char c) throws Exception{
@@ -633,5 +641,13 @@ public class Stage implements Serializable
     {
     	units.add(unit); 
     	zpms.add(unit); 
+    }
+
+    public List<Field> getFields() {
+        return fields;
+    }
+
+    public List<Unit> getUnits() {
+        return units;
     }
 }
