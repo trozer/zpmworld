@@ -176,6 +176,10 @@ public class Stage implements Serializable
 	    	
 	    	NodeList nUnits = doc.getElementsByTagName("unit");
 	    	//add units
+            Player oneill = null;
+            Player jaffa = null;
+            List<ZPM> ZPMsToCheck = new ArrayList<ZPM>();
+            List<Box> boxesToCheck = new ArrayList<Box>();
 	    	for (Field field : fields){
 	    		for(int i = 0; i < nUnits.getLength(); i++){
 	    			Node nUnit = nUnits.item(i);
@@ -209,19 +213,20 @@ public class Stage implements Serializable
                                     box = new Box(null);    //eleve fel lesz véve, így a currentFieldje null
                                     game.registerDrawableUnit(new DrawableBox(box));    // be is regisztráljuk, hogy ki lehessen rajzolni
                                 }
-                                Player player;
 
 	    						if(unitType.equals("O'neill")){
-	    							player = new Player(allZPM, dir,new Action(actionType, turnDir, color), field, game, box, "O'neill");
-									game.setOneill(player);
+	    							oneill = new Player(allZPM, dir,new Action(actionType, turnDir, color), field, game, box, "O'neill");
+									game.setOneill(oneill);
+                                    game.registerDrawableUnit(new DrawablePlayer(oneill));
+                                    units.add(oneill);
+                                    field.addUnit(oneill);
 	    						}else{
-	    							player = new Player(allZPM, dir,new Action(actionType, turnDir, color), field, game, box ,"Jaffa");
-	    							game.setJaffa(player);
+	    							jaffa = new Player(allZPM, dir,new Action(actionType, turnDir, color), field, game, box ,"Jaffa");
+	    							game.setJaffa(jaffa);
+                                    game.registerDrawableUnit(new DrawablePlayer(jaffa));
+                                    units.add(jaffa);
+                                    field.addUnit(jaffa);
 	    						}
-								game.registerDrawableUnit(new DrawablePlayer(player));
-
-	    						units.add(player);
-	    						field.addUnit(player);
 	    					}
 	    					else
 	    					if(unitType.equals("Replicator")){
@@ -236,6 +241,7 @@ public class Stage implements Serializable
 	    					if(unitType.equals("Box")){
 	    						Box box = new Box(field);
 	    						units.add(box);
+                                boxesToCheck.add(box);
 								game.registerDrawableUnit(new DrawableBox(box));
 	    						if(!connectGates.contains(field))
 	    							field.addUnit(box);
@@ -247,16 +253,56 @@ public class Stage implements Serializable
 								game.registerDrawableUnit(new DrawableZPM(zpm));
 	    						units.add(zpm);
 	    						zpms.add(zpm);
+                                ZPMsToCheck.add(zpm);
 	    					}else
 	    						throw new Exception("Hiba: ismeretlen egys�gt�pus");
 	    				}
 	    			}
 	    		}
 	    	}
+
+            // ellenőrizni, hogy Oneill vagy Jaffa alá nincs-e berakva ZPM, vagy Box
+            if(!ZPMsToCheck.isEmpty()) {
+                for (ZPM zpm : ZPMsToCheck) {
+                    if (oneill != null && zpm.getCurrentField().getPosition().x == oneill.getCurrentField().getPosition().x && zpm.getCurrentField().getPosition().y == oneill.getCurrentField().getPosition().y) { //ha egy mezőn állnak
+                        zpm.getCurrentField().removeUnit(zpm);
+                        zpm.setCurrentField(null);
+                        oneill.addZPMSimply(zpm);
+                    } else if (jaffa != null && zpm.getCurrentField().getPosition().x == jaffa.getCurrentField().getPosition().x && zpm.getCurrentField().getPosition().y == jaffa.getCurrentField().getPosition().y) {
+                        zpm.getCurrentField().removeUnit(zpm);
+                        zpm.setCurrentField(null);
+                        jaffa.addZPMSimply(zpm);
+                    }
+                }
+            }
+
+            if(!boxesToCheck.isEmpty()) {
+                for (Box box : boxesToCheck) {
+                    if (oneill != null && box.getCurrentField() != null && box.getCurrentField().getPosition().x == oneill.getCurrentField().getPosition().x && box.getCurrentField().getPosition().y == oneill.getCurrentField().getPosition().y) { //ha egy mezőn állnak
+                        if (!oneill.grabBox(box)) {
+                            box.getCurrentField().removeUnit(box);
+                            box.setCurrentField(null);
+                            box.kill();
+                        } else {
+                            box.getCurrentField().removeUnit(box);
+                            box.setCurrentField(null);
+                        }
+                    } else if (jaffa != null && box.getCurrentField() != null && box.getCurrentField().getPosition().x == jaffa.getCurrentField().getPosition().x && box.getCurrentField().getPosition().y == jaffa.getCurrentField().getPosition().y) {
+                        if (!jaffa.grabBox(box)) {
+                            box.getCurrentField().removeUnit(box);
+                            box.setCurrentField(null);
+                            box.kill();
+                        } else {
+                            box.getCurrentField().removeUnit(box);
+                            box.setCurrentField(null);
+                        }
+                    }
+                }
+            }
 	    	
 	    	for(Field field : fields){
 	    		for(Unit unit : units){
-	    			if(unit.getCurrentField().equals(field) && !field.getUnits().contains(unit))
+	    			if(unit.getCurrentField() != null && unit.getCurrentField().equals(field) && !field.getUnits().contains(unit))
 	    				field.addUnit(unit);
 	    		}
 	    	}
