@@ -50,6 +50,12 @@ public class Menu extends JPanel{
             }
         });
 
+        saveGame.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+               save();
+            }
+        });
+
         quitGame.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 exit();
@@ -65,6 +71,7 @@ public class Menu extends JPanel{
     }
 
     private void pause(){ mainFrame.pause(); }
+    private void save(){ mainFrame.save(); }
 
     public void setMainFrame(MainFrame frame){
         mainFrame = frame;
