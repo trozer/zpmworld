@@ -23,11 +23,6 @@ public class Wall extends Field {
 		return;
 	}
 
-	/*@Override
-	public String toString(){
-		return "fal: " + super.toString();
-	}*/
-
 	@Override
 	public String toString() {
 		return "Wall(" + this.hashCode() + ") : (" + (int)position.getX() + "," + (int)position.getY() + ") ; containedUnits: " + containedUnits.size() + "db ";

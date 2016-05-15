@@ -122,7 +122,6 @@ public class DrawableBullet extends Drawable{
 
     }
 
-
     @Override
     public Unit getUnit(){
         return bullet;

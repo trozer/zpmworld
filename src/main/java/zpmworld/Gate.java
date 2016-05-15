@@ -157,19 +157,6 @@ public class Gate extends Field {
 		containedUnits.clear();
 	}
 
-
-	/*@Override
-	public String toString(){
-		if (opened)
-			return "kapu:" + " (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") poz�ci�, "
-				+ "nyitva, "
-				+ containedUnits.size() + " darab t�rolt egys�g";
-		else
-			return "kapu:" + " (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") poz�ci�, "
-				+ "z�rva, "
-				+ containedUnits.size() + " darab t�rolt egys�g";
-	}*/
-
 	@Override
 	public String toString() {
 		return "Gate(" + this.hashCode() + ") : (" + (int)position.getX() + "," + (int)position.getY() +

@@ -1,9 +1,7 @@
 package zpmworld;
 
 import java.awt.Point;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 public class Road extends Field {
@@ -127,14 +125,9 @@ public class Road extends Field {
 			}
 		}
 	}
-	/*
+
 	@Override
 	public String toString(){
 		return "�t:" + super.toString();
-	}*/
-
-	@Override
-	public String toString() {
-		return "Road(" + this.hashCode() + ") : (" + (int)position.getX() + "," + (int)position.getY() + ") ; containedUnits: " + containedUnits.size() + "db ";
 	}
 }

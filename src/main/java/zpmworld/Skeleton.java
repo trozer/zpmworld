@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
-import java.awt.Color;
 
 public class Skeleton {
 	private static int deepness = 0;

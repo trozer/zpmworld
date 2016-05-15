@@ -160,7 +160,6 @@ public class PortalWall extends Wall {
 
         portalWallElement.setAttributeNode(attrType);
         return portalWallElement;
-        //<portalwall_color row='2' col='5' color="blue"/>
     }
 
     @Override
@@ -174,10 +173,4 @@ public class PortalWall extends Wall {
 			+ "nincs rajta port�l, " 
 			+ containedUnits.size() + "darab t�rolt egys�g";
 	}
-
-	/*@Override
-	public String toString() {
-		return "PortalWall(" + this.hashCode() + ") : (" + (int)position.getX() + "," + (int)position.getY() +
-				") ; containedUnits: " + containedUnits.size() + "db ; portal: " + (portal == null ? "nincs " : ("van : " + portal.getColor(this)));
-	}*/
 }

@@ -1,6 +1,5 @@
 package zpmworld;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +18,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import jdk.nashorn.internal.ir.WhileNode;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -39,20 +37,6 @@ public class Game implements KeyListener{
 
     private Map<Class,Character> classCharacterMap;
 
-	/*public static void main(String[] args){
-		try {
-			Graphic graphic = new Graphic(800,600);
-			Game game = new Game(graphic);
-			System.out.println("Üdvözöllek a ZPM világ nevû játékban!");
-			//later check args and run appropiate command
-			//File argFile = new File("t1.xml");
-			//game.newGame(argFile);
-			game.console();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-*/
 	Game(Graphic graphic, Status status) throws Exception {
 		state = State.GAME;
 		pause = false;
@@ -82,10 +66,6 @@ public class Game implements KeyListener{
 
 	public void deleteDrawableField(Field field){
 		graphic.deleteDrawableField(field);
-	}
-
-	public void deleteDrawableUnit(Unit unit){
-		graphic.deleteDrawableUnit(unit);
 	}
 
 	public void setReplicator(Replicator replicator){
@@ -181,32 +161,6 @@ public class Game implements KeyListener{
                 }
             }
 
-
-          /*  Element supercar = doc.createElement("supercars");
-            rootElement.appendChild(supercar);
-
-            // setting attribute to element
-            Attr attr = doc.createAttribute("company");
-            attr.setValue("Ferrari");
-            supercar.setAttributeNode(attr);
-
-            // carname element
-            Element carname = doc.createElement("carname");
-            Attr attrType = doc.createAttribute("type");
-            attrType.setValue("formula one");
-            carname.setAttributeNode(attrType);
-            carname.appendChild(
-                    doc.createTextNode("Ferrari 101"));
-            supercar.appendChild(carname);
-
-            Element carname1 = doc.createElement("carname");
-            Attr attrType1 = doc.createAttribute("type");
-            attrType1.setValue("sports");
-            carname1.setAttributeNode(attrType1);
-            carname1.appendChild(
-                    doc.createTextNode("Ferrari 202"));
-            supercar.appendChild(carname1);
-*/
             // write the content into xml file
             TransformerFactory transformerFactory =
                     TransformerFactory.newInstance();
@@ -216,10 +170,7 @@ public class Game implements KeyListener{
             StreamResult result =
                     new StreamResult(new File("saveGame.xml"));
             transformer.transform(source, result);
-           /* // Output to console for testing
-            StreamResult consoleResult =
-                    new StreamResult(System.out);
-            transformer.transform(source, consoleResult);*/
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -774,14 +725,10 @@ public class Game implements KeyListener{
 		updateTimer.start();
 		paintTimer.start();
 	}
-	public void setStage(Stage stage){
-		this.stage = stage;
-	}
 
 	public void keyTyped(KeyEvent e) {
 
 	}
-
 
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_W){

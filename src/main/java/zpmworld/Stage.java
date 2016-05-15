@@ -16,9 +16,6 @@ import java.awt.Point;
 
 public class Stage implements Serializable
 {
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private int allZPM;
     private List<Unit> units;
@@ -502,10 +499,6 @@ public class Stage implements Serializable
     	else
     		roads.set(roads.indexOf(field), road);
     }
-    
-    /*public List<Unit> getUnit(Field field){
-    	return fields.get(fields.indexOf(field)).getUnits();
-    }*/
     
     //helper query, check boxes
     public List<Unit> listBoxes(){

@@ -29,7 +29,6 @@ public class DrawableReplicator extends Drawable{
         img.add(ImageIO.read(new File("replicator.PNG")));
     }
 
-
     @Override
     public Unit getUnit(){
         return replicator;

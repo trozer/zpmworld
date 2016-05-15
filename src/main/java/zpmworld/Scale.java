@@ -280,7 +280,7 @@ public class Scale extends Field {
 
 	//Teszt
 
-	/*@Override
+	@Override
 	public String toString(){
 		int gross = 0;		//összsúly
 
@@ -310,7 +310,7 @@ public class Scale extends Field {
 					return "mérleg: (" + (int)(position.getX()) + "," + (int)(position.getY()) + ") pozíció, "
 					+ openLimit + " súlyhatár, nincs lenyomva , nincs hozzákapcsolt kapu, " 
 					+ containedUnits.size() + " darab tárolt egység";
-	}*/
+	}
 
     @Override
     public Element getXmlElement(Document doc) {
@@ -332,22 +332,5 @@ public class Scale extends Field {
         scaleElement.setAttributeNode(attrType);
 
         return scaleElement;
-        //<connection fRow='0' fCol='1' toRow='1' toCol='6'/>
     }
-
-    @Override
-	public String toString() {
-		int gross = 0;		//összsúly
-
-		for(Unit unit : containedUnits){
-			gross += unit.getWeight();
-		}
-
-		for(Box box : containedBoxes){
-			gross += box.getWeight();
-		}
-		return "Scale(" + this.hashCode() + ") : (" + (int)position.getX() + "," + (int)position.getY() + ") ; containedUnits: " +
-				containedUnits.size() + "db ; containedBoxes: " + containedBoxes.size() + " db ; összsúly: " + gross +
-				" ; openLimit: " + openLimit + " ; állapot: " + (gross<openLimit ? "zár" : "nyit");
-	}
 }

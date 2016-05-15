@@ -4,7 +4,6 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.util.*;
 
@@ -276,7 +275,6 @@ public class Player extends ActionUnit{
         }
         return unitElement;
 
-        //<unit row='0' col='4' direction="E" action="NONE" box='false' zpm="6">O'neill</unit>
     }
 
 	public String toString(){

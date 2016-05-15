@@ -2,7 +2,6 @@ package zpmworld;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 import java.util.*;
 
@@ -38,27 +37,6 @@ public abstract class Unit implements Comparable{
 	}
 
 	protected abstract Map<Class,Map<ActionType,Boolean>> initAcceptance();
-	/*protected Map<Class,Map<ActionType,Boolean>> initAcceptance(){
-		Map<Class,Map<ActionType,Boolean>> returnMap = new HashMap<Class, Map<ActionType, Boolean>>();
-		Map<ActionType, Boolean> playerAccept = new HashMap<ActionType, Boolean>();
-		playerAccept.put(ActionType.MOVE,false);
-		playerAccept.put(ActionType.GRAB,false);
-		playerAccept.put(ActionType.DROP,false);
-		playerAccept.put(ActionType.TURN,false);
-		playerAccept.put(ActionType.SHOOT,false);
-		playerAccept.put(ActionType.NONE,false);
-		returnMap.put(Player.class,playerAccept);
-		Map<ActionType, Boolean> bulletAccept = new HashMap<ActionType, Boolean>();
-		bulletAccept.put(ActionType.MOVE,false);
-		bulletAccept.put(ActionType.NONE,false);
-		returnMap.put(Bullet.class,bulletAccept);
-		Map<ActionType, Boolean> replicatorAccept = new HashMap<ActionType, Boolean>();
-		replicatorAccept.put(ActionType.MOVE,false);
-		replicatorAccept.put(ActionType.NONE,false);
-		returnMap.put(Replicator.class,replicatorAccept);
-
-		return returnMap;
-	}*/
 
 	// Getter - setter függvények
 

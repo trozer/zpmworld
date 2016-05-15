@@ -6,7 +6,6 @@ import org.w3c.dom.Element;
 
 import java.awt.Color;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -142,7 +141,6 @@ public class Bullet extends ActionUnit{
         unitElement.appendChild(doc.createTextNode("Bullet"));
 
         return unitElement;
-        //<unit row='1' col='3' color="blue" direction="E">Bullet</unit>
     }
 
     public String toString(){

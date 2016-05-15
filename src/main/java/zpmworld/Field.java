@@ -128,13 +128,6 @@ public abstract class Field {
 			System.out.println(unit.toString());
 
 	}
-	
-	/*@Override
-	public String toString(){
-		return " (" + (int)position.getX() + "," + (int)position.getY() + ") poz�ci�, "
-				+ containedUnits.size() + " darab t�rolt egys�g";
-		
-	}*/
 
     public Element getXmlElement(Document doc){
         return null;
@@ -143,11 +136,5 @@ public abstract class Field {
 	@Override
 	public String toString() {
 		return "Field(" + this.hashCode() + ") : (" + (int)position.getX() + "," + (int)position.getY() + ") ; containedUnits: " + containedUnits.size() + "db ";
-	}
-
-	public void removeLastAdded() {
-		if(!containedUnits.isEmpty()){
-			containedUnits.remove(((TreeSet)containedUnits).last());
-		}
 	}
 }

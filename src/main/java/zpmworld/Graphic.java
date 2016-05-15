@@ -43,7 +43,6 @@ public class Graphic extends JPanel{
             });
             updateSort = false;
         }
-        //paintComponent(this.getGraphics());
     }
 
     @Override
@@ -93,14 +92,6 @@ public class Graphic extends JPanel{
         for(int i = 0; i < drawableFields.size(); i++){
             if(drawableFields.get(i).getField() == field)
                 drawableFields.remove(drawableFields.get(i));
-        }
-        updateSort = true;
-    }
-
-    public void deleteDrawableUnit(Unit unit){
-        for(int i = 0; i < drawableUnits.size(); i++){
-            if(drawableUnits.get(i).getUnit() == unit)
-                drawableUnits.remove(drawableUnits.get(i));
         }
         updateSort = true;
     }
